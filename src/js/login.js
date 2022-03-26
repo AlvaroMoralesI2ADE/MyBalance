@@ -12,33 +12,39 @@ function ValidateUser(user){
     
     try{
 
-        console.log("entra");
-        const sqlQuery = "SELECT * FROM usuarios WHERE email=? AND contraseña=?"
 
-        conn.query(sqlQuery, [user.email, user.contraseña], (error,results,fields) => {
+        var sqlQuery = "SELECT * FROM usuarios WHERE email=?"
+
+        conn.query(sqlQuery, [user.email], (error,result,fields) => {
             if(error){
-                console.log("NO");
-            }
-
-            if(results.length > 0){
-
-                window.location.href = "../html/sessionMain.html";
-                //ipcRenderer.send('open-new-window', '../html/sessionMain');
-                
-                //var win = remote.getCurrentWindow();
-                //win.close()
-                //win.loadFile(path.join(__dirname, '../html/sessionMain.html'));
+                console.log(error);
             }else{
-               
-                
-
-
-               /*
-                new Notification({
-                    title:"login",
-                    body: 'email'
-                }).show()*/
+                if(result.length > 0){
+                    const contraseñaDB = result[0]["contraseña"];            
+                    bcrypt.compare(user.contraseña, contraseñaDB , (err, coinciden) => {
+                  
+                        if (err) {
+                            console.log("Error comprobando:", err);
+                        } else {
+                            if(coinciden){
+                                window.location.href = "../html/sessionMain.html";
+                            }
+                            else{
+                                console.log("La contraseña es incorrecta");
+                            }
+                        }
+                    });
+                   
+                    //ipcRenderer.send('open-new-window', '../html/sessionMain');
+                    
+                    //var win = remote.getCurrentWindow();
+                    //win.close()
+                    //win.loadFile(path.join(__dirname, '../html/sessionMain.html'))
+                }else{
+                    console.log("El email no existe en nuestra base de datos");
+                }
             }
+
 
         });
 

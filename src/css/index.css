@@ -30,7 +30,7 @@ body {
   margin: auto;
   max-width: 38rem;
   padding: 2rem;
-  background-image:url('../assets/foodBackground.jpg');
+  background-image:url('../assets/foodBackground.png');
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -51,13 +51,13 @@ body {
 
 a {
   text-decoration: none;
-  color: #1ab188;
+  color: #6fad5f;
   transition: 0.5s ease;
 }
 
 /*usuario interactúa con un elemento*/
 a:hover {
-  color: #179b77;
+  color: #6fad5f;
 }
 
 
@@ -65,10 +65,10 @@ a:hover {
 
 
 .contenedor-formularios {
-  background: rgba(19, 35, 47, .9);
+  background: #785c32;
   padding: 40px;
   max-width: 600px;
-  margin: 40px auto;
+  margin: 200px auto;
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, .3);
 }
@@ -87,7 +87,7 @@ a:hover {
   text-decoration: none;
   padding: 15px;
   background: rgba(160, 179, 176, .25);
-  color: #a0b3b0;
+  color: #6fad5f;
   font-size: 20px;
   float: left;
   width: 50%;
@@ -96,19 +96,19 @@ a:hover {
   transition: 0.5s ease;
 }
 .contenedor-tabs li a:hover {
-  background: #179b77;
-  color: #fff;
+  background: #6fad5f;
+  color: #FFFFFF;
 }
 .contenedor-tabs .active a {
-  background: #1ab188;
-  color: #fff;
+  background: #6fad5f;
+  color: #FFFFFF;
 }
 .contenido-tab > div:last-child {
   display: none;
 }
 h1 {
   text-align: center;
-  color: #fff;
+  color: #FFFFFF;
   font-weight: 300;
   margin: 0 0 40px;
 }
@@ -116,7 +116,7 @@ label {
   position: absolute;
   transform: translateY(6px);
   left: 13px;
-  color: rgba(255, 255, 255, .5);
+  color: #FFFFFF;
   transition: all 0.25s ease;
   -webkit-backface-visibility: hidden;
   pointer-events: none;
@@ -124,7 +124,7 @@ label {
 }
 label .req {
   margin: 2px;
-  color: #1ab188;
+  color: #ACCFA3;
 }
 label.active {
   transform: translateY(50px);
@@ -135,7 +135,7 @@ label.active .req {
   opacity: 0;
 }
 label.highlight {
-  color: #fff;
+  color: #FFFFFF;
 }
 input {
   font-size: 22px;
@@ -145,11 +145,11 @@ input {
   padding: 5px 10px;
   background: none;
   background-image: none;
-  border: 1px solid #a0b3b0;
+  border: 1px solid #6fad5f;
   border-top: none;
   border-left: none;
   border-right: none;
-  color: #fff;
+  color: #FFFFFF;
   border-radius: 0;
   transition: all 0.5s ease;
   border-radius: 5px;
@@ -182,13 +182,13 @@ input:focus {
   cursor: pointer;
   padding: 15px 0;
   font-size: 2rem;
-  background: #1ab188;
-  color: #fff;
+  background: #6fad5f;
+  color: #FFFFFF;
   transition: all 0.5s ease;
   -webkit-appearance: none;
 }
 .button:hover, .button:focus {
-  background: #179b77;
+  background: #bff5b1;
 }
 .button-block {
   display: block;

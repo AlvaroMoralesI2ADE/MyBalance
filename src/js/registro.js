@@ -2,6 +2,7 @@ const usuario = document.getElementById("usuarioRegistro")
 const email = document.getElementById("emailRegistro")
 const contraseña = document.getElementById("contraseñaRegistro")
 const contraseña2 = document.getElementById("contraseñaRepRegistro")
+const bcrypt = require("bcryptjs");
 
 
 const registrar = document.getElementById('registrarse');
@@ -46,11 +47,12 @@ registrar.addEventListener('submit', (e) => {
     
 
     try{
+        var contraseñaEncriptada = bcrypt.hashSync(contraseña.value,10); //encriptamos la contraseña
+        console.log(contraseñaEncriptada)
         const newUser = {
             email: email.value,
             nombre: usuario.value,
-            contraseña: contraseña.value
-
+            contraseña: contraseñaEncriptada
         }
         createUser(newUser)
     }catch(error){
