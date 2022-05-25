@@ -1,11 +1,20 @@
-
- 
-    <h2>My Balance</h2>
-    <p>Welcome to My Balance</p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Balance</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+  </head>
+  <body>
     
-    
-    
+    <img src="../assets/logoTexto.png" width="560" height="300">
+    <p style = "text-align: center"><i>Welcome to My Balance</i></p>
+   
     <div class="contenedor-formularios">
+        
+          
         <ul class="contenedor-tabs">
             <li class="tab tab-segunda active"><a href="#iniciar-sesion">Iniciar Sesión</a></li>
             <li class="tab tab-primera"><a href="#registrarse">Registrarse</a></li>
@@ -66,7 +75,8 @@
                     <label>
                         Contraseña <span class="req">*</span>
                     </label>
-                    <input type="password"  id="contraseñaRegistro" required>
+                    <input type="password" id="contraseñaRegistro" required>
+                    <span class="nivelContraseña" id="nivelContraseña"></span>
                 </div>
 
 
@@ -88,3 +98,8 @@
     <script src="../js/jqueryFormularioLog.js"></script>
     <script src="../js/registro.js"></script>
     <script src="../js/login.js"></script>
+
+
+</body>
+ 
+</html>

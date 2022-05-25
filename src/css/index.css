@@ -5,7 +5,7 @@
   --form-bg: #13232f;
   --blanco: #fff;
   
-  --color-principal: #1ab188;
+  --color-principal: #447a36;
   --color-principal-light: lighten($color-principal,5%);
   --color-principal-dark: darken($color-principal,5%);
   
@@ -30,7 +30,7 @@ body {
   margin: auto;
   max-width: 38rem;
   padding: 2rem;
-  background-image:url('../assets/foodBackground.png');
+  background-image:url('../assets/backgroundMyBalance.png');
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -51,7 +51,7 @@ body {
 
 a {
   text-decoration: none;
-  color: #6fad5f;
+  color: #447a36;
   transition: 0.5s ease;
 }
 
@@ -61,14 +61,58 @@ a:hover {
 }
 
 
+.menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #6fad5f;
+  text-align: right;
+}
+
+
+
+.menu li {
+  
+  display:inline-block;
+  margin-left:-4px;
+}
+
+
+.menu li a {
+  display:block;
+  font-size:16px;
+  padding:0px 12px 3px 12px;
+  margin:5px 0;
+  color:rgb(255, 255, 255);
+  line-height:12px;
+  border-left:2px solid #447a36;
+  text-decoration:none;
+
+}
+
+
+.descripcion {
+  padding:0px 12px 3px 12px;
+  text-align: center;
+  color:#0d4000;
+
+
+}
+
+.menu li a:hover {
+  background-color: #356429;
+  padding:0px 14px 3px 12px;
+  margin:8px 0;
+}
 
 
 
 .contenedor-formularios {
-  background: #785c32;
+  background: #dfd3b5;
   padding: 40px;
   max-width: 600px;
-  margin: 200px auto;
+  margin: 20px auto;
   border-radius: 4px;
   box-shadow: 0 4px 10px 4px rgba(19, 35, 47, .3);
 }
@@ -100,7 +144,7 @@ a:hover {
   color: #FFFFFF;
 }
 .contenedor-tabs .active a {
-  background: #6fad5f;
+  background: #447a36;
   color: #FFFFFF;
 }
 .contenido-tab > div:last-child {
@@ -124,7 +168,7 @@ label {
 }
 label .req {
   margin: 2px;
-  color: #ACCFA3;
+  color: #6fad5f;
 }
 label.active {
   transform: translateY(50px);
@@ -156,7 +200,7 @@ input {
 }
 input:focus {
   outline: none;
-  border-color: #1ab188;
+  border-color: #6fad5f;
 }
 .contenedor-input {
   position: relative;
@@ -182,13 +226,27 @@ input:focus {
   cursor: pointer;
   padding: 15px 0;
   font-size: 2rem;
-  background: #6fad5f;
+  background: #447a36;
   color: #FFFFFF;
   transition: all 0.5s ease;
   -webkit-appearance: none;
 }
+
+.buttonTable{
+  border-radius:10px;
+  outline:none;
+  color: #000000;
+
+}
+
+
+.buttonTable:hover{
+  background: #baae84;
+}
+
+
 .button:hover, .button:focus {
-  background: #bff5b1;
+  background: #6fad5f;
 }
 .button-block {
   display: block;
@@ -198,7 +256,83 @@ input:focus {
   margin-top: -20px;
   text-align: right;
   margin-bottom: 20px;
+  
 }
+
+
+.forgot a {
+ 
+  color: #6fad5f;
+
+
+}
+
+.center {
+  margin: auto;
+  width: 90%;
+  padding: 15px;
+}
+
+
+.forgot a:hover {
+ 
+  color: #2f7a1f;
+
+
+}
+
+
+.nivelContraseña {
+  font-size: 12px;
+  color: #6fad5f;
+
+}
+
+
+.botonComenzar {
+  padding:0px 12px 3px 12px;
+  text-decoration:none;
+  font-weight: 600;
+  font-size: 20px;
+  color:#fefefe;
+  background: #6fad5f;
+  border-color: #6fad5f;
+  border-width: 3px;
+  border-style: solid;
+  border-radius:35px;
+  align-self: center;
+ 
+}
+.botonComenzar:hover, .botonComenzar:focus {
+  background-color:#447a36;
+  border-color: #447a36;
+  color:#fefefe;
+}
+
+
+
+
+
+
+
+
+.navbar-logo{
+  display: inline-block;
+  vertical-align: left;
+  width: 85px;
+  float:left;
+}
+
+
+.navbar-logo img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+
+
 @media screen and (max-width: 500px) {
   .fila-arriba div {
     width: 100%;

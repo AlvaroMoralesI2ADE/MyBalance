@@ -6,7 +6,7 @@ const mysql = require('mysql');
 
 const connection = mysql.createConnection({
       host:'localhost',
-      database: 'my balance',
+      database: 'mybalance',
       user: 'root',
       password: 'AlvaroDB'
 })
@@ -17,12 +17,6 @@ const connection = mysql.createConnection({
 function getConnection(){
   return connection;
 }
-
-
-
-
-
-
 
 
 
