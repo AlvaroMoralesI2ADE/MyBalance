@@ -65,7 +65,6 @@ a:hover {
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   background-color: #6fad5f;
   text-align: right;
 }
@@ -86,10 +85,88 @@ a:hover {
   margin:5px 0;
   color:rgb(255, 255, 255);
   line-height:12px;
-  border-left:2px solid #447a36;
+  border-left:2px solid #356429;
   text-decoration:none;
 
 }
+
+
+.menu ul li {
+  background-color:#6fad5f;
+}
+
+.menu ul {
+list-style:none;
+margin:0;
+padding:0;
+}
+
+.menu ul ul li a {
+  display:block;
+  font-size:14px;
+  padding:3px 12px 3px 12px;
+  color:rgb(255, 255, 255);
+  line-height:15px;
+  border-left:none;
+
+}
+
+
+.menu ul a {
+display:block;
+color:#fff;
+text-decoration:none;
+font-weight:400;
+padding:10px;
+font-family:"HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.menu ul li {
+position:relative;
+text-align:left;
+
+margin:0;
+padding:0;
+}
+
+
+.menu ul ul {
+display:none;
+position:absolute;
+top:100%;
+padding:0;
+}
+
+.menu ul ul li {
+float:none;
+  height:30px;
+width:150px
+}
+
+.menu ul ul a {
+font-size:12px;
+line-height:120%;
+padding:10px 15px;
+}
+
+.menu ul li:hover > ul {
+display:block;
+}
+
+
+
+.menu li a:hover {
+  background-color: #356429;
+
+}
+
+
+
+
+
+
 
 
 .descripcion {
@@ -100,11 +177,6 @@ a:hover {
 
 }
 
-.menu li a:hover {
-  background-color: #356429;
-  padding:0px 14px 3px 12px;
-  margin:8px 0;
-}
 
 
 
@@ -139,6 +211,24 @@ a:hover {
   cursor: pointer;
   transition: 0.5s ease;
 }
+
+.contenedor-tabs p{
+  display: block;
+  text-decoration: none;
+  padding: 15px;
+  background: #447a36;
+  color: #ffffff;
+  font-size: 20px;
+  float: left;
+  position: relative;
+  left: 25%;
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+
+
 .contenedor-tabs li a:hover {
   background: #6fad5f;
   color: #FFFFFF;
@@ -236,7 +326,7 @@ input:focus {
   border-radius:10px;
   outline:none;
   color: #000000;
-
+  border: black 1px solid;
 }
 
 
@@ -312,19 +402,16 @@ input:focus {
 
 
 
-
-
-
-
 .navbar-logo{
   display: inline-block;
   vertical-align: left;
-  width: 85px;
+  width: 150px;
   float:left;
 }
 
 
 .navbar-logo img{
+  margin-top:-10px;
   display: block;
   width: 100%;
   height: auto;
@@ -345,4 +432,190 @@ input:focus {
   .contenedor-tabs li a {
     width: 100%;
  }
+}
+
+
+#Buscador {
+  background: url(https://cdn0.iconfinder.com/data/icons/slim-square-icons-basics/100/basics-19-32.png) no-repeat 0.5px;
+  width: 218px;
+  height:20px;
+  color: rgb(0, 0, 0);
+  border-bottom: solid 1.5px rgb(0, 0, 0);
+  padding: 0.5px 30px;
+  outline: none;
+}
+
+#Idcantidad {
+  width: 180px;
+  height:20px;
+  color: rgb(0, 0, 0);
+  border-bottom: solid 1.5px rgb(0, 0, 0);
+  outline: none;
+}
+
+
+.ui-autocomplete {
+  border: 1px solid rgb(255, 255, 255);
+  width: 120px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #ffffff;
+  }
+  
+  .ui-autocomplete select {
+  padding: 5px 8px;
+  width: 120px;
+  border: none;
+  box-shadow: none;
+  background: #f4f0f0 url("arrow.png") no-repeat 90% 50%;
+  -webkit-appearance: none;
+  }
+  
+  .ui-autocomplete select:focus {
+  outline: none;
+  
+  }
+  
+
+
+  .ui-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    outline: none;
+}
+
+
+.titulo{
+  color: rgb(0, 0, 0);
+  float: left;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ui-helper-hidden-accessible {
+  display: none !important;
+}
+
+
+
+
+/* (A) BACKGROUND */
+#boxBack {
+  /* (A1) FULLSCREEN */
+  position: fixed; z-index: 999;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+ 
+  /* (A2) TRANSPARENT BACKGROUND */
+  background: rgba(0, 0, 0, 0.5);
+ 
+  /* (A3) HIDDEN BY DEFAULT */
+  display: none;
+}
+ 
+/* (A4) ADD THIS CSS CLASS TO SHOW */
+#boxBack.show { display: block; }
+ 
+/* (B) DIALOG BOX */
+#boxWrap {
+  /* (B1) CENTER ON SCREEN */
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+ 
+  /* (B2) DIMENSIONS */
+  min-width: 320px; max-width: 600px;
+  padding: 10px;
+ 
+  /* (B3) COLORS */
+  background: #fff;
+}
+
+
+
+
+
+
+
+.suscripcionButtom {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+}
+.suscripcionButtom:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+
+
+.suscripcionButtom li a {
+  display: block;
+  text-decoration: none;
+  padding: 15px;
+  background: #6fad5f;
+  font-family:"HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #ffffff;
+  font-size: 20px;
+  float: left;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+
+
+
+.suscripcionButtom  li a:hover {
+  background: #356429;
+  color: #FFFFFF;
+}
+
+
+
+.suscripcion-input input {
+  font-size: 22px;
+  display: block;
+  width: 80%;
+  height: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  border: 1px solid #6fad5f;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color: #FFFFFF;
+  border-radius: 0;
+  transition: all 0.5s ease;
+  border-radius: 5px;
+}
+
+.suscripcion-input input:focus {
+  outline: none;
+  border-color: #6fad5f;
+}
+
+.suscripcion-input {
+  position: relative;
+  margin-bottom: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

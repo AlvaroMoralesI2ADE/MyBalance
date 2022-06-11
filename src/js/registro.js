@@ -61,7 +61,7 @@ registrar.addEventListener('submit', (e) => {
 
                     
                     if(result.length > 0){
-                        alert('El email ya esta registrado en nuestra base de datos');
+                        dbox('El email ya esta registrado en nuestra base de datos');
                     }else{
                         var contraseñaEncriptada = bcrypt.hashSync(contraseña.value,10); //encriptamos la contraseña
                         const newUser = {
@@ -154,7 +154,7 @@ function Validation(){
     }
  
     if(errors.length > 0) { 
-        alert('Errores en formulario, por favor corrija:\n' + errors.join('\n'));
+        dbox('Errores en formulario, por favor corrija:\n' + errors.join('\n'));
         input.focus();
         correcto = false;
 

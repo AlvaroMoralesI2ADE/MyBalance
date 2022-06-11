@@ -11,14 +11,25 @@
   </head>
   <body>
       
+ 
+
     <div class = "menu">
-      <a class="navbar-logo" href="#">
-        <img src="../assets/logoTexto.png" >
-      </a>
-        <ul>
-        <li><a href="index.html">ADMIN:)</a></li>
-        </ul>
+      <ul>
+        <a class="navbar-logo" href="sessionMain.html">
+          <img src="../assets/logoTexto.png" >
+        </a>
+       
+        <li><a href="cuadroMandos.html">Cuadro de mandos</a></li>
+        <li><a href="#">Mi cuenta</a>
+          <ul>
+            <li><a href="#">Mi cuenta</a></li>
+            <li><a href="#" onclick=cerrarCuenta();>Salir</a></li>
+          </ul>
+        </li>
+        
+      </ul>
     </div>
+  
 
 
     <table class="table table-warning">
@@ -32,7 +43,15 @@
   
 
     </table>
-
+    <script>
+      function cerrarCuenta(){
+          console.log("cerrar sesion");
+          localStorage.removeItem('admin');
+          window.close()
+      }
+  
+   
+  </script>
 
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="../js/adminMain.js"></script>

@@ -20,38 +20,31 @@ function TablaUsuarios(){
 
     var usuarios = [];
 
-    let sql = 'SELECT * FROM view_users';
+    let sql = 'SELECT email, nombre, suscripcion.caducada FROM usuarios , suscripcion WhERE usuarios.email = suscripcion.usuario AND caducada = FALSE';
     conn.query(sql, (error, results, fields) => {
     if (error) {
         return console.error(error.message);
     }else{
-     
-        for (let i = 0; i < results.length; i++) {
-
-            if(results[i].suscripcion != null){
-              usuarios.push(new Usuario(results[i].nombre, results[i].email,true));
-            }else{
-              usuarios.push(new Usuario(results[i].nombre, results[i].email,false)); 
-            }
-          
-        }
-      
-        var tr;
-        for (var i = 0; i <  usuarios.length; i++) {
-          if(usuarios[i].suscrito == true){
-            tr = $('<tr/>');
-            tr.append("<td class=\"table-warning\">" + usuarios[i].nombre + "</td>");
-            tr.append("<td class=\"table-warning\">" + usuarios[i].gmail + "</td>");
-            tr.append("<td>" + "<button class=\"buttonTable\" id=\"AsignarDieta\">Asignar dieta</button>" + "</td>");
-            $('table').first().append(tr);
-          }
-        }  
-
+      console.log(results);
+      var tr;
+      for (let i = 0; i < results.length; i++) {
+        tr = $('<tr/>');
+        tr.append("<td class=\"table-warning\">" + results[i].nombre + "</td>");
+        tr.append("<td class=\"table-warning\">" + results[i].email + "</td>");
+        tr.append("<td>" + "<a class=\"buttonTable\" href=\"adminAsignarDieta.html?gmail=" + results[i].email  +  "\">Asignar dieta</a>" + "</td>");
+        $('table').first().append(tr);
+      }
     }
 
     });
 
 }
+
+
+
+
+
+
 
 
 

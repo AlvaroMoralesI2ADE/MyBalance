@@ -6,42 +6,29 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
     <!-- Estilos -->
     <link rel="stylesheet" href="../css/index.css">
+    
   </head>
   <body>
+  
+
+  <script >
+    
+    var user = localStorage.getItem('user');  
+    var admin = localStorage.getItem('admin');
+
+  
+    if(user != null){
+      window.location.href = "sessionMain.html";
+    }else{
+      if(admin != null){
+        window.location.href = "adminMain.html";
+      }else{
+        window.location.href = "log.html";
+      }
+    }
     
 
-   
-   
-   
-
-    <div class = "menu">
-      <ul>
-        <a class="navbar-logo" href="#">
-          <img src="../assets/logoTexto.png" >
-        </a>
-        <li><a href="log.html">Iniciar sesión</a></li>
-      </ul>
-  </div>
-
- 
-
-
-
-
-  <div class = "descripcion">
-     
-   
-    <p>¿Quiere mejorar su salud, ganar o perder peso?</p>
-    <p > Los planes de nutrición personalizados de MyBalance pueden ayudarle. </p>
-    <br></br>
-    <p >  Nuestro equipo de expertos en nutrición crean dietas personalizadas para nuestros clientes, basadas en sus necesidades y 
-      objetivos individuales. Ya sea que esté buscando reducir su colesterol, comer más grasas saludables o 
-      simplemente quiere mejorar su salud, podemos crear un plan adecuado para usted. Además, todas nuestras 
-      comidas son deliciosas y fáciles de preparar: </p>
-      <p > ¡le encantará comer sano! </p>
-      <br></br>
-
-  <a class="botonComenzar" href="log.html">¡COMIENZA YA!</a>
+  </script>
  
 
   </div>

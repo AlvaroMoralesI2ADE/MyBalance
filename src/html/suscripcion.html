@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Balance</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    
+  </head>
+  <body>
+   
+   
+
+    <div class = "menu">
+      <ul>
+        <a class="navbar-logo" href="sessionMain.html">
+          <img src="../assets/logoTexto.png" >
+        </a>
+       
+        <li><a href="sessionMain.html">Mi Dieta</a></li>
+        <li><a href="#">Mi cuenta</a>
+          <ul>
+            <li><a href="#">Mi cuenta</a></li>
+            <li><a href="#" onclick=cerrarCuenta();>Salir</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="contenedor-formularios">
+        
+  
+        <div class="contenido-tab">
+           
+            <h1>Rellena los campos que faltan</h1>
+            <div class="suscripcion-input" style=" float: left;width: 200px;">
+                <label>
+                        Nombre <span class="req"></span>
+                        </label>
+                    <input type="text" id="idNombre" required>
+
+
+                    
+              </div>
+           
+              <div class="suscripcion-input" style="float: right; width: 200px;">
+                    <label>
+                      Edad <span class="req"></span>
+                      </label>
+                  <input type="number" id="idNombre" required>
+        
+              </div>
+           
+
+              
+            <div class="suscripcion-input" style=" float: left;width: 200px;">
+                <label>
+                        Peso en kg <span class="req"></span>
+                        </label>
+                    <input type="number" id="idNombre" required>
+
+
+                    
+              </div>
+           
+              <div class="suscripcion-input" style="float: right; width: 200px;">
+                    <label>
+                      Altura en cm <span class="req"></span>
+                      </label>
+                  <input type="Altura en cm" id="idNombre" required>
+        
+              </div>
+              
+              <div class="suscripcion-input" style=" float:right; right:35%;width: 200px;">
+                <p style=" float:right; color:white;    right: 35%;font-size: 20px; margin: 2px;">
+
+                Tipo Dieta:
+                </p>
+                <select name="my_html_select_box">
+                    <option selected="yes">Completa</option>
+                    <option>Vegana</option>
+                    <option>Vegetariana</option>
+            
+                </select>
+           
+              </div>
+
+              <ul class="suscripcionButtom">
+                  <li  id = "setSuscripcion"><a href="#">SUSCRIBIRSE</a></li>
+              </ul>
+        </div>
+    </div>
+
+      <!-- (A) HTML DIALOG BOX -->
+      <div id="boxBack"><div id="boxWrap">
+        <div id="boxTxt"></div>
+          <input type="button" class="btn btn-outline-success" value="OK" onclick="dbox()"/>
+        </div>
+      </div>
+          
+        
+
+       
+    <script>
+      function cerrarCuenta(){
+          console.log("cerrar sesion");
+          localStorage.removeItem('user');
+          window.close()
+      }
+  
+   
+  </script>
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="../js/jqueryFormularioLog.js"></script>
+   <script src="../js/suscripcion.js"></script>
+</body>
+</html>

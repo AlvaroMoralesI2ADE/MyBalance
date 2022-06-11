@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Balance</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  </head>
+  <body>
+    
+    <div class = "menu">
+      <a class="navbar-logo" href="#">
+        <img src="../assets/logoTexto.png" >
+      </a>
+        <li><a href="cuadroMandos.html">Cuadro de mandos (Alimentos, usuario)</a></li>
+        <li><a href="index.html">ADMIN:)</a></li>
+        </ul>
+    </div>
+
+  <div class="dropdown">
+    <select name="my_html_select_box">
+      <option selected="yes">Semana 1</option>
+      <option>Semana 2</option>
+      <option>Semana 3</option>
+    </select>
+ </div>
+
+<div class="container body-content">
+  <div class="container">
+    <div class="row justify-content-start" style="padding-top:10px;">
+      <div class="col" style="padding-top:10px;">
+        <input type="text" name="buscador" id="Buscador" placeholder="Buscar Alimento">
+      </div>
+      <div class="col" style="padding-top:10px;">
+        <div class="dropdown">
+          <select name="my_html_select_box">
+            <option selected="yes">Día 1</option>
+            <option>Día 2</option>
+            <option>Día 3</option>
+            <option>Día 4</option>
+            <option>Día 5</option>
+            <option>Día 6</option>
+            <option>Día 7</option>
+          </select>
+       </div>
+      </div>
+
+      <div class="col" style="padding-top:10px;">
+        <div class="dropdown">
+          <select name="my_html_select_box">
+            <option selected="yes">Desayuno </option>
+            <option>Almuerzo</option>
+            <option>Comida</option>
+            <option>Merienda</option>
+            <option>Cena</option>      
+          </select>
+       </div>
+      </div>
+   
+
+      <div class="col" style="padding-top:10px;">
+        <input type="text" id="Idcantidad" name="cantidad" placeholder="Gramos, unidades..."> </p>
+      </div>
+
+     
+      <div class="col" style="padding-top:10px;">
+        <button type="button" class="btn btn-outline-success">Añadir</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<br> </br>
+
+
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Día 1</th>
+        <th scope="col">Día 2</th>
+        <th scope="col">Día 3</th>
+        <th scope="col">Día 4</th>
+        <th scope="col">Día 5</th>
+        <th scope="col">Día 6</th>
+        <th scope="col">Día 7</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Desayuno</th>
+    
+
+      </tr>
+      <tr>
+        <th scope="row">Almuerzo</th>
+      
+
+      </tr>
+      <tr>
+        <th scope="row">Comida</th>
+    
+
+      </tr>
+
+      <tr>
+        <th scope="row">Merienda</th>
+    
+
+      </tr>
+
+      <tr>
+        <th scope="row">Cena</th>
+    
+
+      </tr>
+
+
+
+    </tbody>
+  </table>
+</div>
+  
+
+  
+
+
+<script>window.$ = window.jQuery = require('jquery');</script>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="../js/asignarDieta.js"></script>
+<script type="text/javascript">
+$(function() {
+$("#Buscador").autocomplete({
+  classes: {
+    "ui-autocomplete": "highlight"
+  },
+  name: 'buscador',
+  source: 'http://localhost:3000/search?key=%QUERY',
+  messages: {
+        noResults: 'No se ha encontrado ningun alimento',
+     
+    },
+  limit: 4
+});
+});
+</script>
+
+ 
+  
+</body>
+ 
+</html>

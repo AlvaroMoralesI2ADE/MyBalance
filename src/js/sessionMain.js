@@ -1,58 +1,80 @@
 const set = document.getElementById('setSuscripcion');
 const { getConnection } = require('C:/Users/34658/Desktop/MyBalance/src/js/database');
-
+const { usuario } = require('./MyBalance/src/js/user')
 const conn = getConnection();
 
+let button = document.getElementById('suscribirse');
 
 
-set?.addEventListener('click', () => {
-    console.log("ola");
-    setSuscripcion();
-})
+$(document).ready(function(){
+   
+    try{
+      
+      
+        var a=   localStorage.getItem('altura');
+        var p =localStorage.getItem('peso');
+        var n = localStorage.getItem('nombre');
+        var t = localStorage.getItem('tipo');
 
-
-
-
-function setSuscripcion() {
-    var email = "alvaro@gmail.com";
-    console.log("ola");
-    var sqlQuery = "UPDATE usuarios SET suscripcion = (SELECT tipoSuscripcion FROM suscripcion where tipoSuscripcion = 'mensual') WHERE email = ?" ;
-    conn.query(sqlQuery,email,function (err, result) {
-        if (err){
-            alert(err);
-        }else{
-            console.log("funsiono");
-        }
+        console.log(a + " " + p + " " + n + " " + t);
 
         
-      });
-
-}
-//AQUI HACER UN SET 
-/*
-var sqlQuery = "SELECT * FROM usuarios WHERE email=?"
-                    conn.query(sqlQuery, [user.email], (error,result,fields) => {
-                        if(error){
-                            alert(error);
-                        }else{
-                            if(result.length > 0){
-                                var contraseñaDB = result[0]["contraseña"]; 
-                                console.log(contraseñaDB) ;
-                                bcrypt.compare(user.contraseña, contraseñaDB, (err, coinciden) => {
-                                    if (err) {
-                                        alert(err);
-                                    } else {
-                                        if (coinciden) {
-                                            window.location.href = "../html/sessionMain.html";
-                                        }
-                                        else {
-                                            alert('La contraseña es incorrecta');
-                                        }
-                                    }
-                                });
-                            }else{alert('El email no esta registrado en nuestra base de datos');}        
+        var user = localStorage.getItem('user');  
+       /*
+        var sqlQueryAdmin = "SELECT usuario AS email, caducada FROM suscripcion WHERE usuario = ?";
+       
+        conn.query(sqlQueryAdmin, user, (error,result,fields) => {
+            if(error){
+                dbox(error);
+            }else{
+                console.log(result);
+                if(result.length > 0){
+                    var suscripcionVigente = false;
+                    for(i = 0; i < result.length; i++){
+                        if(result[i].caducada == 0){
+                            suscripcionVigente = true;
                         }
-                    });
+                    }
+
+                    if(suscripcionVigente){
+                        button.style.display = "none";
+
+                    }else{
+                      
+                    }
+                    
+
+                }else{
+                   
+                   
+
+                }
+             
+            }
+        });
+*/
+
+        
+                         
+        }catch(error){
+            dbox(error);
+        }
 
 
-                    */
+
+
+
+
+
+
+});
+
+
+
+
+//COMPROBAR SI TIENE SUSCRIPCION
+
+
+
+
+

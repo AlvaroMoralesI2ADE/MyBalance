@@ -29,7 +29,3 @@ bcrypt.compare(palabraSecretaProporcionadaPorUsuario, palabraSecretaHasheada, (e
 
 
 
-
-module.exports = { getConnection }
-
-
