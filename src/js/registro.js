@@ -7,20 +7,19 @@ const bcrypt = require("bcryptjs");
 
 const registrar = document.getElementById('registrarse');
 
-const { getConnection } = require('C:/Users/34658/Desktop/MyBalance/src/js/database');
+const { getConnection } = require('./../../src/js/database');
 
 const conn = getConnection()
 
 function createUser(user){
  
 
-
         var sqlQuery = 'INSERT INTO usuarios SET?'
         conn.query(sqlQuery, user, (error,result,fields) => {
             if(error){
-                console.log(error);
+                dbox(error);
             }else{
-                console.log("usuario registrado");
+                dbox("Usuario registrado en nuestra base de datos");
             }
           
         });
@@ -32,10 +31,7 @@ function createUser(user){
         }).show();
 */
         
-        conn.end(function(){
-            // La conexión se ha cerrado
-                });
-
+    
 
 }
 
@@ -80,7 +76,7 @@ registrar.addEventListener('submit', (e) => {
            
         }
     }catch(error){
-        console.log(error);
+        dbox(error);
     }
   
 })
@@ -114,6 +110,8 @@ function ContraseñasCoinciden(){
     if(contraseña.value.length > 0){
         if(contraseña2.value  == contraseña.value){
             correcto = true;
+        }else{
+            dbox("Las contraseñas no coinciden")
         }
     }
 
@@ -126,6 +124,7 @@ function ContraseñasCoinciden(){
 
 
 function Validation(){
+
     var correcto = true;
     let errors = [];
     // También una variable para poner foco al primer campo que tenga error
@@ -154,7 +153,7 @@ function Validation(){
     }
  
     if(errors.length > 0) { 
-        dbox('Errores en formulario, por favor corrija:\n' + errors.join('\n'));
+        dbox('Errores en formulario, por favor corrija:<br>' + errors.join('<br>'));
         input.focus();
         correcto = false;
 

@@ -7,12 +7,12 @@ const eliminar = document.getElementById('EliminarAlimento');
 
 let tipo = document.getElementById('tipo');
 
-const { getConnection } = require('C:/Users/34658/Desktop/MyBalance/src/js/database');
+const { getConnection } = require('./../../src/js/database');
 const conn = getConnection();
-const  { app } = require('C:/Users/34658/Desktop/MyBalance/src/js/renderApp.js');
+const  { app } = require('./../../src/js/renderApp.js');
 
 
-const { dbox } = require('C:/Users/34658/Desktop/MyBalance/src/js/popup');
+const { dbox } = require('./../../src/js/popup');
 
 
 app.get('/search', function(req, res) {

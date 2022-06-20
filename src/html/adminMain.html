@@ -19,11 +19,12 @@
           <img src="../assets/logoTexto.png" >
         </a>
        
-        <li><a href="cuadroMandos.html">Cuadro de mandos</a></li>
+        <li><a href="cuadroMandos.html">Añdir Alimento</a></li>
         <li><a href="#">Mi cuenta</a>
           <ul>
             <li><a href="#">Mi cuenta</a></li>
-            <li><a href="#" onclick=cerrarCuenta();>Salir</a></li>
+            <li><a href="#" onclick=cerrarCuentaAdmin();>Salir</a></li>
+            
           </ul>
         </li>
         
@@ -43,18 +44,11 @@
   
 
     </table>
-    <script>
-      function cerrarCuenta(){
-          console.log("cerrar sesion");
-          localStorage.removeItem('admin');
-          window.close()
-      }
-  
    
-  </script>
 
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="../js/adminMain.js"></script>
+    <script src="../js/menu.js"></script>
    
     
   </body>

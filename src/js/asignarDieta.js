@@ -1,9 +1,9 @@
-const { getConnection } = require('C:/Users/34658/Desktop/MyBalance/src/js/database');
+const { getConnection } = require('./../..//src/js/database');
 
 const conn = getConnection();
 
 
-const  { app } = require('C:/Users/34658/Desktop/MyBalance/src/js/renderApp.js');
+const  { app } = require('./../..//src/js/renderApp.js');
 
 
 
@@ -55,7 +55,7 @@ var alimentos = [];
  //PARAMETRO GMAIL.. 
 
   
-    const { getConnection } = require('C:/Users/34658/Desktop/MyBalance/src/js/database');
+    const { getConnection } = require('./../../src/js/database');
 
     const conn = getConnection();
 

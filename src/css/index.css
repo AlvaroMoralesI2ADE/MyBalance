@@ -240,6 +240,7 @@ display:block;
 .contenido-tab > div:last-child {
   display: none;
 }
+
 h1 {
   text-align: center;
   color: #FFFFFF;
@@ -539,45 +540,67 @@ input:focus {
 
 
 
-.suscripcionButtom {
+.suscripcionButton {
   list-style: none;
   padding: 0;
   margin: 0 0 40px 0;
-}
-.suscripcionButtom:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-
-
-
-.suscripcionButtom li a {
-  display: block;
-  text-decoration: none;
-  padding: 15px;
   background: #6fad5f;
+  padding: 15px;
   font-family:"HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #ffffff;
-  font-size: 20px;
-  float: left;
-  width: 100%;
+   color: #ffffff;
+    cursor: pointer;
   text-align: center;
-  cursor: pointer;
-  transition: 0.5s ease;
 }
-
-
-
-.suscripcionButtom  li a:hover {
-  background: #356429;
+.suscripcionButton:hover {
+    background: #356429;
   color: #FFFFFF;
 }
 
 
 
+
+
+
+.icon {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 150px;
+}
+
+
+
+
+.icon {
+  border: 3px solid #fff;
+  border-radius: 40px;
+  padding: 5px;
+  left: 50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
 .suscripcion-input input {
+  font-size: 22px;
+  display: block;
+  width: 80%;
+  height: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  border: 1px solid #6fad5f;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  color: #FFFFFF;
+  border-radius: 0;
+  transition: all 0.5s ease;
+  border-radius: 5px;
+}
+
+.suscripcion-input input::placeholder {
   font-size: 22px;
   display: block;
   width: 80%;

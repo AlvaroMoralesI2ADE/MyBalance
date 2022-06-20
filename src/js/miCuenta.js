@@ -4,16 +4,16 @@ const { getConnection } = require('./../../src/js/database');
 const conn = getConnection();
 const { dbox } = require('./../../src/js/popup');
 
-
 const Usuario = require('./../../src/js/user');
 //IF TIENE SUSCRIPCION NO CADUCADA, PUES LO METES. CREO QUE HABRÍA QUE METER UN CAMPO DATEA
 
 
-var setSuscripcion = document.getElementById("form")
+var setUsuario = document.getElementById("form")
 
-setSuscripcion.addEventListener('submit', () => {
+setUsuario.addEventListener('submit', function(event){ 
     event.preventDefault();
     setUser()
+
 })
 
 
@@ -26,9 +26,3 @@ setSuscripcion.addEventListener('submit', () => {
 
 
 
-
-
-
-
-
-//SET

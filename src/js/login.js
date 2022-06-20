@@ -4,7 +4,7 @@ let  contraseñaLog = document.getElementById('contraseñaLogIn');
 let  emailLog = document.getElementById("emailLogIn")
 //const { BrowserWindow } = require('@electron/remote')
 const {ipcRenderer} = require('electron');
-const { dbox } = require('C:/Users/34658/Desktop/MyBalance/src/js/popup');
+const { dbox } = require('./../../src/js/popup');
 //const remote = require('@electron/remote')
 //const app = require('electron').remote.app
 const path = require('path');
@@ -56,6 +56,8 @@ function ValidateUser(user){
                                             localStorage.setItem('user', user.email);
                                             localStorage.setItem('altura', result[0].altura);
                                             localStorage.setItem('peso', result[0].peso);
+                                            localStorage.setItem('edad', result[0].edad);
+                                            localStorage.setItem('sexo', result[0].sexo);
                                             localStorage.setItem('nombre', result[0].nombre);
                                             localStorage.setItem('tipo', result[0].tipoAlimentacion);
                                             //COGER ALIMENTOS?

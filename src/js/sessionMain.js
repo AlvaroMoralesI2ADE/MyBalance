@@ -1,7 +1,9 @@
 const set = document.getElementById('setSuscripcion');
-const { getConnection } = require('C:/Users/34658/Desktop/MyBalance/src/js/database');
-const { usuario } = require('./MyBalance/src/js/user')
+const { getConnection } = require('./../../src/js/database');
+const Usuario = require('./../../src/js/user');
+
 const conn = getConnection();
+const { dbox } = require('./../../src/js/popup');
 
 let button = document.getElementById('suscribirse');
 
@@ -10,24 +12,17 @@ $(document).ready(function(){
    
     try{
       
-      
-        var a=   localStorage.getItem('altura');
-        var p =localStorage.getItem('peso');
-        var n = localStorage.getItem('nombre');
-        var t = localStorage.getItem('tipo');
+        var user = new Usuario( localStorage.getItem('user'), localStorage.getItem('nombre'),
+        localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'), "")
+   
+ 
 
-        console.log(a + " " + p + " " + n + " " + t);
-
-        
-        var user = localStorage.getItem('user');  
-       /*
         var sqlQueryAdmin = "SELECT usuario AS email, caducada FROM suscripcion WHERE usuario = ?";
        
-        conn.query(sqlQueryAdmin, user, (error,result,fields) => {
+        conn.query(sqlQueryAdmin, user.email, (error,result,fields) => {
             if(error){
                 dbox(error);
             }else{
-                console.log(result);
                 if(result.length > 0){
                     var suscripcionVigente = false;
                     for(i = 0; i < result.length; i++){
@@ -52,9 +47,9 @@ $(document).ready(function(){
              
             }
         });
-*/
 
-        
+
+  
                          
         }catch(error){
             dbox(error);

@@ -5,7 +5,11 @@
     <title>My Balance</title>
     <link href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
     <!-- Estilos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Estilos -->
     <link rel="stylesheet" href="../css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
     
   </head>
   <body>
@@ -21,77 +25,29 @@
         <li><a href="sessionMain.html">Mi Dieta</a></li>
         <li><a href="#">Mi cuenta</a>
           <ul>
-            <li><a href="#">Mi cuenta</a></li>
-            <li><a href="#" onclick=cerrarCuenta();>Salir</a></li>
+            <li><a href="miCuenta.html">Mi cuenta</a></li>
+            <li><a href="#" onclick=cerrarCuentaUser();>Salir</a></li>
           </ul>
         </li>
         
       </ul>
     </div>
 
+
     <div class="contenedor-formularios">
+      <div class="contenido-tab" >
+        <h1>Comprueba que todos los campos esten completos y correctos</h1>
+      </div>
+   
+      <div class="contenido-tab"  id = "camposUsuario">
         
-  
-        <div class="contenido-tab">
-           
-            <h1>Rellena los campos que faltan</h1>
-            <div class="suscripcion-input" style=" float: left;width: 200px;">
-                <label>
-                        Nombre <span class="req"></span>
-                        </label>
-                    <input type="text" id="idNombre" required>
-
-
-                    
-              </div>
-           
-              <div class="suscripcion-input" style="float: right; width: 200px;">
-                    <label>
-                      Edad <span class="req"></span>
-                      </label>
-                  <input type="number" id="idNombre" required>
-        
-              </div>
-           
-
-              
-            <div class="suscripcion-input" style=" float: left;width: 200px;">
-                <label>
-                        Peso en kg <span class="req"></span>
-                        </label>
-                    <input type="number" id="idNombre" required>
-
-
-                    
-              </div>
-           
-              <div class="suscripcion-input" style="float: right; width: 200px;">
-                    <label>
-                      Altura en cm <span class="req"></span>
-                      </label>
-                  <input type="Altura en cm" id="idNombre" required>
-        
-              </div>
-              
-              <div class="suscripcion-input" style=" float:right; right:35%;width: 200px;">
-                <p style=" float:right; color:white;    right: 35%;font-size: 20px; margin: 2px;">
-
-                Tipo Dieta:
-                </p>
-                <select name="my_html_select_box">
-                    <option selected="yes">Completa</option>
-                    <option>Vegana</option>
-                    <option>Vegetariana</option>
-            
-                </select>
-           
-              </div>
-
-              <ul class="suscripcionButtom">
-                  <li  id = "setSuscripcion"><a href="#">SUSCRIBIRSE</a></li>
-              </ul>
-        </div>
+      </div>
     </div>
+      
+
+
+
+            
 
       <!-- (A) HTML DIALOG BOX -->
       <div id="boxBack"><div id="boxWrap">
@@ -102,18 +58,21 @@
           
         
 
-       
+    
+
+
     <script>
-      function cerrarCuenta(){
-          console.log("cerrar sesion");
-          localStorage.removeItem('user');
-          window.close()
-      }
-  
-   
-  </script>
+      
+      const { insertHtml, setInfo, setUser } = require('./../../src/js/renderDatosUsuario');
+      insertHtml("Continuar");
+      setInfo();  
+    </script>
     <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="../js/suscripcion.js"></script>
+    <script src="../js/menu.js"></script>
     <script src="../js/jqueryFormularioLog.js"></script>
-   <script src="../js/suscripcion.js"></script>
+  
+    
+
 </body>
 </html>

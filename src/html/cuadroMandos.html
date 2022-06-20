@@ -12,14 +12,22 @@
   <body>
       
     <div class = "menu">
-      <a class="navbar-logo" href="#">
-        <img src="../assets/logoTexto.png" >
-      </a>
-        <li><a href="cuadroMandos.html">Cuadro de mandos (Alimentos, usuario)</a></li>
-        <li><a href="index.html">ADMIN:)</a></li>
-        </ul>
+      <ul>
+        <a class="navbar-logo" href="sessionMain.html">
+          <img src="../assets/logoTexto.png" >
+        </a>
+       
+        <li><a href="cuadroMandos.html">Añdir Alimento</a></li>
+        <li><a href="#">Mi cuenta</a>
+          <ul>
+            <li><a href="#">Mi cuenta</a></li>
+            <li><a href="#" onclick=cerrarCuentaAdmin();>Salir</a></li>
+            
+          </ul>
+        </li>
+        
+      </ul>
     </div>
-
 
    
 
@@ -74,6 +82,7 @@
       </div>
     </div>
     
+
   
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
