@@ -326,8 +326,13 @@ input:focus {
 .buttonTable{
   border-radius:10px;
   outline:none;
+  background-color: transparent;
   color: #000000;
   border: black 1px solid;
+  overflow:auto;
+  text-align: center;
+  font-size: 1.0em;
+  line-height: 300%
 }
 
 
@@ -335,6 +340,24 @@ input:focus {
   background: #baae84;
 }
 
+
+
+.buttonTable a
+{
+display: inline-block;
+width: 18em;
+height: 6em;
+margin-bottom: 0.5em;
+padding-top: .6em;
+padding-bottom: .6em;
+color: #fff;
+background-color: #aaabbb;
+border-radius: 5px;
+border: solid #cccccc 1px;
+box-shadow: 2px 2px 1px #888888;
+clear:right;
+float:right;
+}
 
 .button:hover, .button:focus {
   background: #6fad5f;
@@ -392,8 +415,16 @@ input:focus {
   border-style: solid;
   border-radius:35px;
   align-self: center;
+  position: absolute;
+  top: 25%;
+  right: 40%;
+  
  
 }
+
+
+
+
 .botonComenzar:hover, .botonComenzar:focus {
   background-color:#447a36;
   border-color: #447a36;
@@ -642,3 +673,4 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+

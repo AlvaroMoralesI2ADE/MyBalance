@@ -12,7 +12,7 @@ var setUsuario = document.getElementById("form")
 
 setUsuario.addEventListener('submit', function(event){ 
     event.preventDefault();
-    setUser()
+    setUser(false)
 
 })
 

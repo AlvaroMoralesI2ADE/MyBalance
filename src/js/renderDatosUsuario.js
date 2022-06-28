@@ -124,7 +124,7 @@ const setInfo = () => {
     }
 }
 
-const setUser = () => {
+const setUser = (suscripcion) => {
     try{
 
             var user = new Usuario( localStorage.getItem('user'), localStorage.getItem('nombre'),localStorage.getItem('edad'),
@@ -214,6 +214,24 @@ const setUser = () => {
                     
                 });
             }
+
+
+            if(suscripcion){
+                var sqlQueryAdmin = "INSERT INTO suscripcion (usuario, caducada) VALUES (?,false)";
+                conn.query(sqlQueryAdmin, user.email, (error,result,fields) => {
+                    if(error){
+                        dbox (error);
+                    }else{
+                        dbox ("Gracias por suscribirte a My Balance");
+                    }            
+                
+                });
+            }
+            /*
+            */
+ 
+
+
 
         
     }catch(error){

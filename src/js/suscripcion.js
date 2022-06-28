@@ -13,8 +13,11 @@ var setSuscripcion = document.getElementById("form")
 
 setSuscripcion.addEventListener('submit', () => {
     event.preventDefault();
-    setUser()
+    setUser(true)
 })
+
+
+
 
 
 
