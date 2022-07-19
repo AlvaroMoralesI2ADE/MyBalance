@@ -1,5 +1,5 @@
 
-const { getConnection } = require('./../..//src/js/database');
+const { getConnection } = require('./../../src/js/database');
 
 const conn = getConnection()
 
