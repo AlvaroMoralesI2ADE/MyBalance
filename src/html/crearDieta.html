@@ -5,10 +5,9 @@
   <meta charset="UTF-8" />
   <title>My Balance</title>
   <link href="https://fonts.googleapis.com/css?family=Raleway|Ubuntu" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <!-- Estilos -->
   <link rel="stylesheet" href="../css/index.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
     integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
@@ -31,53 +30,20 @@
       </li>
       <p id="date"></p>
     </ul>
-  </div>
-
-  <div class="row justify-content-start" style="padding-top:10px; ">
-    <p class="titulo">Asignar dieta</p>
-    <hr style="border:2px;">
-  </div>
-
-  <div class="card border-success mb-3" style="max-width: 28rem ;float:left; margin:10px; position:relative;">
-    <div class="card-header bg-transparent border-success">FICHA CLIENTE</div>
-    <div class="card-body" id="card">
-
-    </div>
+  
   </div>
  
 
 
-  <div class="container body-content" style="display: inline-block; white-space: nowrap;">
-    <div class="container">
+  <div class="container body-content">
+
+    <div class="container" >
+
       <div class="row justify-content-start" style="padding-top:10px;">
-        <p class="titulo">Cargar dieta</p>
+        <p class="titulo">Crear dieta semanal</p>
         <hr style="border:2px;">
-        <div class="col" style="padding-top:10px; ">
-          <input type="text" pattern="^[a-zA-Z]+$" name="buscadorDieta" id="BuscadorDieta" placeholder="Cargar dieta">
-        </div>
-
-        <div class="col" style="padding-top:10px;">
-          <button id="CargarDieta" type="button" class="btn btn-outline-success">Añadir</button>
-        </div>
-
       </div>
-
-      <br></br>
-      <div class="row justify-content-start" style="padding-top:10px;">
-        <p class="titulo">Añadir Alimento
-
-  
-            <select id="semana" style="float:right" >
-              <option selected="yes" value="1">Semana 1</option>
-              <option value="2">Semana 2</option>
-              <option value="3">Semana 3</option>
-              <option value="4">Semana 4</option>
-            </select>
       
-          
-        </p>
-        <hr style="border:2px;">
-      </div>
       <div class="row justify-content-start" style="padding-top:10px;">
         <div class="col" style="padding-top:10px;">
           <input type="text" pattern="^[a-zA-Z]+$" name="buscador" id="Buscador" placeholder="Buscar Alimento">
@@ -85,7 +51,13 @@
         <div class="col" style="padding-top:10px;">
           <div class="dropdown">
             <select name="my_html_select_box" id="dia">
-
+              <option selected="yes" value="1">Día 1</option>
+              <option value="2">Día 2</option>
+              <option value="3">Día 3</option>
+              <option value="4">Día 4</option>
+              <option value="5">Día 5</option>
+              <option value="6">Día 6</option>
+              <option value="7">Día 7</option>
             </select>
           </div>
         </div>
@@ -108,63 +80,120 @@
         </div>
 
 
-        <div class="col" style="padding-top:10px; right:7px">
+        <div class="col" style="padding-top:10px;right:7px">
           <button id="Añadir" type="button" class="btn btn-outline-success">Añadir</button>
         </div>
+
       </div>
+
+      
+      <div class="col" style="padding-top:10px;;right:7px">
+        <input type="text" id="IdNombre" name="nombre" placeholder="Nombre dieta"> </p>
+        <button id="guardarDieta" type="button" class="btn btn-outline-success">Guardar</button>
+   
+      </div>
+
     </div>
   </div>
   <br> </br>
 
 
 
-  <div class="col" style="padding-top:10px;">
-    <button id="GuardarDieta" type="button" class="btn btn-outline-success">Guardar</button>
-  </div>
-
 
   <div>
+    
     <table class="table">
       <thead>
-        <tr id="diasSemana">
-
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Día 1</th>
+          <th scope="col">Día 2</th>
+          <th scope="col">Día 3</th>
+          <th scope="col">Día 4</th>
+          <th scope="col">Día 5</th>
+          <th scope="col">Día 6</th>
+          <th scope="col">Día 7</th>
         </tr>
       </thead>
       <tbody>
-        <tr id="desayuno">
+        <tr>
+          <th scope="row">Desayuno</th>
+          <td id="desayuno-1">
+            <div>
+            <div class = "alimento-label" >
+              <p>Alubias con pepino </p>
+              <button type="button" class="btn-close btn-close-white" aria-label="Close"></button>
+            </div>
+            <div class = "alimento-label" >
+              <p>Alubias con pepino </p>
+              <button type="button" class="btn-close btn-close-white" aria-label="Close"></button>
+            </div>
+          </div>
 
+          </td>
+          
+          <td id="desayuno-2"> </td>
+          <td id="desayuno-3"> </td>
+          <td id="desayuno-4"> </td>
+          <td id="desayuno-5"> </td>
+          <td id="desayuno-6"> </td>
+          <td id="desayuno-7"> </td>
         </tr>
-
         <tr id="almuerzo">
-
+          <th scope="row">Almuerzo</th>
+          <td id="almuerzo-1"> </td>
+          <td id="almuerzo-2"> </td>
+          <td id="almuerzo-3"> </td>
+          <td id="almuerzo-4"> </td>
+          <td id="almuerzo-5"> </td>
+          <td id="almuerzo-6"> </td>
+          <td id="almuerzo-7"> </td>
         </tr>
-
-        <tr id="comidaTH">
+        <tr id="comida">
+          <th scope="row">Comida</th>
+          <td id="comida-1"> </td>
+          <td id="comida-2"> </td>
+          <td id="comida-3"> </td>
+          <td id="comida-4"> </td>
+          <td id="comida-5"> </td>
+          <td id="comida-6"> </td>
+          <td id="comida-7"> </td>
 
         </tr>
 
         <tr id="merienda">
+          <th scope="row">Merienda</th>
+          <td id="merienda-1"> </td>
+          <td id="merienda-2"> </td>
+          <td id="merienda-3"> </td>
+          <td id="merienda-4"> </td>
+          <td id="merienda-5"> </td>
+          <td id="merienda-6"> </td>
+          <td id="merienda-7"> </td>
 
         </tr>
 
         <tr id="cena">
-
+          <th scope="row">Cena</th>
+          <td id="cena-1"> </td>
+          <td id="cena-2"> </td>
+          <td id="cena-3"> </td>
+          <td id="cena-4"> </td>
+          <td id="cena-5"> </td>
+          <td id="cena-6"> </td>
+          <td id="cena-7"> </td>
         </tr>
-
-
-
       </tbody>
     </table>
   </div>
 
-  <!-- (A) HTML DIALOG BOX -->
-  <div id="boxBack">
-    <div id="boxWrap">
+    <!-- (A) HTML DIALOG BOX -->
+    <div id="boxBack"><div id="boxWrap">
       <div id="boxTxt"></div>
-      <input type="button" class="btn btn-outline-success" value="OK" onclick="dbox()" />
+        <input type="button" class="btn btn-outline-success" value="OK" onclick="dbox()"/>
+      </div>
     </div>
-  </div>
-
+    
 
 
 
@@ -176,7 +205,7 @@
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="../js/popup.js"></script>
-  <script src="../js/asignarDieta.js"></script>
+  <script src="../js/crearDieta.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
@@ -190,25 +219,6 @@
         source: 'http://localhost:3000/search?key=%QUERY',
         messages: {
           noResults: 'No se ha encontrado ningun alimento',
-
-        },
-        limit: 4
-      });
-    });
-
-  </script>
-
-
-  <script type="text/javascript">
-    $(function () {
-      $("#BuscadorDieta").autocomplete({
-        classes: {
-          "ui-autocomplete": "highlight"
-        },
-        name: 'buscadorDieta',
-        source: 'http://localhost:3000/searchDieta?key=%QUERY',
-        messages: {
-          noResults: 'No se ha encontrado ninguna dieta',
 
         },
         limit: 4

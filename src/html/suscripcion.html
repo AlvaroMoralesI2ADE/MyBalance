@@ -29,7 +29,6 @@
             <li><a href="#" onclick=cerrarCuentaUser();>Salir</a></li>
           </ul>
         </li>
-        
       </ul>
     </div>
 
@@ -64,12 +63,22 @@
     <script>
       
       const { insertHtml, setInfo, setUser } = require('./../../src/js/renderDatosUsuario');
-      insertHtml("Continuar");
+      insertHtml("Continuar",true);
       setInfo();  
     </script>
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="../js/suscripcion.js"></script>
-    <script src="../js/menu.js"></script>
+    <script type="text/javascript">
+      function cerrarCuentaUser(){
+        localStorage.removeItem('user');
+        localStorage.removeItem('altura');
+        localStorage.removeItem('peso');
+        localStorage.removeItem('nombre');
+        localStorage.removeItem('tipo');
+        localStorage.removeItem('sexo');
+        window.location.href = "../html/log.html";
+      }
+    </script>
     <script src="../js/jqueryFormularioLog.js"></script>
   
     

@@ -27,8 +27,7 @@
             <li><a href="miCuenta.html">Mi cuenta</a></li>
             <li><a href="#" onclick=cerrarCuentaUser();>Salir</a></li>
           </ul>
-        </li>
-        
+        </li>        
       </ul>
     </div>
 
@@ -51,13 +50,23 @@
 
     <script>
       const { insertHtml, setInfo, setUser } = require('./../../src/js/renderDatosUsuario');
-      insertHtml("Modificar Datos");
+      insertHtml("Modificar Datos",false);
   
       setInfo();
 
     </script>
     <script src="../js/miCuenta.js"></script>
-    <script src="../js/menu.js"></script>
+    <script type="text/javascript">
+      function cerrarCuentaUser(){
+        localStorage.removeItem('user');
+        localStorage.removeItem('altura');
+        localStorage.removeItem('peso');
+        localStorage.removeItem('nombre');
+        localStorage.removeItem('tipo');
+        localStorage.removeItem('sexo');
+        window.location.href = "../html/log.html";
+      }
+    </script>
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="../js/jqueryFormularioLog.js"></script>
    

@@ -8,7 +8,8 @@ const connection = mysql.createConnection({
       host:'localhost',
       database: 'mybalance',
       user: 'root',
-      password: 'AlvaroDB'
+      password: 'AlvaroDB',
+      multipleStatements: true
 })
 
 

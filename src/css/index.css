@@ -66,15 +66,45 @@ a:hover {
 .menu {
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 0;  
   background-color: #6fad5f;
   text-align: right;
 }
 
+.menu p{
+  list-style-type: none;
+  text-align: center;
+  margin-top: -21px;
+  color: white;
+  font-size: 14px;
+}
+
+
+.alimento-label{
+
+  font-size:italic;
+  background-color:#6fad5f;
+  color:#000;
+  width: 1%;
+  white-space: nowrap;
+   display:inline;
+  border:0.1px solid #356429;
+  border-radius:5px;
+}
+
+.alimento-label p {
+  color:#fff;
+  padding-left:3px;
+   display:inline;
+  border-right:2px solid #356429;
+  
+
+}
+ 
+
 
 
 .menu li {
-  
   display:inline-block;
   margin-left:-4px;
 }
@@ -427,6 +457,13 @@ float:right;
 
 
 
+th {
+  width: 1%;
+  white-space: nowrap;
+}
+
+
+
 .botonComenzar:hover, .botonComenzar:focus {
   background-color:#447a36;
   border-color: #447a36;
@@ -442,6 +479,7 @@ float:right;
   width: 150px;
   float:left;
 }
+
 
 
 .navbar-logo img{
@@ -485,6 +523,39 @@ float:right;
   color: rgb(0, 0, 0);
   border-bottom: solid 1.5px rgb(0, 0, 0);
   outline: none;
+}
+
+#BuscadorDieta{
+  width: 200px;
+  height:20px;
+  margin-right: 10px;
+  margin-left:80px;
+  padding: 15px;
+  color: rgb(0, 0, 0);
+  border-bottom: solid 1.5px rgb(0, 0, 0);
+  outline: none;
+}
+
+
+
+#IdNombre {
+  display: block;
+  display: inline-block;
+  width: 180px;
+  height:20px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  margin-left:1px;
+  float: left;
+  color: rgb(0, 0, 0);
+  border-bottom: solid 1.5px rgb(0, 0, 0);
+  outline: none;
+}
+
+tr td:last-child {
+  width: 1%;
+  white-space: nowrap;
 }
 
 

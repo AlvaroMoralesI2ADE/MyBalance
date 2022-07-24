@@ -166,12 +166,4 @@ function Validation(){
     return correcto;
     
 
-
-
-   
- 
-
-
-
-
 }
