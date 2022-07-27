@@ -18,7 +18,6 @@ module.exports = class Comida {
     }
 
     añadirAlimento(alimento, cantidad){
-      console.log("entra")
       var añadido = true
       if(this.alimentos.get(alimento) != undefined){
         console.log("repe")
@@ -37,7 +36,7 @@ module.exports = class Comida {
     }
 
     eliminarAlimento(alim){
-      console.log(alim)
+
       this.alimentos.forEach( (cantidad, alimento, map) => {
         console.log(alimento + " " + cantidad) // pepino: 500 etc
       });
@@ -138,8 +137,8 @@ module.exports = class Comida {
         this._sqlCommand += "INSERT INTO alimentos_comidas (tipo, alimento, cantidad, consumido, modificar, comida) "
         this._sqlCommand += "VALUES (\"" + this._tipo + "\", \"" + array[0] + "\", \"" + cantidad + "\", "
         this._sqlCommand +=  " 0, 0, "
-        this._sqlCommand += "(SELECT idcomidas_dia FROM comidas_dia WHERE comidas_dia.dieta = \"" + nombre + "\" AND "
-        this._sqlCommand += "comidas_dia.dia = '" + this._dia + "')); \n"
+        this._sqlCommand += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + nombre + "\" AND "
+        this._sqlCommand += "comidas_del_dia.dia = '" + this._dia + "')); \n"
       });
     }
 
@@ -149,7 +148,7 @@ module.exports = class Comida {
         let array = alimento.split("-")
         this._sqlCommand += "INSERT INTO alimentos_comida_modelo (tipo, alimentos, cantidad, comidas_modelo) "
         this._sqlCommand += "VALUES (\"" + this._tipo + "\", \"" + array[0] + "\", \"" + cantidad + "\", (SELECT idcomidas_dia_modelo " 
-        this._sqlCommand += "FROM comidas_dia_modelo WHERE comidas_dia_modelo.dieta_modelo = \"" + nombre + "\" AND comidas_dia_modelo.dia = " + this._dia + ")); \n"
+        this._sqlCommand += "FROM comidas_del_dia_modelo WHERE comidas_del_dia_modelo.dieta_modelo = \"" + nombre + "\" AND comidas_del_dia_modelo.dia = " + this._dia + ")); \n"
       });
     }
 

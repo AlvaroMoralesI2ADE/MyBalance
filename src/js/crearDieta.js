@@ -166,30 +166,34 @@ guardar.addEventListener("click", function () {
         if(nombre.value != "" && comidas.length > 0){
 
 
-            /* COMPROBAR QUE NO EXISTE
+            /* COMPROBAR QUE NO EXISTE SINO HAY QUE AÑADIR O ELIMINAR...
             comidas.forEach(comida => {
                 comida.prepareSqlModelo(nombre.value)
                 query += comida.sql 
             });*/
 
             let query = "INSERT INTO dieta_modelo (nombre) VALUES (\"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_dia_modelo (dia, dieta_modelo) VALUES (" + 1 + ", \"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_dia_modelo (dia, dieta_modelo) VALUES (" + 2 + ", \"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_dia_modelo (dia, dieta_modelo)  VALUES (" + 3 + ", \"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_dia_modelo (dia, dieta_modelo)  VALUES (" + 4 + ", \"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_dia_modelo (dia, dieta_modelo)  VALUES (" + 5 + ", \"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_dia_modelo (dia, dieta_modelo)  VALUES (" + 6 + ", \"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_dia_modelo (dia, dieta_modelo)  VALUES (" + 7 + ", \"" + nombre.value + "\"); \n"
+            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + 1 + ", \"" + nombre.value + "\"); \n"
+            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + 2 + ", \"" + nombre.value + "\"); \n"
+            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 3 + ", \"" + nombre.value + "\"); \n"
+            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 4 + ", \"" + nombre.value + "\"); \n"
+            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 5 + ", \"" + nombre.value + "\"); \n"
+            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 6 + ", \"" + nombre.value + "\"); \n"
+            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 7 + ", \"" + nombre.value + "\"); \n"
         
+
+      
             comidas.forEach(comida => {
                 comida.prepareSqlModelo(nombre.value)
                 query += comida.sql
             });
 
+            console.log(query)
             
             conn.query(query, (error,result,fields) => {
                 if(error){
                     dbox(error);
+                    console.log(error)
                 }else{
                     dbox("La dieta ha sido guardada como " + nombre.value)
                     comidas = []

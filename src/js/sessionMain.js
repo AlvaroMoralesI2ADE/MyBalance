@@ -19,14 +19,22 @@ $(document).ready(function(){
         var user = new Usuario( localStorage.getItem('user'), localStorage.getItem('nombre'),
         localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'), "")
    
-        var sqlQueryAdmin = "SELECT  dieta.fecha_inicio, suscripcion.caducada, suscripcion.idsuscripcion "
+
+        /*
+        var sqlQueryAdmin = "SELECT dieta.fecha_inicio, suscripcion.caducada, suscripcion.idsuscripcion "
         sqlQueryAdmin += "FROM suscripcion, dieta "
         sqlQueryAdmin += "WHERE dieta.suscripcion = idsuscripcion AND "
         sqlQueryAdmin += "suscripcion.usuario = ? "
         sqlQueryAdmin += "AND (SELECT curdate()) <= dieta.fecha_fin "
-        sqlQueryAdmin += "ORDER BY fecha_inicio ASC"
+        sqlQueryAdmin += "ORDER BY fecha_inicio ASC"*/
+
+        var sqlQueryAdmin = "SELECT suscripcion.caducada, suscripcion.idsuscripcion, suscripcion.fecha_inicio "
+        sqlQueryAdmin += "FROM suscripcion "
+        sqlQueryAdmin += "WHERE "
+        sqlQueryAdmin += "suscripcion.usuario = ? "
+        sqlQueryAdmin += "AND (SELECT curdate()) <= suscripcion.fecha_fin "
+        sqlQueryAdmin += "ORDER BY suscripcion.fecha_inicio ASC"
         
-        console.log(sqlQueryAdmin)
 
         conn.query(sqlQueryAdmin, user.email, (error,result,fields) => {
             if(error){
@@ -35,7 +43,8 @@ $(document).ready(function(){
             }else{
                 if(result.length > 0){
                     var suscripcionVigente = false;
-                    console.log(result)
+                  
+              
                     for(i = 0; i < result.length; i++){
                         if(result[i].caducada == 0){
                             suscripcionVigente = true;

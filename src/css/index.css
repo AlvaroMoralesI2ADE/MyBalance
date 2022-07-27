@@ -1,28 +1,5 @@
 
 
-:root {
-  --body-bg: #c1bdba;
-  --form-bg: #13232f;
-  --blanco: #fff;
-  
-  --color-principal: #447a36;
-  --color-principal-light: lighten($color-principal,5%);
-  --color-principal-dark: darken($color-principal,5%);
-  
-  --gris-light: #a0b3b0;
-  --gris: #ddd;
-  
-  --thin: 300;
-  --normal: 400;
-  --bold: 600;
-  --br: 4px;
-  
-  --fuente-principal: "Ubuntu", helvetica;
-  --fuente-secundaria: "Raleway", arial;
-
-
-}
-
 
 
 
