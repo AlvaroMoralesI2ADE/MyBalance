@@ -1,7 +1,5 @@
 
-
-
-  function dbox (msg) {
+function dbox (msg) {
     if (msg != undefined) {
       document.getElementById("boxTxt").innerHTML = msg;
       document.getElementById("boxBack").classList.add("show");

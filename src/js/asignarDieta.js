@@ -1,12 +1,13 @@
 const { getConnection } = require('./../../src/js/database');
-
 const conn = getConnection();
+//const { app } = require('./../../src/js/renderApp.js');
+const Comida = require('./../../src/js/comida');
+const { selectUser } = require('./../../src/models/user')
+const { selectAlimento } = require('./../../src/models/alimentos')
+const { selectDieta } = require('./../../src/models/dieta')
+
 
 const { app } = require('./../../src/js/renderApp.js');
-
-const Comida = require('./../../src/js/comida');
-
-
 
 
 const cargarDieta = document.getElementById('CargarDieta');
@@ -23,44 +24,69 @@ let comidas = []
 let fechasArray = []
 
 
-app.get('/search', function (req, res) {
-    conn.query('SELECT alimento FROM alimentos WHERE alimento LIKE "%' + req.query.term + '%"',
-        function (err, rows, fields) {
-            if (err) throw err;
-            var data = [];
-            for (i = 0; i < rows.length; i++) {
-                if (i < 5) {
-                    data.push(rows[i].alimento);
-                }
+$(function () {
+    $("#Buscador").autocomplete({
+      classes: {
+        "ui-autocomplete": "highlight"
+      },
+      name: 'buscador',
+      source: 'http://localhost:8000/api/searchAlimento?key=%QUERY',
+      messages: {
+        noResults: 'No se ha encontrado ningun alimento',
 
-            }
-            res.end(JSON.stringify(data));
-        });
+      },
+      limit: 4
+    });
+  });
+
+
+  $(function () {
+    $("#BuscadorDieta").autocomplete({
+      classes: {
+        "ui-autocomplete": "highlight"
+      },
+      name: 'buscadorDieta',
+      source: 'http://localhost:8000/api/searchDieta?key=%QUERY',
+      messages: {
+        noResults: 'No se ha encontrado ninguna dieta',
+
+      },
+      limit: 4
+    });
+  });
+
+
+
+
+app.listen(8000, () => {
+    console.log("Sever is Running");
+  })
+
+
+
+
+
+app.get("/api/searchAlimento", (req, res) => {
+    selectAlimento(
+      conn,
+      req.query.term,
+      (result) => {
+        res.json(result);
+      }
+    );
 });
 
 
-
-
-app.get('/searchDieta', function (req, res) {
-    conn.query('SELECT nombre FROM dieta_modelo',
-        function (err, rows, fields) {
-            if (err) throw err;
-            var data = [];
-            for (i = 0; i < rows.length; i++) {
-                if (i < 5) {
-                    data.push(rows[i].nombre);
-                }
-
-            }
-            res.end(JSON.stringify(data));
-        });
+app.get('/api/searchDieta', (req, res)  => {
+    selectDieta(
+        conn,
+        (result) => {
+          res.json(result);
+        }
+      );
 });
 
 
-// port must be set to 8080 because incoming http requests are routed from port 80 to port 8080
-app.listen(3000, function () {
-
-});
 
 
 
@@ -81,13 +107,27 @@ $(document).ready(function () {
     //CARGAR TODOS LOS DATOS DEL USUARIO PARA EL PLAN
 });
 
+app.get("/api", (req, res) => {
+    console.log('hello world')
+});
+
+app.get("/api/selectUser", (req, res) => {
+    selectUser(
+      conn,
+       {email : nombreUsuario},
+      (result) => {
+        console.log(result)
+        res.json(result);
+      }
+    );
+});
+
 
 function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
 }
-
 
 function getFechas(sem) {
     const fechas = new Map()
@@ -176,6 +216,8 @@ function prepararSemana(semana) {
 
 
 }
+
+
 
 
 

@@ -5,7 +5,6 @@ const insertHtml = (value, suscripcion) => {
     
     const data = document.getElementById("camposUsuario");
 
-
     data.innerHTML = "<form action=\"#\" method=\"post\" id = \"form\">"
 
     const dataForm = document.getElementById("form")
@@ -122,7 +121,6 @@ const setInfo = () => {
         localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'),localStorage.getItem('sexo'), "")
 
 
-
         var labelNombre = document.getElementById("labelNombre")
         var labelEdad = document.getElementById("labelEdad")
         var labelAltura = document.getElementById("labelAltura")
@@ -130,10 +128,6 @@ const setInfo = () => {
         var sexo = document.getElementById('sexo')
         var tipo = document.getElementById('tipoAlimentacion')
       
-
-
-        
-     
 
         if(user.nombre != ""){
             idNombre.value = user.nombre;

@@ -12,8 +12,6 @@ const { getConnection } = require('./../../src/js/database');
 const conn = getConnection()
 
 function createUser(user){
- 
-
         var sqlQuery = 'INSERT INTO usuarios SET?'
         conn.query(sqlQuery, user, (error,result,fields) => {
             if(error){

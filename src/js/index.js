@@ -59,11 +59,12 @@ app.on('activate', () => {
 
 
 ipcMain.on("open-new-window", function(event, arg) {
-
   var x = BrowserWindow.getCurrentWindow;
   x.loadFile(path.join(__dirname, '../html/sessionMain.html'));
- 
 });
+
+
+
 
 
 

@@ -8,7 +8,7 @@ var app = express();
 app.set('views', path.join(__dirname, '/'));
 app.set('view engine', 'ejs');
 app.get('/', function(req, res) {
-res.render('index');
+    res.render('index');
 });
 
 exports.app = app;

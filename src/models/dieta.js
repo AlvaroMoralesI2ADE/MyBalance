@@ -1,17 +1,14 @@
-
 const mysql = require("mysql")
 
-
-function selectAlimento(connection, alimento, callback){
-    connection.query('SELECT alimento FROM alimentos WHERE alimento LIKE "%' + alimento + '%"',
+function selectDieta(connection, callback){
+    connection.query('SELECT nombre FROM dieta_modelo',
     function (err, rows, fields) {
         if (err) throw err;
         var data = [];
         for (i = 0; i < rows.length; i++) {
             if (i < 5) {
-                data.push(rows[i].alimento);
+                data.push(rows[i].nombre);
             }
-
         }
         callback(data);
     });
@@ -19,4 +16,4 @@ function selectAlimento(connection, alimento, callback){
 
 
 
-module.exports = {selectAlimento}
+module.exports = {selectDieta}

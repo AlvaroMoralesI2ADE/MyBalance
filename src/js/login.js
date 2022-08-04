@@ -14,8 +14,6 @@ const path = require('path');
 function ValidateUser(user){
     
     try{
-
-        
         var sqlQueryAdmin = "SELECT * FROM administradores WHERE gmail=?";
         conn.query(sqlQueryAdmin, [user.email], (error,result,fields) => {
             if(error){
