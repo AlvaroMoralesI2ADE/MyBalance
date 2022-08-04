@@ -4,7 +4,7 @@ const { getConnection } = require('./../../src/js/database');
 const { app } = require('./../../src/js/renderApp.js');
 
 const { dbox } = require('./../../src/js/popup.js');
-const { selectSusc } = require('./../../src/models/user')
+const { selectSuscVigentes } = require('./../../src/models/user')
 
 
 /*
@@ -30,9 +30,9 @@ class Usuario {
 }
 
 
-app.get("/api/selectSusc", (req, res) => {
+app.get("/api/selectSuscVigentes", (req, res) => {
   console.log("hola")
-  selectSusc(
+  selectSuscVigentes(
     conn,
     (result) => {
       console.log(result)
@@ -51,7 +51,7 @@ app.listen(3000, function () {
 //SET INTERVALO
 function TablaUsuarios() {
   try {
-    $.getJSON('http://localhost:8000/api/selectSusc').done(function (data) {
+    $.getJSON('http://localhost:8000/api/selectSuscVigentes').done(function (data) {
       for (let i = 0; i < data.length; i++) {
         renderSuscripcion(data[i].fecha_inicioS, data[i].fecha_finS, data[i].fecha_inicio, data[i].fecha_fin,
           data[i].nombre, data[i].email, data[i].idsuscripcion, data.length)

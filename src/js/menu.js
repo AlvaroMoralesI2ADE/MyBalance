@@ -17,8 +17,8 @@ function cerrarCuentaAdmin(){
 function renderDate(dataForm){
     try{
        let Fechahoy = Date.now();
-        let hoy = new Date(Fechahoy);
-        dataForm.innerHTML += hoy.getDate().toString().padStart(2, "0") + "-" + (hoy.getMonth() + 1).toString().padStart(2, "0") + "-" + hoy.getFullYear();
+       let hoy = new Date(Fechahoy);
+       dataForm.innerHTML += hoy.getDate().toString().padStart(2, "0") + "-" + (hoy.getMonth() + 1).toString().padStart(2, "0") + "-" + hoy.getFullYear();
         
     }catch(error){
         console.log(error)
@@ -28,7 +28,5 @@ function renderDate(dataForm){
 
 $(document).ready(function () {
     const dataForm = document.getElementById("date")
-    renderDate(dataForm)
-    
- 
+    renderDate(dataForm) 
 });
