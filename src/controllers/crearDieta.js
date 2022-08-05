@@ -1,13 +1,13 @@
-const { getConnection } = require('./../../src/js/database');
+const { getConnection } = require('../../../src/database/database');
 
 const conn = getConnection();
 
 
-const { app } = require('./../../src/js/renderApp.js');
+const { app } = require('../../../src/controllers/expressApp.js');
 
-const Comida = require('./../../src/js/comida');
-const { selectDieta } = require('./../../src/models/dieta')
-const { selectAlimento } = require('./../../src/models/alimentos')
+const Comida = require('../../../src/controllers/comida');
+const { selectDieta } = require('../../../src/models/dieta')
+const { selectAlimento } = require('../../../src/models/alimentos')
 
 
 const añadir = document.getElementById('Añadir');

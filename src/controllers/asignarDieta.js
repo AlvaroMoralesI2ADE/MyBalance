@@ -1,13 +1,12 @@
-const { getConnection } = require('./../../src/js/database');
+const { getConnection } = require('../../../src/database/database');
 const conn = getConnection();
-//const { app } = require('./../../src/js/renderApp.js');
-const Comida = require('./../../src/js/comida');
-const { selectUser } = require('./../../src/models/user')
-const { selectAlimento } = require('./../../src/models/alimentos')
-const { selectDieta } = require('./../../src/models/dieta')
+const Comida = require('../../../src/controllers/comida');
+const { selectUser } = require('../../../src/models/user')
+const { selectAlimento } = require('../../../src/models/alimentos')
+const { selectDieta } = require('../../../src/models/dieta')
 
 
-const { app } = require('./../../src/js/renderApp.js');
+const { app } = require('../../../src/controllers/expressApp.js');
 
 
 const cargarDieta = document.getElementById('CargarDieta');

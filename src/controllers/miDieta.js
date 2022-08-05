@@ -1,9 +1,9 @@
 
-const { dbox } = require('./../../src/js/popup');
-const { getConnection } = require('./../../src/js/database');
-const Comida = require('./../../src/js/comida');
-const { selectAlimentosSuscripcion, UpdateAlimentosComidas } = require('./../../src/models/alimentos');
-const { app } = require('./../../src/js/renderApp.js');
+const { dbox } = require('../../../src/views/js/popup');
+const { getConnection } = require('../../../src/database/database');
+const Comida = require('../../../src/controllers/comida');
+const { selectAlimentosSuscripcion, UpdateAlimentosComidas } = require('../../../src/models/alimentos');
+const { app } = require('../../../src/controllers/expressApp.js');
 const conn = getConnection();
 let fechasArray = []
 let comidas = []

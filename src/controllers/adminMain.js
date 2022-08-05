@@ -1,10 +1,11 @@
 const { read } = require('original-fs');
-const { getConnection } = require('./../../src/js/database');
+const { getConnection } = require('../../../src/database/database')
 //const { app } = require('electron');
-const { app } = require('./../../src/js/renderApp.js');
+const { app } = require('../../../src/controllers/expressApp.js');
 
-const { dbox } = require('./../../src/js/popup.js');
-const { selectSuscVigentes } = require('./../../src/models/user')
+const { dbox } = require('../../../src/views/js/popup.js');
+
+const { selectSuscVigentes } = require('../../../src/models/user')
 
 
 /*
@@ -31,7 +32,6 @@ class Usuario {
 
 
 app.get("/api/selectSuscVigentes", (req, res) => {
-  console.log("hola")
   selectSuscVigentes(
     conn,
     (result) => {

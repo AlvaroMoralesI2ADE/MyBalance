@@ -2,9 +2,6 @@ const { app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 
 
-require('./database');
-
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -30,7 +27,7 @@ const createWindow = () => {
 
 
  // and load the index.html of the app.
- mainWindow.loadFile(path.join(__dirname, '../html/index.html'));
+ mainWindow.loadFile(path.join(__dirname, 'views/html/index.html'));
  // Open the DevTools.
  mainWindow.webContents.openDevTools();
 };
@@ -60,7 +57,7 @@ app.on('activate', () => {
 
 ipcMain.on("open-new-window", function(event, arg) {
   var x = BrowserWindow.getCurrentWindow;
-  x.loadFile(path.join(__dirname, '../html/sessionMain.html'));
+  x.loadFile(path.join(__dirname, 'views/html/sessionMain.html'));
 });
 
 

@@ -32,7 +32,6 @@ function createUser(connection, data, callback){
     connection.query(sql, data, function (err, result) {
         if (err) throw err
         callback(result)
-
     });
  }
 
@@ -67,4 +66,25 @@ function selectSuscripcion(connection, data, callback) {
 
 }
 
-module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, selectAdmin, createUser }
+
+function insertSuscripcion(connection, data, callback){
+    var sqlQueryAdmin = "INSERT INTO suscripcion (usuario, caducada, fecha_inicio, fecha_fin) VALUES ('"
+    sqlQueryAdmin += data.email + "',false,'" + data.fechaInicio + "','" + data.fechaFinal + "')";
+    connection.query(sql, function (err, result) {
+        if (err) throw err
+        callback(result)
+    });
+}
+
+
+
+function updateUsuario(connection, data, callback){
+    var sqlSet = "UPDATE usuarios SET " + data.setValues + " WHERE email = " + data.email;
+    connection.query(sql, function (err, result) {
+        if (err) throw err
+        callback(result)
+    });
+}
+
+
+module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, selectAdmin, createUser, insertSuscripcion, updateUsuario}

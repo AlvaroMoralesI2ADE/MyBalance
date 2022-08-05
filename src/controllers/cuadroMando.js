@@ -7,12 +7,12 @@ const eliminar = document.getElementById('EliminarAlimento');
 
 let tipo = document.getElementById('tipo');
 
-const { getConnection } = require('./../../src/js/database');
+const { getConnection } = require('../../../src/database/database');
 const conn = getConnection();
-const  { app } = require('./../../src/js/renderApp.js');
+const  { app } = require('../../../src/controllers/expressApp.js');
 
 
-const { dbox } = require('./../../src/js/popup');
+const { dbox } = require('../../../src/views/js/popup');
 
 
 app.get('/search', function(req, res) {

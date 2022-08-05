@@ -1,13 +1,13 @@
-const set = document.getElementById('setSuscripcion')
-const { getConnection } = require('../js/database')
-const Usuario = require('../js/user')
+const { getConnection } = require('../../../src/database/database')
+const Usuario = require('../../../src/controllers/userClass')
 
-const { app } = require('../js/renderApp.js');
+const { app } = require('../../../src/controllers/expressApp.js');
 
-const { selectSuscripcion } = require('../models/user')
+const { selectSuscripcion } = require('../../../src/models/user')
 
 const conn = getConnection();
-const { dbox } = require('../js/popup')
+const set = document.getElementById('setSuscripcion')
+const { dbox } = require('../../../src/views/js/popup.js')
 
 let buttonSus = document.getElementById('botonSus')
 
@@ -38,12 +38,12 @@ $(document).ready(function(){
     try{     
         var user = new Usuario( localStorage.getItem('user'), localStorage.getItem('nombre'),
         localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'), "")  
-
+   
         $.getJSON('http://localhost:8000/api/selectSuscripcion?email=' + user.email).done(function (result) {
             if(result.length > 0){
                 var suscripcionVigente = false;
               
-        
+          
                 for(i = 0; i < result.length; i++){
                     if(result[i].caducada == 0){
                         suscripcionVigente = true;

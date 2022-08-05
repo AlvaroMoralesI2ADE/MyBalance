@@ -4,30 +4,22 @@ let  contraseñaLog = document.getElementById('contraseñaLogIn');
 let  emailLog = document.getElementById("emailLogIn")
 //const { BrowserWindow } = require('@electron/remote')
 const {ipcRenderer} = require('electron');
-const { dbox } = require('../js/popup');
+const { dbox } = require('../../../src/views/js/popup');
 //const remote = require('@electron/remote')
 //const app = require('electron').remote.app
 const path = require('path');
-const { app } = require('../js/renderApp.js');
+const { app } = require('../../../src/controllers/expressApp');
 const bcrypt = require("bcryptjs");
-const { selectAdmin, selectUsuario, createUser } = require('../models/user')
+const { selectAdmin, selectUsuario, createUser } = require('../../../src/models/user')
 
-const { getConnection } = require('../js/database');
+const { getConnection } = require('../../../src/database/database');
 
 const conn = getConnection()
 
 
 app.listen(8000, () => {
     console.log("Sever is Running");
-  })
-
-
-
-
-
-
-
-
+})
 
 
 app.get("/api/selectUsuario", (req, res) => {
@@ -54,9 +46,7 @@ app.get('/api/selectAdmin', (req, res)  => {
 
 
 function ValidateUser(user){
-    
     try{
-        
         $.getJSON('http://localhost:8000/api/selectAdmin?email=' + user.email).done(function (result) {
             if(result.length > 0){
                 var contraseñaAdmin = result[0]["contraseña"]; 

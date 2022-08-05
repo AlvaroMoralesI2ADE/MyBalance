@@ -1,8 +1,12 @@
-const Usuario = require('./../../src/js/user');
-const { getConnection } = require('./../../src/js/database');
-const conn = getConnection()
-const insertHtml = (value, suscripcion) => {
-    
+const Usuario = require('../../../src/controllers/userClass')
+
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+const insertHtml = (value, suscripcion) => {    
     const data = document.getElementById("camposUsuario");
 
     data.innerHTML = "<form action=\"#\" method=\"post\" id = \"form\">"
@@ -106,19 +110,11 @@ const insertHtml = (value, suscripcion) => {
 }
 
 
-
-function addDays(date, days) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  }
-  
-
 const setInfo = () => {
-    try{
-        
-        var user = new Usuario( localStorage.getItem('user'), localStorage.getItem('nombre'),localStorage.getItem('edad'),
-        localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'),localStorage.getItem('sexo'), "")
+    try {
+
+        var user = new Usuario(localStorage.getItem('user'), localStorage.getItem('nombre'), localStorage.getItem('edad'),
+            localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'), localStorage.getItem('sexo'), "")
 
 
         var labelNombre = document.getElementById("labelNombre")
@@ -127,174 +123,45 @@ const setInfo = () => {
         var labelPeso = document.getElementById("labelPeso")
         var sexo = document.getElementById('sexo')
         var tipo = document.getElementById('tipoAlimentacion')
-      
 
-        if(user.nombre != ""){
+
+        if (user.nombre != "") {
             idNombre.value = user.nombre;
             labelNombre.className += "active highlight";
         }
 
-        
-        if(user.edad != ""){
+
+        if (user.edad != "") {
             idEdad.value = user.edad;
             labelEdad.className += "active highlight";
         }
 
 
-      
-        if(user.altura != ""){
+
+        if (user.altura != "") {
             idAltura.value = user.altura;
             labelAltura.className += "active highlight";
         }
 
-        
-        if(user.peso != ""){
+
+        if (user.peso != "") {
             idPeso.value = user.peso;
             labelPeso.className += "active highlight";
         }
 
 
-        
-        if(user.sexo != ""){
+
+        if (user.sexo != "") {
             sexo.value = user.sexo;
         }
 
 
 
-        if(user.tipo != ""){
+        if (user.tipo != "") {
             tipoAlimentacion.value = user.tipo;
         }
 
-    }catch(error){
+    } catch (error) {
         dbox(error);
     }
 }
-
-const setUser = (suscripcion) => {
-    try{
-
-            var user = new Usuario( localStorage.getItem('user'), localStorage.getItem('nombre'),localStorage.getItem('edad'),
-            localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'),localStorage.getItem('sexo'), "")
-
-            var fechaInicioSelect = document.getElementById('fechaSuscripcion')
-            let fechaInicio = fechaInicioSelect.value
-            let fechaFinalF = addDays(fechaInicio, 28)
-            let fechaFinal = fechaFinalF.toISOString().split('T')[0]
-
-            console.log(fechaFinal)
-
-    
-        
-            var  valuesSet = "";
- 
-            
-            if(idNombre.value != user.nombre){
-                valuesSet += "nombre = '" + idNombre.value + "'," ;
-                localStorage.setItem('nombre', idNombre.value)
-
-            }
-            
-        
-   
-            if(user.edad != ""){    
-                if(idEdad.value != user.edad){
-                    valuesSet += "edad = '" + idEdad.value + "',";
-                    localStorage.setItem('edad',  idEdad.value)
-                }
-            }else{
-                valuesSet += "edad = '" + idEdad.value + "',";
-                localStorage.setItem('edad',  idEdad.value)
-            }
-
-            if(user.altura != ""){
-                if( idAltura.value != user.altura){
-                    valuesSet +=  "altura = '" + idAltura.value + "',";
-                    localStorage.setItem('altura', idAltura.value)
-                }
-            }else{
-                valuesSet +=  "altura = '" + idAltura.value + "',";
-                localStorage.setItem('altura', idAltura.value)
-            }
-
-            
-            if(user.peso != ""){
-                if( idPeso.value != user.peso){
-                    valuesSet +=  "peso = '" + idPeso.value  + "',";
-                    localStorage.setItem('peso', idPeso.value)
-                }
-            }else{
-                valuesSet +=  "peso = '" + idPeso.value  + "',";
-                localStorage.setItem('peso', idPeso.value)
-            }
-            
-            if(user.sexo != ""){
-                if(sexo.value != user.sexo){
-                    valuesSet +=  "sexo = '" + sexo.value  + "',";
-                    localStorage.setItem('sexo', sexo.value)
-                }
-            }else{
-                valuesSet +=  "sexo = '" + sexo.value  + "',";
-                localStorage.setItem('sexo', sexo.value)
-            }
-
-
-            if(user.tipo != ""){
-                if(tipoAlimentacion.value != user.tipo){
-                    valuesSet += "tipoAlimentacion = '" +  tipoAlimentacion.value + "',";
-                    localStorage.setItem('tipo', tipoAlimentacion.value)
-                }
-
-            }else{
-                valuesSet += "tipoAlimentacion = '" +  tipoAlimentacion.value + "',";
-                localStorage.setItem('tipo', tipoAlimentacion.value)
-
-            }
-
-
-  
-    
-
-            if(valuesSet != ""){
-                var setValues = valuesSet.substring(0, valuesSet.length - 1);
-                var sqlSet = "UPDATE usuarios SET " + setValues + " WHERE email = ?";
-                console.log(sqlSet);
-                conn.query(sqlSet ,user.email, function (err, result) {
-                    if (err){
-                        dbox(err);
-                    }else{
-                      console.log("bien");
-                    }
-                    
-                });
-            }
-            
-            if(suscripcion){
-                console.log(fechaInicio + " " + fechaFinal)
-                var sqlQueryAdmin = "INSERT INTO suscripcion (usuario, caducada, fecha_inicio, fecha_fin) VALUES ('" + user.email + "',false,'" + fechaInicio + "','" + fechaFinal + "')";
-                conn.query(sqlQueryAdmin,(error,result,fields) => {
-                    if(error){
-                        dbox (error);
-                    }else{
-                        dbox ("Gracias por suscribirte a My Balance");
-                    }            
-                });
-            }
-            
-    }catch(error){
-        console.log(error)
-        dbox(error);
-    }
-    
-
-
-
-
-}
-
-
-
-
-
-exports.setUser = setUser;
-exports.setInfo = setInfo;
-exports.insertHtml = insertHtml;
