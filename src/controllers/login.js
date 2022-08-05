@@ -4,19 +4,27 @@ let  contraseñaLog = document.getElementById('contraseñaLogIn');
 let  emailLog = document.getElementById("emailLogIn")
 //const { BrowserWindow } = require('@electron/remote')
 const {ipcRenderer} = require('electron');
-const { dbox } = require('./../../src/js/popup');
+const { dbox } = require('../js/popup');
 //const remote = require('@electron/remote')
 //const app = require('electron').remote.app
 const path = require('path');
-const { app } = require('./../../src/js/renderApp.js');
-const { selectAdmin, selectUsuario } = require('./../../src/models/user')
+const { app } = require('../js/renderApp.js');
+const bcrypt = require("bcryptjs");
+const { selectAdmin, selectUsuario, createUser } = require('../models/user')
 
+const { getConnection } = require('../js/database');
 
+const conn = getConnection()
 
 
 app.listen(8000, () => {
     console.log("Sever is Running");
   })
+
+
+
+
+
 
 
 
@@ -108,8 +116,6 @@ function ValidateUser(user){
 
 logIn.addEventListener('submit', (e) => {
     e.preventDefault();
-
-    
     try{
         const user = {
             email: emailLog.value,
@@ -121,6 +127,4 @@ logIn.addEventListener('submit', (e) => {
         console.log(error)
     }
 
-    
-    
 })

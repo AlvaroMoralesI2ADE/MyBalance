@@ -3,35 +3,34 @@ const email = document.getElementById("emailRegistro")
 const contraseña = document.getElementById("contraseñaRegistro")
 const contraseña2 = document.getElementById("contraseñaRepRegistro")
 const nombreUsuario = document.getElementById("usuarioRegistro")
-const bcrypt = require("bcryptjs");
-
 const registrar = document.getElementById('registrarse');
 
-const { getConnection } = require('./../../src/js/database');
+app.get("/api/createUser", (req, res) => {
+    createUser(
+      conn,
+      req.query,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
 
-const conn = getConnection()
 
-function createUser(user){
-        var sqlQuery = 'INSERT INTO usuarios SET?'
-        conn.query(sqlQuery, user, (error,result,fields) => {
-            if(error){
-                dbox(error);
-            }else{
-                dbox("Usuario registrado en nuestra base de datos");
-            }
-          
-        });
 
-        /*
-        new Notification({
-            title:"Registro",
-            body: 'Usuario registrado'
-        }).show();
-*/
-        
-    
 
+
+function createU(user){
+    let request = 'http://localhost:8000/api/createUser?email=' + user.email
+    request += '&nombre=' + user.nombre
+    request += '&contraseña=' + user.contraseña
+
+    console.log(request)
+    $.getJSON(request).done(function (result) {
+        dbox("Usuario registrado en nuestra base de datos");
+    });
 }
+
+
 
 
 
@@ -47,31 +46,20 @@ registrar.addEventListener('submit', (e) => {
 
     try{
         if(Validation()){
-            var sqlQuery = "SELECT * FROM usuarios WHERE email=?";
-            conn.query(sqlQuery, email.value,(error,result,fields) => {
-                if(error){
-                    errors.push(error);
-                }else{
-
-                    
-                    if(result.length > 0){
-                        dbox('El email ya esta registrado en nuestra base de datos');
-                    }else{
-                        var contraseñaEncriptada = bcrypt.hashSync(contraseña.value,10); //encriptamos la contraseña
-                        const newUser = {
-                            email: email.value,
-                            nombre: usuario.value,
-                            contraseña: contraseñaEncriptada
-                        }
-                        createUser(newUser)
-                    }
-                }
+            $.getJSON('http://localhost:8000/api/selectUsuario?email=' + email.value).done(function (result) {
                 
-
-            
-            
-            });
-           
+                if(result.length > 0){
+                    dbox('El email ya esta registrado en nuestra base de datos');
+                }else{
+                    var contraseñaEncriptada = bcrypt.hashSync(contraseña.value,10); //encriptamos la contraseña
+                    const newUser = {
+                        email: email.value,
+                        nombre: usuario.value,
+                        contraseña: contraseñaEncriptada
+                    }
+                    createU(newUser)
+                }
+            });              
         }
     }catch(error){
         dbox(error);

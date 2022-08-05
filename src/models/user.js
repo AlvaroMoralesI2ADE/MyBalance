@@ -27,6 +27,17 @@ function selectUsuario(connection, data, callback) {
 }
 
 
+function createUser(connection, data, callback){
+    let sql = "INSERT INTO usuarios SET ?"
+    connection.query(sql, data, function (err, result) {
+        if (err) throw err
+        callback(result)
+
+    });
+ }
+
+
+
 
 function selectAdmin(connection, data, callback) {
     let sql = 'SELECT * FROM administradores WHERE gmail = ?';
@@ -56,4 +67,4 @@ function selectSuscripcion(connection, data, callback) {
 
 }
 
-module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, selectAdmin }
+module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, selectAdmin, createUser }
