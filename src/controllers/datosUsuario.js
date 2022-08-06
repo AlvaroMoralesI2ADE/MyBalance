@@ -1,4 +1,4 @@
-const { insertSuscripcion, UpdateUsuario } = require('../../../src/models/user');
+const { insertSuscripcion, updateUsuario } = require('../../../src/models/user');
 const { app } = require('../../../src/controllers/expressApp.js');
 
 app.listen(8000, () => {
@@ -33,13 +33,13 @@ const setUser = (suscripcion) => {
         var user = new Usuario(localStorage.getItem('user'), localStorage.getItem('nombre'), localStorage.getItem('edad'),
             localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'), localStorage.getItem('sexo'), "")
 
-        var fechaInicioSelect = document.getElementById('fechaSuscripcion')
-        let fechaInicio = fechaInicioSelect.value
-        let fechaFinalF = addDays(fechaInicio, 28)
-        let fechaFinal = fechaFinalF.toISOString().split('T')[0]
+        if(suscripcion){
+            var fechaInicioSelect = document.getElementById('fechaSuscripcion')
+            let fechaInicio = fechaInicioSelect.value
 
-        console.log(fechaFinal)
-
+            let fechaFinalF = addDays(fechaInicio, 28)
+            let fechaFinal = fechaFinalF.toISOString().split('T')[0]
+        }
 
 
         var valuesSet = "";
@@ -128,7 +128,6 @@ const setUser = (suscripcion) => {
             request += '&fechaInicio=' + fechaInicio
             request += '&fechaFinal=' + fechaFinal
 
-
             $.getJSON(request).done(function (result) {
                 dbox("Gracias por suscribirte a My Balance");
             });
@@ -139,10 +138,6 @@ const setUser = (suscripcion) => {
         console.log(error)
         dbox(error);
     }
-
-
-
-
 
 }
 

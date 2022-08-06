@@ -37,3 +37,4 @@ function renderAlimentoBtn(comida, dia, alimento, cantidad, btn, btn_group_width
     data4.innerHTML += alimento + " " + cantidad
     data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + (btn + 1) + "-" + alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + + (btn + 1) + "-" + alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + + (btn + 1) + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
 }
+

@@ -1,13 +1,12 @@
 const { getConnection } = require('../../../src/database/database');
 const conn = getConnection();
 const Comida = require('../../../src/controllers/comida');
-const { selectUser } = require('../../../src/models/user')
+const { selectUsuario } = require('../../../src/models/user')
 const { selectAlimento } = require('../../../src/models/alimentos')
-const { selectDieta } = require('../../../src/models/dieta')
-
-
+const {  selectDieta } =  require('../../../src/models/dieta')
+const { selectDietaModelo, selectNameDietaModelo  } = require('../../../src/models/dietaModelo')
 const { app } = require('../../../src/controllers/expressApp.js');
-
+const { request } = require('express');
 
 const cargarDieta = document.getElementById('CargarDieta');
 const añadir = document.getElementById('Añadir');
@@ -45,7 +44,7 @@ $(function () {
             "ui-autocomplete": "highlight"
         },
         name: 'buscadorDieta',
-        source: 'http://localhost:8000/api/searchDieta?key=%QUERY',
+        source: 'http://localhost:8000/api/searchDietaNombreModelo?key=%QUERY',
         messages: {
             noResults: 'No se ha encontrado ninguna dieta',
 
@@ -76,14 +75,50 @@ app.get("/api/searchAlimento", (req, res) => {
 });
 
 
-app.get('/api/searchDieta', (req, res) => {
+app.get('/api/selectDieta', (req, res) => {
     selectDieta(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
+
+
+app.get('/api/searchDietaNombreModelo', (req, res) => {
+    selectNameDietaModelo(
         conn,
         (result) => {
             res.json(result);
         }
     );
 });
+
+app.get("/api/selectUser", (req, res) => {
+    selectUsuario(
+        conn,
+        req.query.email,
+        (result) => {
+            console.log(result)
+            res.json(result);
+        }
+    );
+});
+
+
+app.get("/api/selectDietaModelo", (req, res) => {
+    selectDietaModelo(
+        conn,
+        req.query.dieta,
+        (result) => {
+            console.log(result)
+            res.json(result);
+        }
+    );
+});
+
 
 
 
@@ -101,32 +136,13 @@ $(document).ready(function () {
     prepararSemana(semana[1])
     mostrarDatosUsuario(usuario[1])
     rellenarAlimentos(suscripcion, semana[1])
-
     //PRIMERO CARGAS LA DIETA.  -> VEMOS EL DIA QUE ES HOY. Y CARGAS TODAS LAS DIETAS Q > 
     //CARGAR TODOS LOS DATOS DEL USUARIO PARA EL PLAN
 });
 
-app.get("/api", (req, res) => {
-    console.log('hello world')
-});
-
-app.get("/api/selectUser", (req, res) => {
-    selectUser(
-        conn,
-        { email: nombreUsuario },
-        (result) => {
-            console.log(result)
-            res.json(result);
-        }
-    );
-});
 
 
-function addDays(date, days) {
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-}
+
 
 function getFechas(sem) {
     const fechas = new Map()
@@ -135,8 +151,6 @@ function getFechas(sem) {
 
 
     let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
-
-
     /*let Fechahoy = Date.now();
     let s = new Date(Fechahoy);
     console.log(s.getDate().toString().padStart(2, "0") + "-" + (s.getMonth() + 1).toString().padStart(2, "0") + "-" + s.getFullYear())
@@ -170,49 +184,28 @@ function getFechas(sem) {
     let dia7 = addDays(semana, 6)
     fechas.set(dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear(), dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
     fechasArray.push(dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
-
-
-
+    
     return fechas
 }
 
 
 
+
+function addDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+
+
 function prepararSemana(semana) {
-
     try {
-        const dataForm = document.getElementById("diasSemana")
-        const cena = document.getElementById("cena")
-        const desayuno = document.getElementById("desayuno")
-        const comida = document.getElementById("comidaTH")
-        const merienda = document.getElementById("merienda")
-        const almuerzo = document.getElementById("almuerzo")
-
         let fechas = getFechas(semana)
-        dataForm.innerHTML += "<th scope=\"col\"></th>"
-        const dataForm2 = document.getElementById("dia")
-        desayuno.innerHTML += "<th scope=\"row\">Desayuno</th>"
-        almuerzo.innerHTML += "<th scope=\"row\">Almuerzo</th>"
-        comida.innerHTML += "<th scope=\"row\">Comida</th>"
-        merienda.innerHTML += "<th scope=\"row\">Merienda</th>"
-        cena.innerHTML += "<th scope=\"row\">Cena</th>"
-
-        fechas.forEach((fechaSQL, fecha, map) => {
-            dataForm.innerHTML += "<th scope=\"col\">" + fecha + "</th>"
-            dataForm2.innerHTML += "<option value=\"" + fechaSQL + "\">" + fecha + "</option>"
-            desayuno.innerHTML += "<td id=\"desayuno-" + fechaSQL + "\"></td>"
-            almuerzo.innerHTML += "<td id=\"almuerzo-" + fechaSQL + "\"></td>"
-            comida.innerHTML += "<td id=\"comida-" + fechaSQL + "\"></td>"
-            merienda.innerHTML += "<td id=\"merienda-" + fechaSQL + "\"></td>"
-            cena.innerHTML += "<td id=\"cena-" + fechaSQL + "\"></td>"
-        });
-
+        renderSemana(fechas)
     } catch (error) {
         dbox(error)
     }
-
-
-
 
 }
 
@@ -222,28 +215,34 @@ function prepararSemana(semana) {
 
 function mostrarDatosUsuario(gmail) {
     try {
-        let sql = 'SELECT nombre, sexo, altura, peso, tipoAlimentacion, edad FROM mybalance.usuarios WHERE email = ?';
-        conn.query(sql, gmail, (error, results, fields) => {
-            if (error) {
-                return console.error(error.message);
+        $.getJSON('http://localhost:8000/api/selectUser?email=' + gmail).done(function (results) {
+            if (results.length == 1) {
+                renderCard(results[0].nombre, results[0].altura, results[0].edad,results[0].tipoAlimentacion, results[0].peso) 
             } else {
-                if (results.length == 1) {
-                    var div = document.getElementById("card");
-                    div.innerHTML += "<h5 class=\"card-title\">" + results[0].nombre + "</h5>"
-                    div.innerHTML += "<p class=\"card-text\">Edad: " + results[0].edad + "&nbsp&nbsp&nbsp Altura: " + results[0].altura + "cm &nbsp&nbsp&nbsp Peso: " + 100 + "kg</p>"
-                    div.innerHTML += "<p class=\"card-text\"> Tipo Alimentacion: " + results[0].tipoAlimentacion + "</p>"
-                } else {
-                    dbox("Ha ocurrido un error a la hora de consultar la información del usuario")
-                }
-
+                dbox("Ha ocurrido un error a la hora de consultar la información del usuario")
             }
         });
+    
     } catch (error) {
         dbox(error)
     }
 
 }
 
+
+
+
+cargarDieta.addEventListener("click", function () {
+    let dieta = document.getElementById('BuscadorDieta');
+    if (dieta.value != "") {
+        if (comidas.length > 0) {
+            comidas = []
+        }
+        cargarDietaModelo(dieta.value)
+    } else {
+        dbox("Por favor, seleccione una dieta")
+    }
+});
 
 
 
@@ -258,8 +257,6 @@ añadir.addEventListener("click", function () {
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1));
                 renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
-    
-
             } else {
                 var pos = -1
                 //USAR MAP
@@ -289,9 +286,6 @@ añadir.addEventListener("click", function () {
                     renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value, classM)
                 }
             }
-
-
-
             Idcantidad.value = ""
             alimento.value = ""
         }
@@ -302,42 +296,14 @@ añadir.addEventListener("click", function () {
 
 });
 
-
-
-
-
-cargarDieta.addEventListener("click", function () {
-    let dieta = document.getElementById('BuscadorDieta');
-    if (dieta.value != "") {
-        if (comidas.length > 0) {
-            comidas = []
-        }
-        cargarDietaModelo(dieta.value)
-    } else {
-        dbox("Por favor, seleccione una dieta")
-    }
-});
-
-
-
-
 function cargarDietaModelo(dieta) {
     try {
-        let query = "SELECT alimentos_comida_modelo.alimentos, alimentos_comida_modelo.tipo,"
-        query += "alimentos_comida_modelo.cantidad, comidas_del_dia_modelo.dia "
-        query += "FROM comidas_del_dia_modelo, alimentos_comida_modelo "
-        query += "WHERE comidas_del_dia_modelo.dieta_modelo = \"" + dieta + "\" AND comidas_del_dia_modelo.idcomidas_dia_modelo = "
-        query += "alimentos_comida_modelo.comidas_modelo"
+    
 
-
-        conn.query(query, function (error, result, fields) {
-            if (error) {
-                dbox(error)
-            } else {
-                renderDietaModelo(result)
-            }
-
+        $.getJSON('http://localhost:8000/api/selectDietaModelo?dieta=' + dieta).done(function (result) {
+            renderDietaModelo(result)
         });
+    
     } catch (error) {
         dbox(error)
     }
@@ -345,9 +311,6 @@ function cargarDietaModelo(dieta) {
 
 
 function getDateFormat(dia) {
-
-
-
     let date = ""
     switch (dia) {
         case 1:
@@ -385,9 +348,7 @@ function getDateFormat(dia) {
 
 function renderDietaModelo(result) {
     try {
-
         //HAY QUE ELIMINAR TODO LO QUE HAYA ANTE
-   
         for (i = 0; i < result.length; i++) {
             let comida = result[i].tipo
             let diaSql = result[i].dia
@@ -443,6 +404,84 @@ function renderDietaModelo(result) {
 
 
 
+function renderDieta(result) {
+    try {
+        /*
+        SELECT  alimentos_comidas.alimento,alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
+        query += "alimentos_comidas.cantidad, alimentos_comidas.consumido, comidas_del_dia.dia "
+        */
+        //IF DATE NOW == SQLDATE -> OPCION MARCAR COMO CONSUMIDO
+        //IF DATE NOW > SQLDATE -> PONER EN VERDE SI ES CONSUMIDO, PONER EN ROJO SINO, PONER EN AMARILLO SI ESTA MODIFICAR
+        //IF DATE NOW < SQLDATE -> PONERLO EN GRIS CON OPCION DE MODIFICAR
+
+        let dia = ""
+        for (i = 0; i < result.length; i++) {
+            let comida = result[i].tipo
+            let diaSql = result[i].dia
+            let diaSqlFormat = new Date(diaSql)
+            let dia = diaSqlFormat.getFullYear() + "-" + (diaSqlFormat.getMonth() + 1).toString().padStart(2, "0") + "-" + diaSqlFormat.getDate().toString().padStart(2, "0")
+            let alimento = result[i].alimento
+            let classM = ""
+            if (result[i].modificar == 0) {
+                classM = "btn btn-success btn-sm dropdown-toggle"
+            } else {
+                classM = "btn btn-danger btn-sm dropdown-toggle"
+            }
+
+            if (comidas.length < 1) {
+                comidas.push(new Comida(comida, dia, (result[i].alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
+                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+            } else {
+                let pos = -1
+                //USAR MAP
+                for (let j = 0; j < comidas.length; j++) {
+                    if (comidas[j].mismaComida(comida, dia)) {
+                        pos = j
+                    }
+                }
+
+                if (pos != -1) {
+                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
+                        var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
+                        if (data.clientWidth > 250) {
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn_group_width()
+                            comidas[pos].incrementBtn()
+                        } else {
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn()
+                        }
+                    } else {
+                        dbox("No puedes añadir el mismo alimento en la misma comida")
+                    }
+
+                } else {
+                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
+                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+                }
+            }
+
+        }
+
+        comidas = []
+
+
+    } catch (error) {
+        console.log(error)
+        dbox(error)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 function eliminarAlimento(id) {
@@ -450,6 +489,7 @@ function eliminarAlimento(id) {
         console.log(id)
         var dropdown_item_id = id.replace('btn-drop', 'dropdown-item')
         var dropdown_menu_id = id.replace('btn-drop', 'dropdown-menu')
+
 
         var dropdown_item = document.getElementById(dropdown_item_id)
         var dropdown_menu = document.getElementById(dropdown_menu_id)
@@ -540,111 +580,31 @@ guardar.addEventListener("click", function () {
 
 function rellenarAlimentos(suscripcion, semana) {
     try {
-
+       
         let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
         let semSQL = semana.getFullYear() + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0")
-        let query = ""
-        query += "SELECT alimentos_comidas.alimento, alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
-        query += "alimentos_comidas.cantidad, alimentos_comidas.consumido, comidas_del_dia.dia "
-        query += "FROM comidas_del_dia, alimentos_comidas "
-        query += "WHERE comidas_del_dia.idcomidas_dia = alimentos_comidas.comida "
-        query += "AND comidas_del_dia.dieta IN (SELECT dieta FROM dieta "
-        query += "WHERE suscripcion =" + suscripcion + " AND dieta.fecha_inicio = \"" + semSQL + "\")"
+        let request = "http://localhost:8000/api/selectDieta?suscripcion=" + suscripcion
+        request +=  "&semSql=" + semSQL
 
-
-        conn.query(query, (error, result, fields) => {
-            if (error) {
-                dbox(error);
-                console.log(error)
-            } else {
-                renderDieta(result)
-            }
+        console.log(semSQL)
+        console.log(request)
+        $.getJSON(request).done(function (result) {
+            renderDieta(result)
         });
-
-
-    } catch (error) {
-        dbox(error)
-    }
-
-}
-
-
-
-
-
-
-
-
-function renderDieta(result) {
-    try {
-        /*
-        SELECT  alimentos_comidas.alimento,alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
-        query += "alimentos_comidas.cantidad, alimentos_comidas.consumido, comidas_del_dia.dia "
-        */
-        //IF DATE NOW == SQLDATE -> OPCION MARCAR COMO CONSUMIDO
-        //IF DATE NOW > SQLDATE -> PONER EN VERDE SI ES CONSUMIDO, PONER EN ROJO SINO, PONER EN AMARILLO SI ESTA MODIFICAR
-        //IF DATE NOW < SQLDATE -> PONERLO EN GRIS CON OPCION DE MODIFICAR
-
-        let dia = ""
-        for (i = 0; i < result.length; i++) {
-            let comida = result[i].tipo
-            let diaSql = result[i].dia
-            let diaSqlFormat = new Date(diaSql)
-            let dia = diaSqlFormat.getFullYear() + "-" + (diaSqlFormat.getMonth() + 1).toString().padStart(2, "0") + "-" + diaSqlFormat.getDate().toString().padStart(2, "0")
-            let alimento = result[i].alimento
-            let classM = ""
-            if (result[i].modificar == 0) {
-                classM = "btn btn-success btn-sm dropdown-toggle"
-            } else {
-                classM = "btn btn-danger btn-sm dropdown-toggle"
-            }
-
-
-
-
-            if (comidas.length < 1) {
-                comidas.push(new Comida(comida, dia, (result[i].alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
-                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
-            } else {
-                let pos = -1
-                //USAR MAP
-                for (let j = 0; j < comidas.length; j++) {
-                    if (comidas[j].mismaComida(comida, dia)) {
-                        pos = j
-                    }
-                }
-
-                if (pos != -1) {
-                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
-                        var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
-                        if (data.clientWidth > 250) {
-                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
-                            comidas[pos].incrementBtn_group_width()
-                            comidas[pos].incrementBtn()
-                        } else {
-                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
-                            comidas[pos].incrementBtn()
-                        }
-                    } else {
-                        dbox("No puedes añadir el mismo alimento en la misma comida")
-                    }
-
-                } else {
-                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
-                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
-                }
-            }
-
-        }
-
-        comidas = []
-
 
     } catch (error) {
         console.log(error)
         dbox(error)
     }
+
 }
+
+
+
+
+
+
+
 
 
 

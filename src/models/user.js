@@ -68,7 +68,7 @@ function selectSuscripcion(connection, data, callback) {
 
 
 function insertSuscripcion(connection, data, callback){
- 
+
     var sqlQueryAdmin = "INSERT INTO suscripcion (usuario, caducada, fecha_inicioS, fecha_finS) VALUES ('"
     sqlQueryAdmin += data.email + "',false,'" + data.fechaInicio + "','" + data.fechaFinal + "')";
     console.log(sqlQueryAdmin)
@@ -81,7 +81,12 @@ function insertSuscripcion(connection, data, callback){
 
 
 function updateUsuario(connection, data, callback){
-    var sqlSet = "UPDATE usuarios SET " + data.setValues + " WHERE email = " + data.email;
+    console.log(data.setValues)
+    console.log(data.email)
+    console.log("etnta")
+    let sql = "UPDATE usuarios SET " + data.setValues + " WHERE email = '" + data.email + "'";
+
+    console.log( sql)
     connection.query(sql, function (err, result) {
         if (err) throw err
         callback(result)

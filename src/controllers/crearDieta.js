@@ -61,11 +61,13 @@ app.get("/api/searchAlimento", (req, res) => {
 //Añade alimento-cantidad a la comida correspondiente
 añadir.addEventListener("click", function () {
     try {
+        
+        let classM = "btn btn-success btn-sm dropdown-toggle"
         if (alimento.value != "") {
             var tr;
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1));
-                renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value)
+                renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
     
 
             } else {
@@ -78,7 +80,15 @@ añadir.addEventListener("click", function () {
                 }
                 if (pos != -1) {
                     if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value)) {
-                        renderAlimento(comida.value, dia.value, Idcantidad.value, alimento.value, comidas, pos)       
+                        var data = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
+                        if (data.clientWidth > 250) {
+                            renderAlimentoBtnGroup(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn_group_width()
+                            comidas[pos].incrementBtn()
+                        } else {
+                            renderAlimentoBtn(comida.value, dia.value, alimento.value,  Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn()
+                        }     
                     } else {
                         dbox("No puedes añadir el mismo alimento en la misma comida")
                     }
@@ -86,11 +96,9 @@ añadir.addEventListener("click", function () {
 
                 } else {
                     comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1))
-                    renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value)
+                    renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
                 }
             }
-
-
 
             Idcantidad.value = ""
             alimento.value = ""
