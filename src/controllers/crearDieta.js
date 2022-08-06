@@ -60,21 +60,14 @@ app.get("/api/searchAlimento", (req, res) => {
 
 //Añade alimento-cantidad a la comida correspondiente
 añadir.addEventListener("click", function () {
-
     try {
         if (alimento.value != "") {
             var tr;
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1));
-                var data2 = document.getElementById(comida.value + "-" + dia.value);
-                
-                data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida.value + "-" + dia.value + "-" + 1 + "\">"
-                var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + 1)
-                data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value)
-                data4.innerHTML += alimento.value + " " + Idcantidad.value
-                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
-             
+                renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value)
+    
+
             } else {
                 var pos = -1
                 //USAR MAP
@@ -85,28 +78,7 @@ añadir.addEventListener("click", function () {
                 }
                 if (pos != -1) {
                     if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value)) {
-                        var data = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
-                        if (data.clientWidth > 250) {
-                            var data2 = document.getElementById(comida.value + "-" + dia.value);
-                            data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn_group_width + 1) + "\">"
-                            document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn_group_width + 1)).style.margin = "5px";
-                            var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn_group_width + 1))
-                            data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                            var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value)
-                            data4.innerHTML += alimento.value + " " + Idcantidad.value
-                            data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
-                            comidas[pos].incrementBtn_group_width()
-                            comidas[pos].incrementBtn()
-                        } else {
-
-                            var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
-                            data3.innerHTML += "<p>&nbsp</p>"
-                            data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                            var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value)
-                            data4.innerHTML += alimento.value + " " + Idcantidad.value
-                            data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
-                            comidas[pos].incrementBtn()
-                        }
+                        renderAlimento(comida.value, dia.value, Idcantidad.value, alimento.value, comidas, pos)       
                     } else {
                         dbox("No puedes añadir el mismo alimento en la misma comida")
                     }
@@ -114,15 +86,7 @@ añadir.addEventListener("click", function () {
 
                 } else {
                     comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1))
-                    var data2 = document.getElementById(comida.value + "-" + dia.value);
-                    data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida.value + "-" + dia.value + "-" + 1 + "\">"
-                    var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + 1)
-                    data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                    var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value)
-                    data4.innerHTML += alimento.value + " " + Idcantidad.value
-                    data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
-
-
+                    renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value)
                 }
             }
 
@@ -196,7 +160,6 @@ guardar.addEventListener("click", function () {
             query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 7 + ", \"" + nombre.value + "\"); \n"
         
 
-      
             comidas.forEach(comida => {
                 comida.prepareSqlModelo(nombre.value)
                 query += comida.sql

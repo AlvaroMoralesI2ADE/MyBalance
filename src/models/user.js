@@ -1,12 +1,12 @@
 const mysql = require("mysql")
 
 
+
+
 function selectSuscVigentes(connection, callback) {
-    let sql = 'SELECT email, nombre, suscripcion.fecha_inicioS, '
-    sql += 'suscripcion.fecha_finS, dieta.dieta, dieta.fecha_inicio, '
-    sql += 'dieta.fecha_fin, suscripcion.idsuscripcion FROM dieta, suscripcion, usuarios '
-    sql += 'WHERE usuarios.email = suscripcion.usuario AND dieta.suscripcion =  '
-    sql += 'suscripcion.idsuscripcion AND suscripcion.caducada = FALSE ORDER BY dieta.fecha_inicio ASC'
+    let sql = 'SELECT email, nombre, suscripcion.fecha_inicioS, suscripcion.fecha_finS,'
+    sql += ' suscripcion.idsuscripcion FROM suscripcion, '
+    sql += 'usuarios WHERE mybalance.usuarios.email = suscripcion.usuario '
 
     connection.query(sql, function (err, result) {
         if (err) throw err
@@ -68,9 +68,11 @@ function selectSuscripcion(connection, data, callback) {
 
 
 function insertSuscripcion(connection, data, callback){
-    var sqlQueryAdmin = "INSERT INTO suscripcion (usuario, caducada, fecha_inicio, fecha_fin) VALUES ('"
+ 
+    var sqlQueryAdmin = "INSERT INTO suscripcion (usuario, caducada, fecha_inicioS, fecha_finS) VALUES ('"
     sqlQueryAdmin += data.email + "',false,'" + data.fechaInicio + "','" + data.fechaFinal + "')";
-    connection.query(sql, function (err, result) {
+    console.log(sqlQueryAdmin)
+    connection.query(sqlQueryAdmin, function (err, result) {
         if (err) throw err
         callback(result)
     });

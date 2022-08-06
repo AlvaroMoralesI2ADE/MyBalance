@@ -54,4 +54,29 @@ function UpdateAlimentosComidas(connection, param, callback){
     });
 }
 
-module.exports = { selectAlimento, selectAlimentosSuscripcion,UpdateAlimentosComidas}
+
+
+function deleteAlimento(connection, data, callback){
+    let query = 'DELETE FROM alimentos WHERE alimento = ?'
+    connection.query(query, data, function (err, result) {
+        if (err) throw err
+        callback(result)
+    });
+
+}
+
+
+
+
+function insertAlimento(connection, data, callback){
+    let query = "INSERT INTO alimentos (alimento, tipo) VALUES (?,?)";
+    connection.query(query, [data.alimento, data.tipo] , function (err, result) {
+        if (err) throw err
+        callback(result)
+    });
+
+}
+
+
+
+module.exports = { selectAlimento, selectAlimentosSuscripcion,UpdateAlimentosComidas, deleteAlimento, insertAlimento}

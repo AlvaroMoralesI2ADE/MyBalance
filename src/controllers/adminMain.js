@@ -53,7 +53,7 @@ function TablaUsuarios() {
   try {
     $.getJSON('http://localhost:8000/api/selectSuscVigentes').done(function (data) {
       for (let i = 0; i < data.length; i++) {
-        renderSuscripcion(data[i].fecha_inicioS, data[i].fecha_finS, data[i].fecha_inicio, data[i].fecha_fin,
+        renderSuscripcion(data[i].fecha_inicioS, data[i].fecha_finS, 
           data[i].nombre, data[i].email, data[i].idsuscripcion, data.length)
       }
     })

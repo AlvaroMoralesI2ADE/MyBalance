@@ -25,41 +25,41 @@ let fechasArray = []
 
 $(function () {
     $("#Buscador").autocomplete({
-      classes: {
-        "ui-autocomplete": "highlight"
-      },
-      name: 'buscador',
-      source: 'http://localhost:8000/api/searchAlimento?key=%QUERY',
-      messages: {
-        noResults: 'No se ha encontrado ningun alimento',
+        classes: {
+            "ui-autocomplete": "highlight"
+        },
+        name: 'buscador',
+        source: 'http://localhost:8000/api/searchAlimento?key=%QUERY',
+        messages: {
+            noResults: 'No se ha encontrado ningun alimento',
 
-      },
-      limit: 4
+        },
+        limit: 4
     });
-  });
+});
 
 
-  $(function () {
+$(function () {
     $("#BuscadorDieta").autocomplete({
-      classes: {
-        "ui-autocomplete": "highlight"
-      },
-      name: 'buscadorDieta',
-      source: 'http://localhost:8000/api/searchDieta?key=%QUERY',
-      messages: {
-        noResults: 'No se ha encontrado ninguna dieta',
+        classes: {
+            "ui-autocomplete": "highlight"
+        },
+        name: 'buscadorDieta',
+        source: 'http://localhost:8000/api/searchDieta?key=%QUERY',
+        messages: {
+            noResults: 'No se ha encontrado ninguna dieta',
 
-      },
-      limit: 4
+        },
+        limit: 4
     });
-  });
+});
 
 
 
 
 app.listen(8000, () => {
     console.log("Sever is Running");
-  })
+})
 
 
 
@@ -67,22 +67,22 @@ app.listen(8000, () => {
 
 app.get("/api/searchAlimento", (req, res) => {
     selectAlimento(
-      conn,
-      req.query.term,
-      (result) => {
-        res.json(result);
-      }
+        conn,
+        req.query.term,
+        (result) => {
+            res.json(result);
+        }
     );
 });
 
 
-app.get('/api/searchDieta', (req, res)  => {
+app.get('/api/searchDieta', (req, res) => {
     selectDieta(
         conn,
         (result) => {
-          res.json(result);
+            res.json(result);
         }
-      );
+    );
 });
 
 
@@ -100,8 +100,8 @@ $(document).ready(function () {
     nombreUsuario = usuario[1]
     prepararSemana(semana[1])
     mostrarDatosUsuario(usuario[1])
-    rellenarAlimentos(suscripcion,semana[1])
-   
+    rellenarAlimentos(suscripcion, semana[1])
+
     //PRIMERO CARGAS LA DIETA.  -> VEMOS EL DIA QUE ES HOY. Y CARGAS TODAS LAS DIETAS Q > 
     //CARGAR TODOS LOS DATOS DEL USUARIO PARA EL PLAN
 });
@@ -112,12 +112,12 @@ app.get("/api", (req, res) => {
 
 app.get("/api/selectUser", (req, res) => {
     selectUser(
-      conn,
-       {email : nombreUsuario},
-      (result) => {
-        console.log(result)
-        res.json(result);
-      }
+        conn,
+        { email: nombreUsuario },
+        (result) => {
+            console.log(result)
+            res.json(result);
+        }
     );
 });
 
@@ -134,42 +134,42 @@ function getFechas(sem) {
     semanaArray = sem.split("-")
 
 
-    let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1])- 1), Number(semanaArray[0]))
+    let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
 
 
     /*let Fechahoy = Date.now();
     let s = new Date(Fechahoy);
     console.log(s.getDate().toString().padStart(2, "0") + "-" + (s.getMonth() + 1).toString().padStart(2, "0") + "-" + s.getFullYear())
     console.log(s.toISOString().split('T')[0])*/
- 
-    fechas.set(semana.getDate().toString().padStart(2, "0") + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getFullYear(), semana.getFullYear()  + "-" +  (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0"))
-    fechasArray.push(semana.getFullYear()  + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0"))
+
+    fechas.set(semana.getDate().toString().padStart(2, "0") + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getFullYear(), semana.getFullYear() + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0"))
+    fechasArray.push(semana.getFullYear() + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0"))
 
 
     let dia2 = addDays(semana, 1)
-    fechas.set(dia2.getDate().toString().padStart(2, "0") + "-" + (dia2.getMonth() + 1).toString().padStart(2, "0") + "-" + dia2.getFullYear(), dia2.getFullYear()  + "-" + (dia2.getMonth() + 1).toString().padStart(2, "0") + "-" + dia2.getDate().toString().padStart(2, "0"))
-    fechasArray.push(dia2.getFullYear()  + "-" + (dia2.getMonth() + 1).toString().padStart(2, "0") + "-" + dia2.getDate().toString().padStart(2, "0"))
+    fechas.set(dia2.getDate().toString().padStart(2, "0") + "-" + (dia2.getMonth() + 1).toString().padStart(2, "0") + "-" + dia2.getFullYear(), dia2.getFullYear() + "-" + (dia2.getMonth() + 1).toString().padStart(2, "0") + "-" + dia2.getDate().toString().padStart(2, "0"))
+    fechasArray.push(dia2.getFullYear() + "-" + (dia2.getMonth() + 1).toString().padStart(2, "0") + "-" + dia2.getDate().toString().padStart(2, "0"))
 
     let dia3 = addDays(semana, 2)
-    fechas.set(dia3.getDate().toString().padStart(2, "0") + "-" + (dia3.getMonth() + 1).toString().padStart(2, "0") + "-" + dia3.getFullYear(), dia3.getFullYear()  + "-" + (dia3.getMonth() + 1).toString().padStart(2, "0") + "-" + dia3.getDate().toString().padStart(2, "0"))
-    fechasArray.push(dia3.getFullYear()  + "-" + (dia3.getMonth() + 1).toString().padStart(2, "0") + "-" + dia3.getDate().toString().padStart(2, "0"))
+    fechas.set(dia3.getDate().toString().padStart(2, "0") + "-" + (dia3.getMonth() + 1).toString().padStart(2, "0") + "-" + dia3.getFullYear(), dia3.getFullYear() + "-" + (dia3.getMonth() + 1).toString().padStart(2, "0") + "-" + dia3.getDate().toString().padStart(2, "0"))
+    fechasArray.push(dia3.getFullYear() + "-" + (dia3.getMonth() + 1).toString().padStart(2, "0") + "-" + dia3.getDate().toString().padStart(2, "0"))
 
     let dia4 = addDays(semana, 3)
-    fechas.set(dia4.getDate().toString().padStart(2, "0") + "-" + (dia4.getMonth() + 1).toString().padStart(2, "0") + "-" + dia4.getFullYear(), dia4.getFullYear()  + "-" + (dia4.getMonth() + 1).toString().padStart(2, "0") + "-" + dia4.getDate().toString().padStart(2, "0"))
-    fechasArray.push(dia4.getFullYear()  + "-" + (dia4.getMonth() + 1).toString().padStart(2, "0") + "-" + dia4.getDate().toString().padStart(2, "0"))
+    fechas.set(dia4.getDate().toString().padStart(2, "0") + "-" + (dia4.getMonth() + 1).toString().padStart(2, "0") + "-" + dia4.getFullYear(), dia4.getFullYear() + "-" + (dia4.getMonth() + 1).toString().padStart(2, "0") + "-" + dia4.getDate().toString().padStart(2, "0"))
+    fechasArray.push(dia4.getFullYear() + "-" + (dia4.getMonth() + 1).toString().padStart(2, "0") + "-" + dia4.getDate().toString().padStart(2, "0"))
 
-    
+
     let dia5 = addDays(semana, 4)
-    fechas.set(dia5.getDate().toString().padStart(2, "0") + "-" + (dia5.getMonth() + 1).toString().padStart(2, "0") + "-" + dia5.getFullYear(), dia5.getFullYear()  + "-" + (dia5.getMonth() + 1).toString().padStart(2, "0") + "-" + dia5.getDate().toString().padStart(2, "0"))
-    fechasArray.push(dia5.getFullYear()  + "-" + (dia5.getMonth() + 1).toString().padStart(2, "0") + "-" + dia5.getDate().toString().padStart(2, "0"))
+    fechas.set(dia5.getDate().toString().padStart(2, "0") + "-" + (dia5.getMonth() + 1).toString().padStart(2, "0") + "-" + dia5.getFullYear(), dia5.getFullYear() + "-" + (dia5.getMonth() + 1).toString().padStart(2, "0") + "-" + dia5.getDate().toString().padStart(2, "0"))
+    fechasArray.push(dia5.getFullYear() + "-" + (dia5.getMonth() + 1).toString().padStart(2, "0") + "-" + dia5.getDate().toString().padStart(2, "0"))
 
     let dia6 = addDays(semana, 5)
-    fechas.set(dia6.getDate().toString().padStart(2, "0") + "-" + (dia6.getMonth() + 1).toString().padStart(2, "0") + "-" + dia6.getFullYear(), dia6.getFullYear()  + "-" + (dia6.getMonth() + 1).toString().padStart(2, "0") + "-" + dia6.getDate().toString().padStart(2, "0"))
-    fechasArray.push(dia6.getFullYear()  + "-" + (dia6.getMonth() + 1).toString().padStart(2, "0") + "-" + dia6.getDate().toString().padStart(2, "0"))
+    fechas.set(dia6.getDate().toString().padStart(2, "0") + "-" + (dia6.getMonth() + 1).toString().padStart(2, "0") + "-" + dia6.getFullYear(), dia6.getFullYear() + "-" + (dia6.getMonth() + 1).toString().padStart(2, "0") + "-" + dia6.getDate().toString().padStart(2, "0"))
+    fechasArray.push(dia6.getFullYear() + "-" + (dia6.getMonth() + 1).toString().padStart(2, "0") + "-" + dia6.getDate().toString().padStart(2, "0"))
 
     let dia7 = addDays(semana, 6)
-    fechas.set(dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear(), dia7.getFullYear()  + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
-    fechasArray.push(dia7.getFullYear()  + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
+    fechas.set(dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear(), dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
+    fechasArray.push(dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
 
 
 
@@ -253,17 +253,13 @@ añadir.addEventListener("click", function () {
 
     try {
         if (alimento.value != "") {
+            let classM = "btn btn-success btn-sm dropdown-toggle"
             var tr;
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1));
-                var data2 = document.getElementById(comida.value + "-" + dia.value);
-                data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida.value + "-" + dia.value + "-" + 1 + "\">"
-                var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + 1)
-                data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value)
-                data4.innerHTML += alimento.value + " " + Idcantidad.value
-                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
-                //<button type="button" class="btn-close" aria-label="Close"></button>
+                renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
+    
+
             } else {
                 var pos = -1
                 //USAR MAP
@@ -276,24 +272,11 @@ añadir.addEventListener("click", function () {
                     if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value)) {
                         var data = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
-                            var data2 = document.getElementById(comida.value + "-" + dia.value);
-                            data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn_group_width + 1) + "\">"
-                            document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn_group_width + 1)).style.margin = "5px";
-                            var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn_group_width + 1))
-                            data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                            var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value)
-                            data4.innerHTML += alimento.value + " " + Idcantidad.value
-                            data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
+                            renderAlimentoBtnGroup(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-
-                            var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
-                            data3.innerHTML += "<p>&nbsp</p>"
-                            data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                            var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value)
-                            data4.innerHTML += alimento.value + " " + Idcantidad.value
-                            data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + (comidas[pos].btn + 1) + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + + (comidas[pos].btn + 1) + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
+                            renderAlimentoBtn(comida.value, dia.value, alimento.value,  Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
                             comidas[pos].incrementBtn()
                         }
                     } else {
@@ -303,17 +286,12 @@ añadir.addEventListener("click", function () {
 
                 } else {
                     comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1))
-                    var data2 = document.getElementById(comida.value + "-" + dia.value);
-                    data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida.value + "-" + dia.value + "-" + 1 + "\">"
-                    var data3 = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + 1)
-                    data3.innerHTML += "<button id = \"btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                    var data4 = document.getElementById("btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value)
-                    data4.innerHTML += alimento.value + " " + Idcantidad.value
-                    data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
-
-
+                    renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value, classM)
                 }
             }
+
+
+
             Idcantidad.value = ""
             alimento.value = ""
         }
@@ -350,7 +328,7 @@ function cargarDietaModelo(dieta) {
         query += "FROM comidas_del_dia_modelo, alimentos_comida_modelo "
         query += "WHERE comidas_del_dia_modelo.dieta_modelo = \"" + dieta + "\" AND comidas_del_dia_modelo.idcomidas_dia_modelo = "
         query += "alimentos_comida_modelo.comidas_modelo"
-  
+
 
         conn.query(query, function (error, result, fields) {
             if (error) {
@@ -368,8 +346,8 @@ function cargarDietaModelo(dieta) {
 
 function getDateFormat(dia) {
 
- 
-    
+
+
     let date = ""
     switch (dia) {
         case 1:
@@ -408,81 +386,55 @@ function getDateFormat(dia) {
 function renderDietaModelo(result) {
     try {
 
-        //HAY QUE ELIMINAR TODO LO QUE HAYA ANTES
-
-
-        let dia = ""
+        //HAY QUE ELIMINAR TODO LO QUE HAYA ANTE
+   
         for (i = 0; i < result.length; i++) {
             let comida = result[i].tipo
+            let diaSql = result[i].dia
             let dia = getDateFormat(result[i].dia)
             let alimento = result[i].alimentos
+            let classM = "btn btn-success btn-sm dropdown-toggle"
+
+            console.log(comida + " " + dia + " " + alimento)
+
             if (comidas.length < 1) {
-                comidas.push(new Comida(comida, dia, (result[i].alimentos + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
-                var data2 = document.getElementById(comida + "-" + dia);
-                data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida + "-" + dia + "-" + 1 + "\">"
-                var data3 = document.getElementById("btn-" + comida + "-" + dia + "-" + 1)
-                data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimentos + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimentos)
-                data4.innerHTML += result[i].alimentos + " " + result[i].cantidad
-                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimentos + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimentos + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida.value + "-" + dia.value + "-" + 1 + "-" + alimento.value + "')\">Eliminar</a></li> </ul> </div>"
-
-            }else{
-                    let pos = -1
-                    //USAR MAP
-                    for (let j = 0; j < comidas.length; j++) {
-                        if (comidas[j].mismaComida(comida, dia)) {
-                            pos = j
-                        }
-                    }
-
-                    if (pos != -1) {
-                  
-                        if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
-                            var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
-                            if (data.clientWidth > 250) {
-                                var data2 = document.getElementById(comida + "-" + dia);
-                                data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida + "-" + dia + "-" + (comidas[pos].btn_group_width + 1) + "\">"
-                                document.getElementById("btn-" + comida + "-" + dia + "-" + (comidas[pos].btn_group_width + 1)).style.margin = "5px";
-                                var data3 = document.getElementById("btn-" + comida + "-" + dia + "-" + (comidas[pos].btn_group_width + 1))
-                                data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                                var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
-                                data4.innerHTML += alimento + " " + result[i].cantidad
-                                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
-                                comidas[pos].incrementBtn_group_width()
-                                comidas[pos].incrementBtn()
-                            } else {
-    
-                                var data3 = document.getElementById("btn-" + comida+ "-" + dia + "-" + comidas[pos].btn_group_width)
-                                data3.innerHTML += "<p>&nbsp</p>"
-                                data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                                var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
-                                data4.innerHTML += alimento + " " + result[i].cantidad
-                                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
-                                comidas[pos].incrementBtn()
-                            }
-                        } else {
-                            dbox("No puedes añadir el mismo alimento en la misma comida")
-                        }
-    
-    
-                    } else {
-                        comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
-                        var data2 = document.getElementById(comida + "-" + dia);
-                        data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida + "-" + dia + "-" + 1 + "\">"
-                        var data3 = document.getElementById("btn-" + comida + "-" + dia + "-" + 1)
-                        data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "\" class=\"btn btn-success btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                        var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento)
-                        data4.innerHTML += alimento + " " + result[i].cantidad
-                        data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
-    
-    
+                comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
+                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+            } else {
+                let pos = -1
+                //USAR MAP
+                for (let j = 0; j < comidas.length; j++) {
+                    if (comidas[j].mismaComida(comida, dia)) {
+                        pos = j
                     }
                 }
+
+                if (pos != -1) {
+                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
+                        var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
+                        if (data.clientWidth > 250) {
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn_group_width()
+                            comidas[pos].incrementBtn()
+                        } else {
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn()
+                        }
+                    } else {
+                        dbox("No puedes añadir el mismo alimento en la misma comida")
+                    }
+
+                } else {
+                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
+                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                }
+            }
+
         }
-            
-        
+
+
     } catch (error) {
-        
+
         console.log(error)
         dbox(error)
     }
@@ -532,16 +484,16 @@ guardar.addEventListener("click", function () {
 
     try {
 
-        if(comidas.length > 0){
+        if (comidas.length > 0) {
             /* COMPROBAR QUE NO EXISTE , PARA LUEGO HACER INSERT 
             comidas.forEach(comida => {
                 comida.prepareSqlModelo(nombre.value)
                 query += comida.sql 
             });*/
-            
-            
-            let nombreD =  nombreUsuario  + "/" + fechasArray[0]
-            let query = "INSERT INTO dieta (dieta,fecha_inicio,fecha_fin,suscripcion) VALUES ('" + nombreD + "', '" + fechasArray[0] + "', '" +  fechasArray[6] + "', " + suscripcion + "); \n"
+
+
+            let nombreD = nombreUsuario + "/" + fechasArray[0]
+            let query = "INSERT INTO dieta (dieta,fecha_inicio,fecha_fin,suscripcion) VALUES ('" + nombreD + "', '" + fechasArray[0] + "', '" + fechasArray[6] + "', " + suscripcion + "); \n"
             query += "INSERT INTO comidas_del_dia (dia, dieta) VALUES ('" + fechasArray[0] + "', \"" + nombreD + "\"); \n"
             query += "INSERT INTO comidas_del_dia (dia, dieta) VALUES ('" + fechasArray[1] + "', \"" + nombreD + "\"); \n"
             query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[2] + "', \"" + nombreD + "\"); \n"
@@ -549,8 +501,8 @@ guardar.addEventListener("click", function () {
             query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[4] + "', \"" + nombreD + "\"); \n"
             query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[5] + "', \"" + nombreD + "\"); \n"
             query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[6] + "', \"" + nombreD + "\"); \n"
-        
-    
+
+
             comidas.forEach(comida => {
                 comida.prepareSql(nombreD)
                 query += comida.sql
@@ -559,21 +511,21 @@ guardar.addEventListener("click", function () {
             console.log(query)
             comidas = []
 
-            conn.query(query, (error,result,fields) => {
-                if(error){
+            conn.query(query, (error, result, fields) => {
+                if (error) {
                     dbox(error);
                     console.log(error)
-                }else{
+                } else {
                     dbox("Dieta guardada correctamente")
                     comidas = []
                 }
             });
 
-        
-        }else{
+
+        } else {
             dbox("Tienes que incluir al menos un alimento")
         }
-       
+
     } catch (error) {
         console.log(error)
         dbox(error)
@@ -586,37 +538,37 @@ guardar.addEventListener("click", function () {
 
 
 
-function rellenarAlimentos(suscripcion,semana){
-    try{
+function rellenarAlimentos(suscripcion, semana) {
+    try {
 
-        let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1])- 1), Number(semanaArray[0]))
-        let semSQL = semana.getFullYear()  + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0")    
-        let query = "" 
-        query +=  "SELECT alimentos_comidas.alimento, alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
+        let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
+        let semSQL = semana.getFullYear() + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0")
+        let query = ""
+        query += "SELECT alimentos_comidas.alimento, alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
         query += "alimentos_comidas.cantidad, alimentos_comidas.consumido, comidas_del_dia.dia "
         query += "FROM comidas_del_dia, alimentos_comidas "
         query += "WHERE comidas_del_dia.idcomidas_dia = alimentos_comidas.comida "
-        query += "AND comidas_del_dia.dieta IN (SELECT dieta FROM dieta "   
+        query += "AND comidas_del_dia.dieta IN (SELECT dieta FROM dieta "
         query += "WHERE suscripcion =" + suscripcion + " AND dieta.fecha_inicio = \"" + semSQL + "\")"
 
-      
-        conn.query(query, (error,result,fields) => {
-            if(error){
+
+        conn.query(query, (error, result, fields) => {
+            if (error) {
                 dbox(error);
                 console.log(error)
-            }else{
+            } else {
                 renderDieta(result)
             }
         });
 
 
-    }catch(error){
+    } catch (error) {
         dbox(error)
     }
 
 }
 
-     
+
 
 
 
@@ -625,102 +577,69 @@ function rellenarAlimentos(suscripcion,semana){
 
 function renderDieta(result) {
     try {
-
         /*
         SELECT  alimentos_comidas.alimento,alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
         query += "alimentos_comidas.cantidad, alimentos_comidas.consumido, comidas_del_dia.dia "
         */
-
-
         //IF DATE NOW == SQLDATE -> OPCION MARCAR COMO CONSUMIDO
         //IF DATE NOW > SQLDATE -> PONER EN VERDE SI ES CONSUMIDO, PONER EN ROJO SINO, PONER EN AMARILLO SI ESTA MODIFICAR
         //IF DATE NOW < SQLDATE -> PONERLO EN GRIS CON OPCION DE MODIFICAR
-
 
         let dia = ""
         for (i = 0; i < result.length; i++) {
             let comida = result[i].tipo
             let diaSql = result[i].dia
             let diaSqlFormat = new Date(diaSql)
-            let dia = diaSqlFormat.getFullYear()  + "-" + (diaSqlFormat.getMonth() + 1).toString().padStart(2, "0") + "-" + diaSqlFormat.getDate().toString().padStart(2, "0")
+            let dia = diaSqlFormat.getFullYear() + "-" + (diaSqlFormat.getMonth() + 1).toString().padStart(2, "0") + "-" + diaSqlFormat.getDate().toString().padStart(2, "0")
             let alimento = result[i].alimento
             let classM = ""
-            if(result[i].modificar == 0){
+            if (result[i].modificar == 0) {
                 classM = "btn btn-success btn-sm dropdown-toggle"
-            }else{
+            } else {
                 classM = "btn btn-danger btn-sm dropdown-toggle"
             }
 
-          
-            
-            
+
+
+
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida, dia, (result[i].alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
-                var data2 = document.getElementById(comida + "-" + dia);
-                data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida + "-" + dia + "-" + 1 + "\">"
-                var data3 = document.getElementById("btn-" + comida + "-" + dia + "-" + 1)
-                data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimento + "\" class=\"" + classM + "\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimento)
-                data4.innerHTML += result[i].alimento + " " + result[i].cantidad
-                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
-
-            }else{
-                    let pos = -1
-                    //USAR MAP
-                    for (let j = 0; j < comidas.length; j++) {
-                        if (comidas[j].mismaComida(comida, dia)) {
-                            pos = j
-                        }
-                    }
-
-                    if (pos != -1) {
-                        if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
-                            var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
-                            if (data.clientWidth > 250) {
-                                var data2 = document.getElementById(comida + "-" + dia);
-                                data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida + "-" + dia + "-" + (comidas[pos].btn_group_width + 1) + "\">"
-                                document.getElementById("btn-" + comida + "-" + dia + "-" + (comidas[pos].btn_group_width + 1)).style.margin = "5px";
-                                var data3 = document.getElementById("btn-" + comida + "-" + dia + "-" + (comidas[pos].btn_group_width + 1))
-                                data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\" class=\"" + classM + "\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                                var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
-           
-                                data4.innerHTML += alimento + " " + result[i].cantidad
-                                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
-                                comidas[pos].incrementBtn_group_width()
-                                comidas[pos].incrementBtn()
-                            } else {
-    
-                                var data3 = document.getElementById("btn-" + comida+ "-" + dia + "-" + comidas[pos].btn_group_width)
-                                data3.innerHTML += "<p>&nbsp</p>"
-                                data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\" class=\"" + classM + "\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                                var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
-                                data4.innerHTML += alimento + " " + result[i].cantidad
-                                data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + + (comidas[pos].btn + 1) + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
-                                comidas[pos].incrementBtn()
-                            }
-                        } else {
-                            dbox("No puedes añadir el mismo alimento en la misma comida")
-                        }
-    
-    
-                    } else {
-                        comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
-                        var data2 = document.getElementById(comida + "-" + dia);
-                        data2.innerHTML += "<div class=\"btn-group\" id=\"btn-" + comida + "-" + dia + "-" + 1 + "\">"
-                        var data3 = document.getElementById("btn-" + comida + "-" + dia + "-" + 1)
-                        data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "\" class=\"" + classM + "\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
-                        var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento)
-                        data4.innerHTML += alimento + " " + result[i].cantidad
-                        data3.innerHTML += "<ul class=\"dropdown-menu\" id = \"dropdown-menu-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "\"> <li><a class=\"dropdown-item\"  id = \"dropdown-item-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "\"href=\"#\" onclick=\"eliminarAlimento('" + "btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento + "')\">Eliminar</a></li> </ul> </div>"
-    
-    
+                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+            } else {
+                let pos = -1
+                //USAR MAP
+                for (let j = 0; j < comidas.length; j++) {
+                    if (comidas[j].mismaComida(comida, dia)) {
+                        pos = j
                     }
                 }
+
+                if (pos != -1) {
+                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
+                        var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
+                        if (data.clientWidth > 250) {
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn_group_width()
+                            comidas[pos].incrementBtn()
+                        } else {
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn()
+                        }
+                    } else {
+                        dbox("No puedes añadir el mismo alimento en la misma comida")
+                    }
+
+                } else {
+                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
+                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+                }
+            }
+
         }
 
         comidas = []
-            
-        
+
+
     } catch (error) {
         console.log(error)
         dbox(error)

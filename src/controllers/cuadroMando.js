@@ -14,35 +14,80 @@ const  { app } = require('../../../src/controllers/expressApp.js');
 
 const { dbox } = require('../../../src/views/js/popup');
 
+const { selectAlimento, deleteAlimento, insertAlimento } = require('../../../src/models/alimentos')
 
-app.get('/search', function(req, res) {
-    conn.query('SELECT alimento FROM alimentos WHERE alimento LIKE "%' + req.query.term + '%"',
-    function(err, rows, fields) {
-    if (err) throw err;
-    var data = [];
-    for (i = 0; i < rows.length; i++) {
-        if(i< 5){
-            data.push(rows[i].alimento);
-            
-        }
-        
-    }
+
+
+
+
+
+
+$(function () {
+    $("#Buscador").autocomplete({
+      classes: {
+        "ui-autocomplete": "highlight"
+      },
+      name: 'buscador',
+      source: 'http://localhost:8000/api/searchAlimento?key=%QUERY',
+      messages: {
+        noResults: 'No se ha encontrado ningun alimento',
+
+      },
+      limit: 4
+    });
+  });
+
+
+
+app.listen(8000, () => {
+    console.log("Sever is Running");
+})
+
+app.get("/api/searchAlimento", (req, res) => {
+    selectAlimento(
+      conn,
+      req.query.term,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
+
+
+app.get("/api/deleteAlimento", (req, res) => {
+    deleteAlimento(
+      conn,
+      req.query.alimento,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
+
+
+app.get("/api/insertAlimento", (req, res) => {
+    insertAlimento(
+      conn,
+      req.query,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
+
+
+
+
+
+
    
-    res.end(JSON.stringify(data));
-    });
-    });
-    // port must be set to 8080 because incoming http requests are routed from port 80 to port 8080
-    app.listen(3000, function() {
-    
-    });
-
 
 
 alimento.addEventListener('input', updateValue);
 
 function updateValue(e) {
     eliminar.disabled = true;
-    añadir.disabled = false;
+    //añadir.disabled = true;
 }
 
 
@@ -50,8 +95,9 @@ alimento.addEventListener('change', updateValue2);
 
 //arreglar lag
 function updateValue2(e) {
-    añadir.disabled = false;
-    eliminar.disabled = true;
+    añadir.disabled = true;
+    //añadir.disabled = true;
+    //eliminar.disabled = true;
  
 }
 
@@ -63,16 +109,14 @@ añadir.addEventListener("click", function() {
         var type = tipo.value;
         console.log(alimento);
         if(alimento.value != ""){  
-            var sqlQueryAdmin = "INSERT INTO alimentos (alimento, tipo) VALUES (?,?)";
-            conn.query(sqlQueryAdmin, [alim, type ], (error,result,fields) => {
-                if(error){
-                    dbox (error);
-                }else{
-                    dbox ("Alimento añadido correctamente. " + alim + " (" + type + ")" );
-                }            
-            
+            let request = 'http://localhost:8000/api/insertAlimento?' 
+            request += 'alimento=' + alim
+            request += '&tipo=' + type
+
+            $.getJSON(request).done(function (result) {
+                dbox ("Alimento añadido correctamente. " + alim + " (" + type + ")" );
             });
- 
+            
             eliminar.disabled = false;
             alimento.value = "";
 
@@ -94,17 +138,15 @@ añadir.addEventListener("click", function() {
     try{
         if(alimento.value != ""){  
             var alim = alimento.value;
-            var sqlQueryAdmin = "DELETE FROM alimentos WHERE alimento = ?";
-            conn.query(sqlQueryAdmin, [alim], (error,result,fields) => {
-                if(error){
-                    dbox (error);
-                }else{
-                    dbox ("Alimento eliminado correctamente. "+ alim) 
-        
-                }            
+            var type = tipo.value;
             
+            let request = 'http://localhost:8000/api/deleteAlimento?' 
+            request += 'alimento=' + alim
+
+            $.getJSON(request).done(function (result) {
+                dbox ("Alimento añadido correctamente. " + alim + " (" + type + ")" );
             });
-  
+              
             añadir.disabled = false;
             alimento.value = "";
 
