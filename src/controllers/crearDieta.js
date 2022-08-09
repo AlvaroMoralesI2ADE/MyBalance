@@ -2,13 +2,12 @@ const { getConnection } = require('../../../src/database/database');
 
 const conn = getConnection();
 
-
 const { app } = require('../../../src/controllers/expressApp.js');
 
 const Comida = require('../../../src/controllers/comida');
 const { selectDieta } = require('../../../src/models/dieta')
 const { selectAlimento } = require('../../../src/models/alimentos')
-
+const { transactionInsertAlimentosDietaModelo, createDietaModelo, createComidasDietaModelo } = require('../../../src/models/dietaModelo');
 
 const añadir = document.getElementById('Añadir');
 const guardar = document.getElementById('guardarDieta');
@@ -52,6 +51,43 @@ app.get("/api/searchAlimento", (req, res) => {
 });
 
 
+app.get("/api/createDietaModelo", (req, res) => {
+    createDietaModelo(
+      conn,
+      req.query.nombre,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
+
+
+app.get("/api/transactionInsertAlimentosDietaModelo", (req, res) => {
+    console.log(req.query)
+    transactionInsertAlimentosDietaModelo(
+      conn,
+      req.query,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
+
+
+app.get("/api/createComidasDietaModelo", (req, res) => {
+    console.log(req.query)
+    createComidasDietaModelo(
+      conn,
+      req.query.nombre,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
+
+
+
+
 
       
 
@@ -66,7 +102,7 @@ añadir.addEventListener("click", function () {
         if (alimento.value != "") {
             var tr;
             if (comidas.length < 1) {
-                comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1));
+                comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false, 1, 1));
                 renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
     
 
@@ -79,7 +115,7 @@ añadir.addEventListener("click", function () {
                     }
                 }
                 if (pos != -1) {
-                    if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value)) {
+                    if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false)) {
                         var data = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
                             renderAlimentoBtnGroup(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
@@ -95,7 +131,7 @@ añadir.addEventListener("click", function () {
 
 
                 } else {
-                    comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1))
+                    comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false, 1, 1))
                     renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
                 }
             }
@@ -127,15 +163,13 @@ function eliminarAlimento(id) {
 
         var array = id.split("-")
 
+        console.log(array)
         comidas.forEach(comida => {
-            if (comida.mismaComida(array[2], array[3] + "-" + array[4] + "-" + array[5])) {
-                comida.eliminarAlimento(array[7] + "-" + array[2] + "-" + array[3] + "-" + array[4] + "-" + array[5])
+            if (comida.mismaComida(array[2], array[3])) {
+                comida.eliminarAlimento(array[5] + "-" + array[2] + "-" + array[4])
             }
         });
-        //my_map.delete(key)
-
-
-        //BUSCAR EL ALIMENTO EN EL 
+        
 
     } catch (error) {
         dbox(error)
@@ -150,6 +184,55 @@ guardar.addEventListener("click", function () {
 
     try {
         if(nombre.value != "" && comidas.length > 0){
+            
+       
+           /* $.getJSON('http://localhost:8000/api/createDietaModelo?nombre=' + nombre.value).done(function (result1) {
+                if(result1 == true){
+                    $.getJSON('http://localhost:8000/api/createComidasDietaModelo?nombre=' + nombre.value).done(function (result2) {
+                        if(result2 == true){*/
+                            $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDietaModelo?array[]=' + JSON.stringify(comidas) + "&nombre=" + nombre.value).done(function (result3) {
+                                console.log(result3 + " este es el result")
+                              if(result3 == true){
+                                    dbox("Dieta " + nombre.value + ", creada correctamente")
+                                }else{
+                                    dbox("Ha ocurrido un error creando la dieta")
+                                }
+                            });
+                       /* }else{
+                            dbox("Error al crear dieta-modelo")
+                        }
+                       
+                    });
+                }else{
+                    dbox("Error al crear dieta-modelo")
+                }
+            });*/
+
+            
+        }else{
+            if(nombre.value != ""){
+                dbox("Tienes que incluir al menos un alimento")
+            }else{
+                dbox("Por favor, introduzca un nombre")
+            }
+        }
+       
+
+
+
+/*
+        let attributes = ["name","age"]; 
+        let attributes_list = attributes.join(",");
+        let values = elements.map(
+        element => {
+            attributes = [element.name, element.age]
+            return "(" + attributes.join(",") + ")";
+        }
+        ).join(",\n");
+        var sql = `INSERT INTO DOWNLOAD_LIST(${attributes_list}) VALUES ${values};`;
+        console.log(sql);*/
+        /*
+        if(nombre.value != "" && comidas.length > 0){
 
 
             /* COMPROBAR QUE NO EXISTE SINO HAY QUE AÑADIR O ELIMINAR...
@@ -158,8 +241,8 @@ guardar.addEventListener("click", function () {
                 query += comida.sql 
             });*/
 
-            let query = "INSERT INTO dieta_modelo (nombre) VALUES (\"" + nombre.value + "\"); \n"
-            query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + 1 + ", \"" + nombre.value + "\"); \n"
+            /*
+             query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + 1 + ", \"" + nombre.value + "\"); \n"
             query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + 2 + ", \"" + nombre.value + "\"); \n"
             query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 3 + ", \"" + nombre.value + "\"); \n"
             query += "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo)  VALUES (" + 4 + ", \"" + nombre.value + "\"); \n"
@@ -192,14 +275,10 @@ guardar.addEventListener("click", function () {
 
 
         }else{
-            if(nombre.value != ""){
-                dbox("Tienes que incluir al menos un alimento")
-            }else{
-                dbox("Por favor, introduzca un nombre")
-            }
+            
           
         }
-       
+       */
     } catch (error) {
         dbox(error)
     }

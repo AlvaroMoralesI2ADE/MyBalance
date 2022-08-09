@@ -486,7 +486,6 @@ function renderDieta(result) {
 
 function eliminarAlimento(id) {
     try {
-        console.log(id)
         var dropdown_item_id = id.replace('btn-drop', 'dropdown-item')
         var dropdown_menu_id = id.replace('btn-drop', 'dropdown-menu')
 
@@ -498,10 +497,10 @@ function eliminarAlimento(id) {
         dropdown_item.remove()
         btn_drop.remove()
         dropdown_menu.remove()
-
         var array = id.split("-")
 
         comidas.forEach(comida => {
+       
             if (comida.mismaComida(array[2], array[3] + "-" + array[4] + "-" + array[5])) {
                 comida.eliminarAlimento(array[7] + "-" + array[2] + "-" + array[3] + "-" + array[4] + "-" + array[5])
             }
