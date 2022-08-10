@@ -2,10 +2,11 @@ const { select } = require("async")
 
 
 class ComidaCantidad{
-  constructor (alimento, cantidad, bd) {
+  constructor (alimento, cantidad, bd, eliminar) {
     this._alimento = alimento
     this._cantidad = cantidad
     this._bd = bd
+    this._eliminar = eliminar
   
   }
 
@@ -32,20 +33,32 @@ class ComidaCantidad{
       return "";
     }
   }
+
+  set eliminar(elim) {
+    this._eliminar = elim
+  }
+
+
+  
+  get eliminar() {
+    if(this._eliminar != 'null'){
+      return  this._eliminar;
+    }else{
+      return "";
+    }
+  }
 }
 
 
 
 module.exports = class Comida {
 
-   
-
     constructor (tipo, dia, alimento, cantidad, bd, btn_group_width, btn) {
       //this._sqlCommand = ""
       this._semana = 0
       this._btn_group_width = 0
       this._btn  = 0
-      let alimentoCantidad = new ComidaCantidad(alimento,cantidad, bd)
+      let alimentoCantidad = new ComidaCantidad(alimento,cantidad, bd, false)
       this._alimentos = []
       this._alimentos.push(alimentoCantidad)
 
@@ -57,35 +70,53 @@ module.exports = class Comida {
       
     }
 
+
+
     añadirAlimento(alimento, cantidad, bd){
       let añadido = true
-
+      let yaEnBd = false
       console.log(this._alimentos)
-
-      this._alimentos.forEach(alim => {
-        console.log(alim.alimento)
-      });
-
-      this._alimentos.forEach(alim => {
-        if(alim.alimento  == alimento){
+      this._alimentos.forEach(function(alim, index, object) {
+        if(alim.alimento == alimento && alim.eliminar == true){
+          object.splice(index, 1)
+          yaEnBd = true
+        }else if(alim.alimento == alimento && alim.eliminar == false){
           añadido = false
         }
       });
 
+
       if(añadido){
-        this._alimentos.push(new ComidaCantidad(alimento,cantidad, bd))
+        if(yaEnBd){
+          this._alimentos.push(new ComidaCantidad(alimento,cantidad, true, false))
+        }else{
+          this._alimentos.push(new ComidaCantidad(alimento,cantidad, bd, false))
+        }
       }
 
       return añadido
       
     }
 
-    eliminarAlimento(alim){   
+
+    get alimentos() {
+      return this._alimentos;
+    }
+
+
+    eliminarAlimento(alim){ 
+      console.log("entra")
       this._alimentos.forEach(function(alimentos, index, object) {
-        console.log(alimentos.alimento + " " + alim)
         if (alimentos.alimento == alim) {
-          object.splice(index, 1)
-          console.log("entra")
+          if(alimentos.eliminar == true){
+            object.splice(index, 1)
+          }else{
+            if(alimentos.bd != false){
+              alimentos.eliminar = true
+            }else{
+              object.splice(index, 1)
+            }
+          }
         }
       });
     }
@@ -142,19 +173,6 @@ module.exports = class Comida {
         return "";
       }
     }
-/*
-    get sql() {
-      if(this._sqlCommand != 'null'){
-        return this._sqlCommand;
-      }else{
-        return "";
-      }
-    }
-
-    set sql(param) {
-      this._sqlCommand = param
-      console.log(this._sqlCommand)
-    }*/
 
     mismaComida(tipo, dia){
         var misma = false
@@ -162,7 +180,6 @@ module.exports = class Comida {
         if(this._tipo == tipo && this._dia == dia){
             misma = true
         }
-
         return misma
     }
 

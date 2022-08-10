@@ -3,8 +3,8 @@ const conn = getConnection();
 const Comida = require('../../../src/controllers/comida');
 const { selectUsuario } = require('../../../src/models/user')
 const { selectAlimento } = require('../../../src/models/alimentos')
-const {  selectDieta } =  require('../../../src/models/dieta')
-const { selectDietaModelo, selectNameDietaModelo  } = require('../../../src/models/dietaModelo')
+const { selectDieta } = require('../../../src/models/dieta')
+const { selectDietaModelo, selectNameDietaModelo } = require('../../../src/models/dietaModelo')
 const { app } = require('../../../src/controllers/expressApp.js');
 const { request } = require('express');
 
@@ -19,6 +19,8 @@ var alimento = document.getElementById("Buscador");
 var nombreUsuario = ""
 var suscripcion = 0
 let comidas = []
+let comidasDelete = []
+let comidasAsignadasPreviamente = []
 let fechasArray = []
 
 
@@ -184,7 +186,7 @@ function getFechas(sem) {
     let dia7 = addDays(semana, 6)
     fechas.set(dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear(), dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
     fechasArray.push(dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
-    
+
     return fechas
 }
 
@@ -217,12 +219,12 @@ function mostrarDatosUsuario(gmail) {
     try {
         $.getJSON('http://localhost:8000/api/selectUser?email=' + gmail).done(function (results) {
             if (results.length == 1) {
-                renderCard(results[0].nombre, results[0].altura, results[0].edad,results[0].tipoAlimentacion, results[0].peso) 
+                renderCard(results[0].nombre, results[0].altura, results[0].edad, results[0].tipoAlimentacion, results[0].peso)
             } else {
                 dbox("Ha ocurrido un error a la hora de consultar la información del usuario")
             }
         });
-    
+
     } catch (error) {
         dbox(error)
     }
@@ -255,8 +257,8 @@ añadir.addEventListener("click", function () {
             let classM = "btn btn-success btn-sm dropdown-toggle"
             var tr;
             if (comidas.length < 1) {
-                comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1));
-                renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
+                comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false, 1, 1));
+                renderFirstAlimento(comida.value, dia.value, alimento.value, Idcantidad.value, classM)
             } else {
                 var pos = -1
                 //USAR MAP
@@ -266,14 +268,14 @@ añadir.addEventListener("click", function () {
                     }
                 }
                 if (pos != -1) {
-                    if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value)) {
+                    if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false)) {
                         var data = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
                             renderAlimentoBtnGroup(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-                            renderAlimentoBtn(comida.value, dia.value, alimento.value,  Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtn(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
                             comidas[pos].incrementBtn()
                         }
                     } else {
@@ -282,13 +284,15 @@ añadir.addEventListener("click", function () {
 
 
                 } else {
-                    comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, 1, 1))
-                    renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value, classM)
+                    comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false, 1, 1))
+                    renderFirstAlimento(comida.value, dia.value, alimento.value, Idcantidad.value, classM)
                 }
             }
             Idcantidad.value = ""
             alimento.value = ""
         }
+
+        console.log(comidas)
     } catch (error) {
         console.log(error)
         dbox(error)
@@ -298,12 +302,9 @@ añadir.addEventListener("click", function () {
 
 function cargarDietaModelo(dieta) {
     try {
-    
-
         $.getJSON('http://localhost:8000/api/selectDietaModelo?dieta=' + dieta).done(function (result) {
             renderDietaModelo(result)
         });
-    
     } catch (error) {
         dbox(error)
     }
@@ -359,7 +360,7 @@ function renderDietaModelo(result) {
             console.log(comida + " " + dia + " " + alimento)
 
             if (comidas.length < 1) {
-                comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
+                comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, false, 1, 1));
                 renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
             } else {
                 let pos = -1
@@ -371,7 +372,7 @@ function renderDietaModelo(result) {
                 }
 
                 if (pos != -1) {
-                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
+                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad, false)) {
                         var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
                             renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
@@ -382,11 +383,77 @@ function renderDietaModelo(result) {
                             comidas[pos].incrementBtn()
                         }
                     } else {
-                        dbox("No puedes añadir el mismo alimento en la misma comida")
+                        dbox("ha ocurrido un error al insertar un alimento")
+                        console.log("ERROR: " + alimento + "-" + comida + "-" + dia + " " + result[i].cantidad)
                     }
-
                 } else {
-                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
+                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, false, 1, 1))
+                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        dbox(error)
+    }
+}
+
+
+
+
+function renderDieta(result) {
+    try {
+        /*
+        SELECT  alimentos_comidas.alimento,alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
+        query += "alimentos_comidas.cantidad, alimentos_comidas.consumido, comidas_del_dia.dia "
+        */
+        //IF DATE NOW == SQLDATE -> OPCION MARCAR COMO CONSUMIDO
+        //IF DATE NOW > SQLDATE -> PONER EN VERDE SI ES CONSUMIDO, PONER EN ROJO SINO, PONER EN AMARILLO SI ESTA MODIFICAR
+        //IF DATE NOW < SQLDATE -> PONERLO EN GRIS CON OPCION DE MODIFICAR
+
+        let dia = ""
+        for (i = 0; i < result.length; i++) {
+            let comida = result[i].tipo
+            let diaSql = result[i].dia
+            let diaSqlFormat = new Date(diaSql)
+            let dia = diaSqlFormat.getFullYear() + "-" + (diaSqlFormat.getMonth() + 1).toString().padStart(2, "0") + "-" + diaSqlFormat.getDate().toString().padStart(2, "0")
+            let alimento = result[i].alimento
+            let classM = ""
+            if (result[i].modificar == 0) {
+                classM = "btn btn-success btn-sm dropdown-toggle"
+            } else {
+                classM = "btn btn-danger btn-sm dropdown-toggle"
+            }
+
+            if (comidas.length < 1) {
+                comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, false, 1, 1));
+                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+            } else {
+                let pos = -1
+                //USAR MAP
+                for (let j = 0; j < comidas.length; j++) {
+                    if (comidas[j].mismaComida(comida, dia)) {
+                        pos = j
+                    }
+                }
+
+                if (pos != -1) {
+                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad, false)) {
+                        var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
+                        if (data.clientWidth > 250) {
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn_group_width()
+                            comidas[pos].incrementBtn()
+                        } else {
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            comidas[pos].incrementBtn()
+                        }
+                    } else {
+                        dbox("ha ocurrido un error al insertar un alimento")
+                        console.log("ERROR: " + alimento + "-" + comida + "-" + dia + " " + result[i].cantidad)
+                    }
+                } else {
+                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, false, 1, 1))
                     renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
                 }
             }
@@ -429,8 +496,8 @@ function renderDieta(result) {
             }
 
             if (comidas.length < 1) {
-                comidas.push(new Comida(comida, dia, (result[i].alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
-                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+                comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, true, 1, 1));
+                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
             } else {
                 let pos = -1
                 //USAR MAP
@@ -441,7 +508,7 @@ function renderDieta(result) {
                 }
 
                 if (pos != -1) {
-                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
+                    if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad, true)) {
                         var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
                             renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
@@ -452,18 +519,18 @@ function renderDieta(result) {
                             comidas[pos].incrementBtn()
                         }
                     } else {
-                        dbox("No puedes añadir el mismo alimento en la misma comida")
+                        dbox("ha ocurrido un error al insertar un alimento")
+                        console.log("ERROR: " + alimento + "-" + comida + "-" + dia + " " + result[i].cantidad)
                     }
-
                 } else {
-                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
-                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+                    comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, true, 1, 1))
+                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
                 }
             }
 
         }
 
-        comidas = []
+        console.log(comidas)
 
 
     } catch (error) {
@@ -499,14 +566,25 @@ function eliminarAlimento(id) {
         dropdown_menu.remove()
         var array = id.split("-")
 
+
+        console.log(array)
+        let asignada = false
+
+
+
+        //btn', 'drop', 'desayuno', '2022', '08', '10', '1', 'copos de maiz'
+        let dia = array[3] + "-" + array[4] + "-" + array[5]
+
+
         comidas.forEach(comida => {
-       
             if (comida.mismaComida(array[2], array[3] + "-" + array[4] + "-" + array[5])) {
-                comida.eliminarAlimento(array[7] + "-" + array[2] + "-" + array[3] + "-" + array[4] + "-" + array[5])
+                console.log("elimina")
+                comida.eliminarAlimento(array[7] + "-" + array[2] + "-" + dia)
             }
         });
-        //my_map.delete(key)
 
+
+        console.log(comidas)
 
         //BUSCAR EL ALIMENTO EN EL 
 
@@ -524,12 +602,109 @@ guardar.addEventListener("click", function () {
     try {
 
         if (comidas.length > 0) {
+
+            let comidasSql = []
+            
+        
+            comidas.forEach(comida => {
+                let sql = ""
+                comida._alimentos.forEach(alim => {
+                    let comidaAdd = null
+                    if(alim.bd != true){
+                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: false};
+                        comidasSql.push(comidaAdd)
+                        alim._bd = true
+                    }else if(alim.bd != false && alim.eliminar == true){
+                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: true};
+                        console.log("entra bien a eliminar el que hay que eliminar")
+                        comidasSql.push(comidaAdd)
+                        comida.eliminarAlimento(alim.alimento)
+                    }
+                });
+            });
+
+
+            comidasSql.forEach(comida => {
+                console.log(comida)
+            });
+
+            console.log(comidas)
+
+            /*
+            if(comidasSql.length > 1){
+                let attributes = ["tipo", "alimento", "cantidad", "consumido", "modificar", "comida"];
+                let attributes_list = attributes.join(",");
+                comidas.forEach(alim => {
+                    let sql = ""
+                    let values = alim._alimentos.map(
+                        element => {
+                            if(element.delete != true){
+                                if (element.bd != true) {
+                                    let array = element._alimento.split("-")
+                                    let querySelect = ""
+                                    querySelect += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + nombre.value + "\" AND "
+                                    querySelect += nombre + "\" AND comidas_del_dia.dia  = " + alim._dia + ")"
+                                    attributes = ["\"" + alim._tipo + "\"", "\"" + array[0] + "\"", "\"" + element._cantidad + "\"", 0, 0, querySelect]
+                                    return "(" + attributes.join(",") + ")";
+                                }
+                            }else{
+                                let queryDelet  = ""
+                                queryDelet += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + nombre.value + "\" AND "
+                                queryDelet  += nombre + "\" AND comidas_del_dia.dia  = " + alim._dia + ")"
+                                sql += "DELETE FROM alimentos_comida WHERE alimentos_comida.alimento = " + " AND alimentos_comida.tipo = " + alim._tipo
+                                sql += "  alimentos_comida.comida = " + queryDelet
+                            }
+                        }
+                    ).join(",\n");
+                    sql += `INSERT INTO alimentos_comida(${attributes_list}) VALUES ${values};`;
+                    console.log(sql)
+                });
+            }
+
+           */
+
+
+
+
+
+
+
+
             /* COMPROBAR QUE NO EXISTE , PARA LUEGO HACER INSERT 
             comidas.forEach(comida => {
                 comida.prepareSqlModelo(nombre.value)
                 query += comida.sql 
             });*/
 
+            /*
+
+            $.getJSON('http://localhost:8000/api/selectDietaModeloName?nombre=' + nombre.value).done(function (existe) {
+                if(existe.length > 0){
+                    dbox("La dieta ya esta creada. Por favor, introduzca otro nombre o importe la dieta deseada y modifiquela")
+                }else{
+                    $.getJSON('http://localhost:8000/api/createDietaModelo?nombre=' + nombre.value).done(function (result1) {
+                        if(result1 == true){
+                            $.getJSON('http://localhost:8000/api/createComidasDietaModelo?nombre=' + nombre.value).done(function (result2) {
+                                if(result2 == true){
+                                    $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDietaModelo?array[]=' + JSON.stringify(comidas) + "&nombre=" + nombre.value).done(function (result3) {
+                                        console.log(result3 + " este es el result")
+                                      if(result3 == true){
+                                            dbox("Dieta " + nombre.value + ", creada correctamente")
+                                        }else{
+                                            dbox("Ha ocurrido un error creando la dieta")
+                                        }
+                                    });
+                                }else{
+                                    dbox("Error al crear dieta-modelo")
+                                }
+                               
+                            });
+                        }else{
+                            dbox("Error al crear dieta-modelo")
+                        }
+                    });
+                }
+            });
 
             let nombreD = nombreUsuario + "/" + fechasArray[0]
             let query = "INSERT INTO dieta (dieta,fecha_inicio,fecha_fin,suscripcion) VALUES ('" + nombreD + "', '" + fechasArray[0] + "', '" + fechasArray[6] + "', " + suscripcion + "); \n"
@@ -559,7 +734,7 @@ guardar.addEventListener("click", function () {
                     comidas = []
                 }
             });
-
+*/
 
         } else {
             dbox("Tienes que incluir al menos un alimento")
@@ -579,11 +754,11 @@ guardar.addEventListener("click", function () {
 
 function rellenarAlimentos(suscripcion, semana) {
     try {
-       
+
         let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
         let semSQL = semana.getFullYear() + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0")
         let request = "http://localhost:8000/api/selectDieta?suscripcion=" + suscripcion
-        request +=  "&semSql=" + semSQL
+        request += "&semSql=" + semSQL
 
         console.log(semSQL)
         console.log(request)

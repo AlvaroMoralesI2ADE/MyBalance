@@ -37,6 +37,27 @@ function selectNameDietaModelo(connection, callback) {
 }
 
 
+
+
+
+function selectDietaModeloName(connection, param, callback) {
+    try {
+        let query = "SELECT nombre FROM dieta_modelo WHERE nombre = '" + param + "'"
+        connection.query(query, function (err, result) {
+            if (err) throw err
+            callback(result)
+        });
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+
+
+
+
+
 function createDietaModelo(connection, param, callback){
     try{
         let query = "INSERT INTO dieta_modelo (nombre) VALUES (\"" + param + "\"); \n"
@@ -132,20 +153,16 @@ function transactionInsertAlimentosDietaModelo(connection, params, callback) {
                         }
                     });
                 });
-                
                 callback(call)
                 
             }
         });
-
        
     } catch (err) {
         console.log(err)
         callback(false)
-    }
-    console.log("este es el callback " + call)
-   
+    }  
 }
 
 
-module.exports = { selectDietaModelo, selectNameDietaModelo, transactionInsertAlimentosDietaModelo, createDietaModelo, createComidasDietaModelo}
+module.exports = { selectDietaModelo, selectNameDietaModelo, transactionInsertAlimentosDietaModelo, createDietaModelo, createComidasDietaModelo, selectDietaModeloName}

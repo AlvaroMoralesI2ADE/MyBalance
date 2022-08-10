@@ -7,7 +7,7 @@ const { app } = require('../../../src/controllers/expressApp.js');
 const Comida = require('../../../src/controllers/comida');
 const { selectDieta } = require('../../../src/models/dieta')
 const { selectAlimento } = require('../../../src/models/alimentos')
-const { transactionInsertAlimentosDietaModelo, createDietaModelo, createComidasDietaModelo } = require('../../../src/models/dietaModelo');
+const { transactionInsertAlimentosDietaModelo, createDietaModelo, createComidasDietaModelo, selectDietaModeloName } = require('../../../src/models/dietaModelo');
 
 const añadir = document.getElementById('Añadir');
 const guardar = document.getElementById('guardarDieta');
@@ -49,6 +49,17 @@ app.get("/api/searchAlimento", (req, res) => {
       }
     );
 });
+
+app.get("/api/selectDietaModeloName", (req, res) => {
+    selectDietaModeloName(
+      conn,
+      req.query.nombre,
+      (result) => {
+        res.json(result);
+      }
+    );
+});
+
 
 
 app.get("/api/createDietaModelo", (req, res) => {
@@ -122,6 +133,7 @@ añadir.addEventListener("click", function () {
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
+                            console.log(data)
                             renderAlimentoBtn(comida.value, dia.value, alimento.value,  Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
                             comidas[pos].incrementBtn()
                         }     
@@ -135,7 +147,6 @@ añadir.addEventListener("click", function () {
                     renderFirstAlimento(comida.value , dia.value, alimento.value, Idcantidad.value,classM)
                 }
             }
-
             Idcantidad.value = ""
             alimento.value = ""
         }
@@ -166,7 +177,7 @@ function eliminarAlimento(id) {
         console.log(array)
         comidas.forEach(comida => {
             if (comida.mismaComida(array[2], array[3])) {
-                comida.eliminarAlimento(array[5] + "-" + array[2] + "-" + array[4])
+                comida.eliminarAlimento(array[5] + "-" + array[2] + "-" + array[3])
             }
         });
         
@@ -180,35 +191,37 @@ function eliminarAlimento(id) {
 
 
 
-guardar.addEventListener("click", function () {
 
+guardar.addEventListener("click", function () {
     try {
         if(nombre.value != "" && comidas.length > 0){
-            
-       
-           /* $.getJSON('http://localhost:8000/api/createDietaModelo?nombre=' + nombre.value).done(function (result1) {
-                if(result1 == true){
-                    $.getJSON('http://localhost:8000/api/createComidasDietaModelo?nombre=' + nombre.value).done(function (result2) {
-                        if(result2 == true){*/
-                            $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDietaModelo?array[]=' + JSON.stringify(comidas) + "&nombre=" + nombre.value).done(function (result3) {
-                                console.log(result3 + " este es el result")
-                              if(result3 == true){
-                                    dbox("Dieta " + nombre.value + ", creada correctamente")
+            $.getJSON('http://localhost:8000/api/selectDietaModeloName?nombre=' + nombre.value).done(function (existe) {
+                if(existe.length > 0){
+                    dbox("La dieta ya esta creada. Por favor, introduzca otro nombre o importe la dieta deseada y modifiquela")
+                }else{
+                    $.getJSON('http://localhost:8000/api/createDietaModelo?nombre=' + nombre.value).done(function (result1) {
+                        if(result1 == true){
+                            $.getJSON('http://localhost:8000/api/createComidasDietaModelo?nombre=' + nombre.value).done(function (result2) {
+                                if(result2 == true){
+                                    $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDietaModelo?array[]=' + JSON.stringify(comidas) + "&nombre=" + nombre.value).done(function (result3) {
+                                        console.log(result3 + " este es el result")
+                                      if(result3 == true){
+                                            dbox("Dieta " + nombre.value + ", creada correctamente")
+                                        }else{
+                                            dbox("Ha ocurrido un error creando la dieta")
+                                        }
+                                    });
                                 }else{
-                                    dbox("Ha ocurrido un error creando la dieta")
+                                    dbox("Error al crear dieta-modelo")
                                 }
+                               
                             });
-                       /* }else{
+                        }else{
                             dbox("Error al crear dieta-modelo")
                         }
-                       
                     });
-                }else{
-                    dbox("Error al crear dieta-modelo")
                 }
-            });*/
-
-            
+            });
         }else{
             if(nombre.value != ""){
                 dbox("Tienes que incluir al menos un alimento")

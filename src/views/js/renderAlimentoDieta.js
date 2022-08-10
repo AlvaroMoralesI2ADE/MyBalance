@@ -30,7 +30,12 @@ function renderAlimentoBtnGroup(comida, dia, alimento, cantidad, btn, btn_group_
 
 
 function renderAlimentoBtn(comida, dia, alimento, cantidad, btn, btn_group_width, classM){
-    var data3 = document.getElementById("btn-" + comida+ "-" + dia + "-" + btn_group_width)
+    //btn-desayuno-2022-07-28-1
+    console.log(comida)
+    console.log(dia)
+    console.log( btn_group_width)
+    var data3 = document.getElementById("btn-" + comida + "-" + dia + "-" + btn_group_width)
+    console.log(data3)
     data3.innerHTML += "<p>&nbsp</p>"
     data3.innerHTML += "<button id = \"btn-drop-" + comida + "-" + dia + "-" + (btn + 1) + "-" + alimento + "\" class=\"" + classM + "\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">"
     var data4 = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (btn + 1) + "-" + alimento)
