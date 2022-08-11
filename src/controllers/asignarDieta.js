@@ -3,7 +3,7 @@ const conn = getConnection();
 const Comida = require('../../../src/controllers/comida');
 const { selectUsuario } = require('../../../src/models/user')
 const { selectAlimento } = require('../../../src/models/alimentos')
-const { selectDieta } = require('../../../src/models/dieta')
+const { selectDieta, selectDietaNombre, createComidasDieta, createDieta,transactionInsertAlimentosDieta } = require('../../../src/models/dieta')
 const { selectDietaModelo, selectNameDietaModelo } = require('../../../src/models/dietaModelo')
 const { app } = require('../../../src/controllers/expressApp.js');
 const { request } = require('express');
@@ -88,22 +88,62 @@ app.get('/api/selectDieta', (req, res) => {
 });
 
 
-
-app.get('/api/searchDietaNombreModelo', (req, res) => {
-    selectNameDietaModelo(
+ 
+app.get('/api/selectDietaNombre', (req, res) => {
+    selectDietaNombre(
         conn,
+        req.query.nombre,
         (result) => {
             res.json(result);
         }
     );
 });
 
+
+
+app.get('/api/transactionInsertAlimentosDieta', (req, res) => {
+    transactionInsertAlimentosDieta(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
+
+app.get('/api/createComidasDieta', (req, res) => {
+    createComidasDieta(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
+
+
+app.get('/api/createDieta', (req, res) => {
+    createDieta(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
+
+
+
+
+
 app.get("/api/selectUser", (req, res) => {
     selectUsuario(
         conn,
         req.query.email,
         (result) => {
-            console.log(result)
             res.json(result);
         }
     );
@@ -604,138 +644,66 @@ guardar.addEventListener("click", function () {
         if (comidas.length > 0) {
 
             let comidasSql = []
-            
-        
             comidas.forEach(comida => {
                 let sql = ""
                 comida._alimentos.forEach(alim => {
                     let comidaAdd = null
                     if(alim.bd != true){
-                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: false};
+                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: false, cantidad: alim.cantidad};
                         comidasSql.push(comidaAdd)
-                        alim._bd = true
+                       // alim._bd = true
                     }else if(alim.bd != false && alim.eliminar == true){
-                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: true};
+                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: true,  cantidad: alim.cantidad};
                         console.log("entra bien a eliminar el que hay que eliminar")
                         comidasSql.push(comidaAdd)
-                        comida.eliminarAlimento(alim.alimento)
+                        //comida.eliminarAlimento(alim.alimento)
                     }
                 });
             });
 
-
-            comidasSql.forEach(comida => {
-                console.log(comida)
-            });
-
-            console.log(comidas)
-
-            /*
-            if(comidasSql.length > 1){
-                let attributes = ["tipo", "alimento", "cantidad", "consumido", "modificar", "comida"];
-                let attributes_list = attributes.join(",");
-                comidas.forEach(alim => {
-                    let sql = ""
-                    let values = alim._alimentos.map(
-                        element => {
-                            if(element.delete != true){
-                                if (element.bd != true) {
-                                    let array = element._alimento.split("-")
-                                    let querySelect = ""
-                                    querySelect += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + nombre.value + "\" AND "
-                                    querySelect += nombre + "\" AND comidas_del_dia.dia  = " + alim._dia + ")"
-                                    attributes = ["\"" + alim._tipo + "\"", "\"" + array[0] + "\"", "\"" + element._cantidad + "\"", 0, 0, querySelect]
-                                    return "(" + attributes.join(",") + ")";
-                                }
+        
+            console.log(comidasSql)
+            let nombreD = nombreUsuario + "/" + fechasArray[0]
+            if(comidasSql.length > 0){ 
+                $.getJSON('http://localhost:8000/api/selectDietaNombre?nombre=' + nombreD).done(function (existe) {
+                    let correcto = true
+                    if(existe.length < 1){
+                        let petitionCreateDieta = "http://localhost:8000/api/createDieta?nombre=" + nombreD
+                        petitionCreateDieta += "&fechaF=" + fechasArray[6] 
+                        petitionCreateDieta += "&fechaI=" + fechasArray[0]
+                        petitionCreateDieta += "&suscripcion=" +  suscripcion
+                        $.getJSON(petitionCreateDieta).done(function (result) {
+                            console.log(result)
+                            if(result){
+                                let petitionCreateComidas = "http://localhost:8000/api/createComidasDieta?nombre=" + nombreD
+                                petitionCreateComidas += "&fechas=" + JSON.stringify(fechasArray)
+                                $.getJSON(petitionCreateComidas).done(function (result2) {
+                                    if(result2 != true){
+                                        dbox("Error al crear las comidas de la dieta")
+                                        correcto = false
+                                    }
+                                });          
                             }else{
-                                let queryDelet  = ""
-                                queryDelet += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + nombre.value + "\" AND "
-                                queryDelet  += nombre + "\" AND comidas_del_dia.dia  = " + alim._dia + ")"
-                                sql += "DELETE FROM alimentos_comida WHERE alimentos_comida.alimento = " + " AND alimentos_comida.tipo = " + alim._tipo
-                                sql += "  alimentos_comida.comida = " + queryDelet
+                                dbox("Error al crear la dieta")
+                                correcto = false
                             }
+                        });
+                    }else{
+                        if(correcto){
+                            $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDieta?alimentos[]=' + JSON.stringify(comidasSql) + "&nombre=" + nombreD).done(function (result3) {
+                                  if(result3 != true){
+                                    dbox("Error al crear insertar los alimentos")
+                                    //resetear comidas. y ponerlo como estaba. 
+                                  }else{
+                                    dbox("Alimentos guardados correctamente")
+                                  }
+                            });
+                         
                         }
-                    ).join(",\n");
-                    sql += `INSERT INTO alimentos_comida(${attributes_list}) VALUES ${values};`;
-                    console.log(sql)
+                    }
+        
                 });
             }
-
-           */
-
-
-
-
-
-
-
-
-            /* COMPROBAR QUE NO EXISTE , PARA LUEGO HACER INSERT 
-            comidas.forEach(comida => {
-                comida.prepareSqlModelo(nombre.value)
-                query += comida.sql 
-            });*/
-
-            /*
-
-            $.getJSON('http://localhost:8000/api/selectDietaModeloName?nombre=' + nombre.value).done(function (existe) {
-                if(existe.length > 0){
-                    dbox("La dieta ya esta creada. Por favor, introduzca otro nombre o importe la dieta deseada y modifiquela")
-                }else{
-                    $.getJSON('http://localhost:8000/api/createDietaModelo?nombre=' + nombre.value).done(function (result1) {
-                        if(result1 == true){
-                            $.getJSON('http://localhost:8000/api/createComidasDietaModelo?nombre=' + nombre.value).done(function (result2) {
-                                if(result2 == true){
-                                    $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDietaModelo?array[]=' + JSON.stringify(comidas) + "&nombre=" + nombre.value).done(function (result3) {
-                                        console.log(result3 + " este es el result")
-                                      if(result3 == true){
-                                            dbox("Dieta " + nombre.value + ", creada correctamente")
-                                        }else{
-                                            dbox("Ha ocurrido un error creando la dieta")
-                                        }
-                                    });
-                                }else{
-                                    dbox("Error al crear dieta-modelo")
-                                }
-                               
-                            });
-                        }else{
-                            dbox("Error al crear dieta-modelo")
-                        }
-                    });
-                }
-            });
-
-            let nombreD = nombreUsuario + "/" + fechasArray[0]
-            let query = "INSERT INTO dieta (dieta,fecha_inicio,fecha_fin,suscripcion) VALUES ('" + nombreD + "', '" + fechasArray[0] + "', '" + fechasArray[6] + "', " + suscripcion + "); \n"
-            query += "INSERT INTO comidas_del_dia (dia, dieta) VALUES ('" + fechasArray[0] + "', \"" + nombreD + "\"); \n"
-            query += "INSERT INTO comidas_del_dia (dia, dieta) VALUES ('" + fechasArray[1] + "', \"" + nombreD + "\"); \n"
-            query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[2] + "', \"" + nombreD + "\"); \n"
-            query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[3] + "', \"" + nombreD + "\"); \n"
-            query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[4] + "', \"" + nombreD + "\"); \n"
-            query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[5] + "', \"" + nombreD + "\"); \n"
-            query += "INSERT INTO comidas_del_dia (dia, dieta)  VALUES ('" + fechasArray[6] + "', \"" + nombreD + "\"); \n"
-
-
-            comidas.forEach(comida => {
-                comida.prepareSql(nombreD)
-                query += comida.sql
-            });
-
-            console.log(query)
-            comidas = []
-
-            conn.query(query, (error, result, fields) => {
-                if (error) {
-                    dbox(error);
-                    console.log(error)
-                } else {
-                    dbox("Dieta guardada correctamente")
-                    comidas = []
-                }
-            });
-*/
-
         } else {
             dbox("Tienes que incluir al menos un alimento")
         }

@@ -21,4 +21,153 @@ function selectDieta(connection, param, callback){
 }
 
 
-module.exports = { selectDieta }
+
+function selectDietaNombre(connection, param, callback) {
+    try {
+        let query = "SELECT dieta FROM dieta WHERE dieta = '" + param + "'"
+        connection.query(query, function (err, result) {
+            if (err) throw err
+            callback(result)
+        });
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+
+
+
+
+
+function createDieta(connection, param, callback){
+    try{
+        let nombreD = param.nombre
+        let fecha_fin = param.fechaF
+        let fecha_inicio = param.fechaI
+        let suscripcion = param.suscripcion
+        let query = "INSERT INTO dieta (dieta,fecha_inicio,fecha_fin,suscripcion) VALUES ('" + nombreD + "', '" + fecha_inicio + "', '" + fecha_fin + "', " + suscripcion + ");"
+        connection.query(query, function (err, result) {
+            if (err) throw err
+            callback(true)
+        });
+    }catch(error){
+        console.log(error)
+    }
+
+
+}
+
+
+
+function createComidasDieta(connection, param, callback){
+    let call = true
+
+    try{
+        console.log("entra a create comidas dieta")
+        let fechasArray = JSON.parse(param.fechas)
+        console.log(fechasArray)
+        let nombreD = param.nombre
+        let sql = ""
+        connection.beginTransaction(function(err) {
+            if (err) {                  //Transaction Error (Rollback and release connection)
+                connection.rollback()
+                call = false
+            } else {
+                for(let i = 0; i < 7; i++){
+                    sql = "INSERT INTO comidas_del_dia (dia, dieta) VALUES ('" + fechasArray[i] + "', \"" + nombreD + "\"); \n"
+                    connection.query(sql, function(err, results) {
+                        if (err) {          //Query Error (Rollback and release connection)
+                            conn.rollback()
+                            call = false
+                        }else{
+                            connection.commit(function(err) {
+                                if (err) {
+                                    conn.rollback()
+                                    call = false
+                                } 
+                            });
+                        }
+                    });
+                }
+            }
+        });
+        callback(call)
+      
+    }catch(error){
+        console.log(error)
+        callback(call)
+    }
+}
+
+
+
+
+function transactionInsertAlimentosDieta(connection, params, callback) {
+    let call = true
+    try {
+        console.log(params.alimentos)
+        let alimentos = JSON.parse(params.alimentos)
+        
+        console.log(alimentos)
+        connection.beginTransaction(function(err) {
+            if (err) {                  //Transaction Error (Rollback and release connection)
+                connection.rollback()
+                call = false
+                console.log("error1")
+            } else {
+                alimentos.forEach(alim => {
+                    console.log(alim)
+                    let sql = ""
+                    let alimentoNombre = alim.alimento.split("-")
+                    if(alim.eliminar == true){
+                        let queryDelet = "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + params.nombre + "\" "
+                        queryDelet  += "AND comidas_del_dia.dia  = '" + alim.dia + "')"
+                        sql = "DELETE FROM alimentos_comidas WHERE alimentos_comidas.comida = " + queryDelet + " AND "
+                        sql += "alimentos_comidas.alimento = \"" + alimentoNombre[0] + "\"  AND alimentos_comidas.tipo = \"" + alim.tipo + "\""
+                    }else{
+                        sql  += "INSERT INTO alimentos_comidas (tipo, alimento, cantidad, consumido, modificar, comida) "
+                        sql  += "VALUES (\"" + alim.tipo + "\", \"" + alimentoNombre[0] + "\", \"" + alim.cantidad + "\", "
+                        sql +=  " 0, 0, "
+                        sql  += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + params.nombre + "\" AND "
+                        sql  += "comidas_del_dia.dia = '" + alim.dia + "')); \n"
+                    }
+              
+                    connection.query(sql, function(err, results) {
+                        if (err) {          //Query Error (Rollback and release connection)
+                            connection.rollback()
+                            call = false
+                            console.log(err)
+                            console.log(sql)
+                        }else{
+                            connection.commit(function(err) {
+                                if (err) {
+                                    connection.rollback()
+                                    call = false
+                                    console.log(err)
+                                    console.log(sql)
+                                } 
+                            });
+                        }
+                    });
+                });
+                callback(call)
+                
+            }
+        });
+       
+    } catch (err) {
+        console.log(err)
+        callback(false)
+    }  
+}
+
+
+
+
+
+
+
+
+
+module.exports = {selectDieta, selectDietaNombre, createComidasDieta, createDieta, transactionInsertAlimentosDieta}

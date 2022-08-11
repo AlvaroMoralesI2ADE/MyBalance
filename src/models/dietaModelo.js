@@ -80,8 +80,9 @@ function createComidasDietaModelo(connection, param, callback){
                 connection.rollback()
                 call = false
             } else {
+                let sql = ""
                 for(let i = 1; i <= 7; i++){
-                    let sql = "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + i + ", \"" + param + "\");"
+                    sql = "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + i + ", \"" + param + "\");"
                     connection.query(sql, function(err, results) {
                         if (err) {          //Query Error (Rollback and release connection)
                             conn.rollback()
