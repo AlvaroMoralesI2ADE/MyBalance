@@ -33,14 +33,7 @@ const setUser = (suscripcion) => {
         var user = new Usuario(localStorage.getItem('user'), localStorage.getItem('nombre'), localStorage.getItem('edad'),
             localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'), localStorage.getItem('sexo'), "")
 
-        if(suscripcion){
-            var fechaInicioSelect = document.getElementById('fechaSuscripcion')
-            let fechaInicio = fechaInicioSelect.value
-
-            let fechaFinalF = addDays(fechaInicio, 28)
-            let fechaFinal = fechaFinalF.toISOString().split('T')[0]
-        }
-
+        
 
         var valuesSet = "";
 
@@ -117,17 +110,24 @@ const setUser = (suscripcion) => {
             let requestU = 'http://localhost:8000/api/updateUsuario?setValues=' + setValues 
             requestU +=  '&email=' + user.email
             $.getJSON(requestU).done(function (result) {
-                dbox("Datos actualizados");
+                if(suscripcion != true){
+                    dbox("Datos actualizados");
+                }
             });
-
-        
         }
 
         if (suscripcion) {
+            var fechaInicioSelect = document.getElementById('fechaSuscripcion')
+            let fechaInicio = fechaInicioSelect.value
+
+            let fechaFinalF = addDays(fechaInicio, 27)
+            let fechaFinal = fechaFinalF.toISOString().split('T')[0]
+
             let request = 'http://localhost:8000/api/insertSuscripcion?email=' + user.email
             request += '&fechaInicio=' + fechaInicio
             request += '&fechaFinal=' + fechaFinal
-
+           
+            console.log(request)
             $.getJSON(request).done(function (result) {
                 dbox("Gracias por suscribirte a My Balance");
             });

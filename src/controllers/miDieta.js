@@ -4,19 +4,37 @@ const { getConnection } = require('../../../src/database/database');
 const Comida = require('../../../src/controllers/comida');
 const { selectAlimentosSuscripcion, UpdateAlimentosComidas } = require('../../../src/models/alimentos');
 const { app } = require('../../../src/controllers/expressApp.js');
+const semanaA = document.getElementById('semanaAnterior');
+const semanaS = document.getElementById('semanaSiguiente');
 const conn = getConnection();
 let fechasArray = []
 let comidas = []
+var diaFin = null
+var diaInit = null
+var idsuscripcion = 0
+var cont = 0
 
 $(document).ready(function () {
     //CUANDO CAMBIE DE SEMANA COMPROBAR QUE LA FECHA FINAL QUE VAYAS A MANDAR NO SUPERE LA FECHA DE FIN DE LA SUS
     //HABRÁ QUE PASARLA COMO PARAMETRO TB ... CUANDO LO PASO DE SESSIONMAIN AQUI
 
     //rellenarTabla()
+
     var param = window.location.search.substr(1);
     var listaParametros = param.split('&');
+    console.log("PARAMETROS: " + listaParametros)
     var suscripcion = listaParametros[0].split('=');
-    var semana = listaParametros[1].split('=');
+    var semanaInit = listaParametros[1].split('=');
+    var semanaFin = listaParametros[2].split('=');
+    var semana = listaParametros[3].split('=');
+    var contArray = listaParametros[4].split('=');
+    cont = parseInt(contArray[1])
+    idsuscripcion =  suscripcion[1]
+    diaFin =  semanaFin[1]
+    diaInit = semanaInit[1]
+
+
+    console.log("semana actual:" + semana + " susc" + diaInit + "///" + diaFin )
     rellenarTabla(suscripcion[1], semana[1])
 
 });
@@ -62,6 +80,12 @@ function rellenarTabla(suscripcion, sem) {
     let dataForm = document.getElementById("tableClass")
     dataForm.innerHTML += "<tbody id=\"body\"><tr id=\"desayuno\"></tr><tr id=\"almuerzo\"></tr><tr id=\"comidaTH\"></tr><tr id=\"merienda\"></tr><tr id=\"cena\"></tr>"
     dataForm.innerHTML += "</tbody>"
+
+    
+    if (sem == diaInit) {
+        semanaA.disabled = true
+    }
+
     semanaArray = sem.split("-")
     let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
     let semSQL = semana.getFullYear() + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0")
@@ -73,6 +97,13 @@ function rellenarTabla(suscripcion, sem) {
 function addDays(date, days) {
     var result = new Date(date);
     result.setDate(result.getDate() + days);
+    return result;
+}
+
+
+function removeDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() - days);
     return result;
 }
 
@@ -121,11 +152,54 @@ function getFechas(sem) {
 
     let div = document.getElementById("titulo")
 
+    
+    
+    let compare = dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear()
+
+
+    if (diaFin == compare) {
+        semanaS.disabled = true
+    }
+
+    let dia8 = addDays(semana, 7)
+    fechasArray.push(dia8.getFullYear() + "-" + (dia8.getMonth() + 1).toString().padStart(2, "0") + "-" + dia8.getDate().toString().padStart(2, "0"))
+
+
     semanaTit = sem.replace('-', '/')
-    div.innerHTML += "<p class=\"titulo\">SEMANA " + semanaTit + " - " + dia7.getDate().toString().padStart(2, "0") + "/" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "/" + dia7.getFullYear() + "</p>"
+    div.innerHTML += "<p class=\"titulo\">SEMANA " + cont +  "</p>"
+
+
+
 
 
     return fechas
+}
+
+
+
+
+
+function semanaSiguiente() {
+    let fechaInicio = new Date(fechasArray[7]);
+    //let fechaFind = new Date(fechaFinD);
+    //let fechaIniciod = new Date(fechaInicioD);
+    let fechaInicioFormat = fechaInicio.getDate().toString().padStart(2, "0") + "-" + (fechaInicio.getMonth() + 1).toString().padStart(2, "0") + "-" + fechaInicio.getFullYear()
+   
+    console.log(fechaInicioFormat )
+    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit  + "&fechaFin=" + diaFin  + "&semana=" + fechaInicioFormat+ "&cont=" + (cont + 1) 
+
+
+}
+
+
+
+function semanaAnterior() {
+    let semanaAnt = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
+    let diaAnt = removeDays(semanaAnt, 7)
+
+    let fechaInicioFormat = diaAnt.getDate().toString().padStart(2, "0") + "-" + (diaAnt.getMonth() + 1).toString().padStart(2, "0") + "-" + diaAnt.getFullYear()
+    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit + "&fechaFin=" + diaFin + "&semana=" + fechaInicioFormat + "&cont=" + (cont - 1) 
+
 }
 
 
@@ -188,7 +262,7 @@ function renderDieta(result, suscripcion) {
             let alimento = result[i].alimento
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida, dia, (result[i].alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
-                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM, false , suscripcion)
                 btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimento)
                 console.log(btn_drop_id)
             } else {
@@ -205,12 +279,12 @@ function renderDieta(result, suscripcion) {
                     if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
                         var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
-                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)      
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, false, suscripcion)      
                             btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, false, suscripcion)
                             btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
                             comidas[pos].incrementBtn()
 
@@ -220,7 +294,7 @@ function renderDieta(result, suscripcion) {
                     }
                 } else {
                     comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
-                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM)
+                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM, false, suscripcion)
                     btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento)
                 }
             }
@@ -243,6 +317,8 @@ function renderDieta(result, suscripcion) {
 //PASAR COMO PARÁMETRO DIV?
 function modificarAlimento(id, suscripcion) {
     try {
+
+        console.log(id + " sus " + suscripcion)
         var dropdown_item_id = id.replace('btn-drop', 'dropdown-item')
         var dropdown_menu_id = id.replace('btn-drop', 'dropdown-menu')
 

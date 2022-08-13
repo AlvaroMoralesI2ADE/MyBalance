@@ -3,25 +3,29 @@ const conn = getConnection();
 const Comida = require('../../../src/controllers/comida');
 const { selectUsuario } = require('../../../src/models/user')
 const { selectAlimento } = require('../../../src/models/alimentos')
-const { selectDieta, selectDietaNombre, createComidasDieta, createDieta,transactionInsertAlimentosDieta } = require('../../../src/models/dieta')
+const { selectDieta, selectDietaNombre, createComidasDieta, createDieta, transactionInsertAlimentosDieta } = require('../../../src/models/dieta')
 const { selectDietaModelo, selectNameDietaModelo } = require('../../../src/models/dietaModelo')
 const { app } = require('../../../src/controllers/expressApp.js');
 const { request } = require('express');
 
-const cargarDieta = document.getElementById('CargarDieta');
 const añadir = document.getElementById('Añadir');
 const guardar = document.getElementById('GuardarDieta');
 var semana = document.getElementById("semana");
 var cantidad = document.getElementById("Idcantidad");
+var semanaA = document.getElementById("semanaAnterior");
+var semanaS = document.getElementById("semanaSiguiente");
 var dia = document.getElementById("dia");
 var comida = document.getElementById("comida");
 var alimento = document.getElementById("Buscador");
 var nombreUsuario = ""
 var suscripcion = 0
+var fechaFin
+var fechaInit
 let comidas = []
-let comidasDelete = []
-let comidasAsignadasPreviamente = []
 let fechasArray = []
+var num
+var semanaArray
+var dietaModeloS = false
 
 
 $(function () {
@@ -40,21 +44,22 @@ $(function () {
 });
 
 
-$(function () {
+
+
+function dietaModelo() {
     $("#BuscadorDieta").autocomplete({
         classes: {
             "ui-autocomplete": "highlight"
         },
         name: 'buscadorDieta',
-        source: 'http://localhost:8000/api/searchDietaNombreModelo?key=%QUERY',
+        source: 'http://localhost:8000/api/selectNameDietaModelo?key=%QUERY',
         messages: {
             noResults: 'No se ha encontrado ninguna dieta',
 
         },
         limit: 4
     });
-});
-
+}
 
 
 
@@ -62,6 +67,17 @@ app.listen(8000, () => {
     console.log("Sever is Running");
 })
 
+
+
+app.get("/api/selectNameDietaModelo", (req, res) => {
+    selectNameDietaModelo(
+        conn,
+        req.query.term,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
 
 
 
@@ -88,7 +104,7 @@ app.get('/api/selectDieta', (req, res) => {
 });
 
 
- 
+
 app.get('/api/selectDietaNombre', (req, res) => {
     selectDietaNombre(
         conn,
@@ -101,8 +117,8 @@ app.get('/api/selectDietaNombre', (req, res) => {
 
 
 
-app.get('/api/transactionInsertAlimentosDieta', (req, res) => {
-    transactionInsertAlimentosDieta(
+app.get('/api/transactionInsertAlimentosDieta', async (req, res) => {
+    await transactionInsertAlimentosDieta(
         conn,
         req.query,
         (result) => {
@@ -170,10 +186,22 @@ app.get("/api/selectDietaModelo", (req, res) => {
 $(document).ready(function () {
     var param = window.location.search.substr(1);
     var listaParametros = param.split('&');
+    console.log(listaParametros)
     var usuario = listaParametros[0].split('=');
     var semana = listaParametros[1].split('=');
     var suscripcionSplit = listaParametros[2].split('=');
+    let fechaFinFormat = listaParametros[3].split('=');
+    let fechaInitFormat = listaParametros[4].split('=');
+    let numFormat = listaParametros[5].split('=');
+    fechaFin = fechaFinFormat[1]
+    fechaInit = fechaInitFormat[1]
     suscripcion = suscripcionSplit[1]
+    num = parseInt(numFormat[1])
+
+    console.log("ESTE ES EL num: " + num)
+
+    // console.log(fechaFin + " " + fechaInit)
+    console.log("suscripcion=" + suscripcionSplit[1])
     nombreUsuario = usuario[1]
     prepararSemana(semana[1])
     mostrarDatosUsuario(usuario[1])
@@ -227,8 +255,21 @@ function getFechas(sem) {
     fechas.set(dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear(), dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
     fechasArray.push(dia7.getFullYear() + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getDate().toString().padStart(2, "0"))
 
+    let compare = dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear()
+
+
+    if (fechaFin == compare) {
+        semanaS.disabled = true
+    }
+
+    let dia8 = addDays(semana, 7)
+    fechasArray.push(dia8.getFullYear() + "-" + (dia8.getMonth() + 1).toString().padStart(2, "0") + "-" + dia8.getDate().toString().padStart(2, "0"))
+
+
     return fechas
 }
+
+
 
 
 
@@ -240,9 +281,27 @@ function addDays(date, days) {
 }
 
 
+function removeDays(date, days) {
+    var result = new Date(date);
+    result.setDate(result.getDate() - days);
+    return result;
+}
+
+
+
 
 function prepararSemana(semana) {
     try {
+
+        var semNum = document.getElementById("semanaNumero");
+        let html = "SEMANA " + num;
+        semNum.insertAdjacentHTML("afterbegin", html);
+
+
+        if (semana == fechaInit) {
+            semanaA.disabled = true
+        }
+
         let fechas = getFechas(semana)
         renderSemana(fechas)
     } catch (error) {
@@ -272,9 +331,7 @@ function mostrarDatosUsuario(gmail) {
 }
 
 
-
-
-cargarDieta.addEventListener("click", function () {
+function cargarDieta() {
     let dieta = document.getElementById('BuscadorDieta');
     if (dieta.value != "") {
         if (comidas.length > 0) {
@@ -284,7 +341,9 @@ cargarDieta.addEventListener("click", function () {
     } else {
         dbox("Por favor, seleccione una dieta")
     }
-});
+}
+
+
 
 
 
@@ -296,9 +355,34 @@ añadir.addEventListener("click", function () {
         if (alimento.value != "") {
             let classM = "btn btn-success btn-sm dropdown-toggle"
             var tr;
+            if (dietaModeloS) {
+                div1 = document.getElementById('line');
+                div4 = document.getElementById('tituloModelo');
+                div2 = document.getElementById('labelCargarDieta');
+                div3 = document.getElementById('buttonCargarDieta');
+                div1.remove()
+                div2.remove()
+                div4.remove()
+                div3.remove()
+            }
+
+
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false, 1, 1));
-                renderFirstAlimento(comida.value, dia.value, alimento.value, Idcantidad.value, classM)
+
+                div1 = document.getElementById('line');
+                div4 = document.getElementById('tituloModelo');
+                div2 = document.getElementById('labelCargarDieta');
+                div3 = document.getElementById('buttonCargarDieta');
+
+                div1.remove()
+                div2.remove()
+                div4.remove()
+                div3.remove()
+
+                renderFirstAlimento(comida.value, dia.value, alimento.value, Idcantidad.value, classM, true, 0)
+
+
             } else {
                 var pos = -1
                 //USAR MAP
@@ -311,11 +395,11 @@ añadir.addEventListener("click", function () {
                     if (comidas[pos].añadirAlimento((alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false)) {
                         var data = document.getElementById("btn-" + comida.value + "-" + dia.value + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
-                            renderAlimentoBtnGroup(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtnGroup(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-                            renderAlimentoBtn(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtn(comida.value, dia.value, alimento.value, Idcantidad.value, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn()
                         }
                     } else {
@@ -325,14 +409,13 @@ añadir.addEventListener("click", function () {
 
                 } else {
                     comidas.push(new Comida(comida.value, dia.value, (alimento.value + "-" + comida.value + "-" + dia.value), Idcantidad.value, false, 1, 1))
-                    renderFirstAlimento(comida.value, dia.value, alimento.value, Idcantidad.value, classM)
+                    renderFirstAlimento(comida.value, dia.value, alimento.value, Idcantidad.value, classM, true, 0)
                 }
             }
             Idcantidad.value = ""
             alimento.value = ""
         }
 
-        console.log(comidas)
     } catch (error) {
         console.log(error)
         dbox(error)
@@ -397,11 +480,10 @@ function renderDietaModelo(result) {
             let alimento = result[i].alimentos
             let classM = "btn btn-success btn-sm dropdown-toggle"
 
-            console.log(comida + " " + dia + " " + alimento)
-
+            dietaModeloS = true
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, false, 1, 1));
-                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM, true, 0)
             } else {
                 let pos = -1
                 //USAR MAP
@@ -415,11 +497,11 @@ function renderDietaModelo(result) {
                     if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad, false)) {
                         var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
-                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn()
                         }
                     } else {
@@ -428,7 +510,7 @@ function renderDietaModelo(result) {
                     }
                 } else {
                     comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, false, 1, 1))
-                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM, true, 0)
                 }
             }
         }
@@ -443,6 +525,7 @@ function renderDietaModelo(result) {
 
 function renderDieta(result) {
     try {
+
         /*
         SELECT  alimentos_comidas.alimento,alimentos_comidas.comida, alimentos_comidas.tipo, alimentos_comidas.modificar,"
         query += "alimentos_comidas.cantidad, alimentos_comidas.consumido, comidas_del_dia.dia "
@@ -467,7 +550,7 @@ function renderDieta(result) {
 
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, false, 1, 1));
-                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM, true, 0)
             } else {
                 let pos = -1
                 //USAR MAP
@@ -481,11 +564,11 @@ function renderDieta(result) {
                     if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad, false)) {
                         var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
-                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn()
                         }
                     } else {
@@ -494,7 +577,7 @@ function renderDieta(result) {
                     }
                 } else {
                     comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, false, 1, 1))
-                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM, true, 0)
                 }
             }
 
@@ -537,7 +620,7 @@ function renderDieta(result) {
 
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida, dia, (alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, true, 1, 1));
-                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM, true, 0)
             } else {
                 let pos = -1
                 //USAR MAP
@@ -551,11 +634,11 @@ function renderDieta(result) {
                     if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad, true)) {
                         var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
-                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM)
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, true, 0)
                             comidas[pos].incrementBtn()
                         }
                     } else {
@@ -564,7 +647,7 @@ function renderDieta(result) {
                     }
                 } else {
                     comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, true, 1, 1))
-                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM)
+                    renderFirstAlimento(comida, dia, alimento, result[i].cantidad, classM, true, 0)
                 }
             }
 
@@ -582,10 +665,31 @@ function renderDieta(result) {
 
 
 
+function semanaSiguiente() {
+    let fechaInicio = new Date(fechasArray[7]);
+    //let fechaFind = new Date(fechaFinD);
+    //let fechaIniciod = new Date(fechaInicioD);
+    let fechaInicioFormat = fechaInicio.getDate().toString().padStart(2, "0") + "-" + (fechaInicio.getMonth() + 1).toString().padStart(2, "0") + "-" + fechaInicio.getFullYear()
+    window.location.href = "adminAsignarDieta.html?gmail=" + nombreUsuario + "&semana=" + fechaInicioFormat + "&suscripcion=" + suscripcion + "&semanaF=" + fechaFin + "&semanaI=" + fechaInit + "&num=" + (num + 1)
+
+
+}
+
+
+
+function semanaAnterior() {
+    let semanaAnt = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
+    let diaAnt = removeDays(semanaAnt, 7)
+
+    let fechaInicioFormat = diaAnt.getDate().toString().padStart(2, "0") + "-" + (diaAnt.getMonth() + 1).toString().padStart(2, "0") + "-" + diaAnt.getFullYear()
+
+
+    window.location.href = "adminAsignarDieta.html?gmail=" + nombreUsuario + "&semana=" + fechaInicioFormat + "&suscripcion=" + suscripcion + "&semanaF=" + fechaFin + "&semanaI=" + fechaInit + "&num=" + (num - 1)
 
 
 
 
+}
 
 
 
@@ -607,7 +711,6 @@ function eliminarAlimento(id) {
         var array = id.split("-")
 
 
-        console.log(array)
         let asignada = false
 
 
@@ -616,15 +719,23 @@ function eliminarAlimento(id) {
         let dia = array[3] + "-" + array[4] + "-" + array[5]
 
 
-        comidas.forEach(comida => {
+        comidas.forEach(function (comida, index, object) {
             if (comida.mismaComida(array[2], array[3] + "-" + array[4] + "-" + array[5])) {
-                console.log("elimina")
+
                 comida.eliminarAlimento(array[7] + "-" + array[2] + "-" + dia)
+
+                if (!comida.contieneAlimentos()) {
+                    object.splice(index, 1)
+                }
             }
         });
 
 
-        console.log(comidas)
+        if (comidas.length < 1) {
+            renderCargarDieta()
+            dietaModelo()
+        }
+
 
         //BUSCAR EL ALIMENTO EN EL 
 
@@ -635,73 +746,69 @@ function eliminarAlimento(id) {
 }
 
 
+function insertDeleteComidas(comidasSql, nombreD){
+    $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDieta?alimentos[]=' + JSON.stringify(comidasSql) + "&nombre=" + nombreD).done(function (result3) {
+        if (result3 != true) {
+            dbox("Error al crear insertar los alimentos")
+            //resetear comidas. y ponerlo como estaba. 
+        } else {
+            dbox("Alimentos guardados correctamente")
+        }
+    });
+}
+
 
 
 guardar.addEventListener("click", function () {
 
     try {
-
         if (comidas.length > 0) {
-
             let comidasSql = []
             comidas.forEach(comida => {
                 let sql = ""
                 comida._alimentos.forEach(alim => {
                     let comidaAdd = null
-                    if(alim.bd != true){
-                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: false, cantidad: alim.cantidad};
+                    if (alim.bd != true) {
+                        comidaAdd = { dia: comida.dia, tipo: comida.tipo, alimento: alim.alimento, eliminar: false, cantidad: alim.cantidad };
                         comidasSql.push(comidaAdd)
-                       // alim._bd = true
-                    }else if(alim.bd != false && alim.eliminar == true){
-                        comidaAdd = {dia:comida.dia, tipo:comida.tipo, alimento:alim.alimento, eliminar: true,  cantidad: alim.cantidad};
-                        console.log("entra bien a eliminar el que hay que eliminar")
+                        // alim._bd = true
+                    } else if (alim.bd != false && alim.eliminar == true) {
+                        comidaAdd = { dia: comida.dia, tipo: comida.tipo, alimento: alim.alimento, eliminar: true, cantidad: alim.cantidad };
                         comidasSql.push(comidaAdd)
                         //comida.eliminarAlimento(alim.alimento)
                     }
                 });
             });
 
-        
-            console.log(comidasSql)
+
+
             let nombreD = nombreUsuario + "/" + fechasArray[0]
-            if(comidasSql.length > 0){ 
+            if (comidasSql.length > 0) {
                 $.getJSON('http://localhost:8000/api/selectDietaNombre?nombre=' + nombreD).done(function (existe) {
                     let correcto = true
-                    if(existe.length < 1){
+                    if (existe.length < 1) {
                         let petitionCreateDieta = "http://localhost:8000/api/createDieta?nombre=" + nombreD
-                        petitionCreateDieta += "&fechaF=" + fechasArray[6] 
+                        petitionCreateDieta += "&fechaF=" + fechasArray[6]
                         petitionCreateDieta += "&fechaI=" + fechasArray[0]
-                        petitionCreateDieta += "&suscripcion=" +  suscripcion
+                        petitionCreateDieta += "&suscripcion=" + suscripcion
                         $.getJSON(petitionCreateDieta).done(function (result) {
-                            console.log(result)
-                            if(result){
+                            if (result) {
                                 let petitionCreateComidas = "http://localhost:8000/api/createComidasDieta?nombre=" + nombreD
                                 petitionCreateComidas += "&fechas=" + JSON.stringify(fechasArray)
                                 $.getJSON(petitionCreateComidas).done(function (result2) {
-                                    if(result2 != true){
+                                    if (result2 != true) {
                                         dbox("Error al crear las comidas de la dieta")
                                         correcto = false
-                                    }
-                                });          
-                            }else{
+                                    }else{insertDeleteComidas(comidasSql, nombreD)}
+                                });
+                            } else {
                                 dbox("Error al crear la dieta")
                                 correcto = false
                             }
                         });
                     }else{
-                        if(correcto){
-                            $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDieta?alimentos[]=' + JSON.stringify(comidasSql) + "&nombre=" + nombreD).done(function (result3) {
-                                  if(result3 != true){
-                                    dbox("Error al crear insertar los alimentos")
-                                    //resetear comidas. y ponerlo como estaba. 
-                                  }else{
-                                    dbox("Alimentos guardados correctamente")
-                                  }
-                            });
-                         
-                        }
+                        insertDeleteComidas(comidasSql, nombreD)
                     }
-        
                 });
             }
         } else {
@@ -728,10 +835,19 @@ function rellenarAlimentos(suscripcion, semana) {
         let request = "http://localhost:8000/api/selectDieta?suscripcion=" + suscripcion
         request += "&semSql=" + semSQL
 
-        console.log(semSQL)
-        console.log(request)
+        /* var div = document.getElementById('GFG_DIV');
+             up.innerHTML = "Click on button to remove the element.";
+               
+             function GFG_Fun() {
+                 div.remove();*/
         $.getJSON(request).done(function (result) {
-            renderDieta(result)
+
+            if (result.length > 0) {
+                renderDieta(result)
+            } else {
+                renderCargarDieta()
+                dietaModelo()
+            }
         });
 
     } catch (error) {

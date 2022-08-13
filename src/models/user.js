@@ -68,7 +68,7 @@ function selectAdmin(connection, data, callback) {
 
 function selectSuscripcion(connection, data, callback) {
     try {
-        var sql = "SELECT suscripcion.caducada, suscripcion.idsuscripcion, suscripcion.fecha_inicioS "
+        var sql = "SELECT suscripcion.caducada, suscripcion.idsuscripcion, suscripcion.fecha_inicioS, suscripcion.fecha_finS "
         sql += "FROM suscripcion WHERE "
         sql += "suscripcion.usuario = ? "
         sql += "AND (SELECT curdate()) <= suscripcion.fecha_finS "

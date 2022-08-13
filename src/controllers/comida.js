@@ -121,6 +121,15 @@ module.exports = class Comida {
       });
     }
 
+    contieneAlimentos(){
+      let contiene = false
+      if(this._alimentos.length > 0){
+        contiene = true
+      }
+
+      return contiene
+    }
+
     incrementBtn_group_width(){
       this._btn_group_width += 1
     }
@@ -182,49 +191,6 @@ module.exports = class Comida {
         }
         return misma
     }
-
-/*
-
-    prepareSql(nombre){
-
-      this._alimentos.forEach(alim => {
-        if(alim.bd != true){
-          let array = alimento.split("-")
-          this._sqlCommand += "INSERT INTO alimentos_comidas (tipo, alimento, cantidad, consumido, modificar, comida) "
-          this._sqlCommand += "VALUES (\"" + this._tipo + "\", \"" + array[0] + "\", \"" + alim.cantidad + "\", "
-          this._sqlCommand +=  " 0, 0, "
-          this._sqlCommand += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + nombre + "\" AND "
-          this._sqlCommand += "comidas_del_dia.dia = '" + this._dia + "')); \n"
-        }
-      });
-
-
-      /*
-      this.alimentos.forEach( (cantidad, alimento, map) => {
-        let array = alimento.split("-")
-        this._sqlCommand += "INSERT INTO alimentos_comidas (tipo, alimento, cantidad, consumido, modificar, comida) "
-        this._sqlCommand += "VALUES (\"" + this._tipo + "\", \"" + array[0] + "\", \"" + cantidad + "\", "
-        this._sqlCommand +=  " 0, 0, "
-        this._sqlCommand += "(SELECT idcomidas_dia FROM comidas_del_dia WHERE comidas_del_dia.dieta = \"" + nombre + "\" AND "
-        this._sqlCommand += "comidas_del_dia.dia = '" + this._dia + "')); \n"
-      });
-    }
-
-
-    prepareSqlModelo(nombre){
-
-      this._alimentos.forEach(alim => {
-        if(alim.bd != true){
-          let array = alim.alimento.split("-")
-          this._sqlCommand += "INSERT INTO alimentos_comida_modelo (tipo, alimentos, cantidad, comidas_modelo) "
-          this._sqlCommand += "VALUES (\"" + this._tipo + "\", \"" + array[0] + "\", \"" + alim.cantidad + "\", (SELECT idcomidas_dia_modelo " 
-          this._sqlCommand += "FROM comidas_del_dia_modelo WHERE comidas_del_dia_modelo.dieta_modelo = \"" + nombre + "\" AND comidas_del_dia_modelo.dia = " + this._dia + ")); \n"
-           }
-      });
-  
-
-    }
-*/
 
 
   }

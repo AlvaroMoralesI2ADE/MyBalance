@@ -18,19 +18,20 @@ function selectDietaModelo(connection, dieta, callback) {
 }
 
 
-function selectNameDietaModelo(connection, callback) {
+function selectNameDietaModelo(connection, dieta ,callback) {
     try {
-        connection.query('SELECT nombre FROM dieta_modelo',
-            function (err, rows, fields) {
-                if (err) throw err;
-                var data = [];
-                for (i = 0; i < rows.length; i++) {
-                    if (i < 5) {
-                        data.push(rows[i].nombre);
-                    }
+        connection.query('SELECT nombre FROM dieta_modelo WHERE nombre LIKE "%' + dieta + '%"',
+        function (err, rows, fields) {
+            if (err) throw err;
+            var data = [];
+            for (i = 0; i < rows.length; i++) {
+                if (i < 5) {
+                    data.push(rows[i].nombre);
                 }
-                callback(data);
-            });
+
+            }
+            callback(data);
+        });
     } catch (err) {
         console.log(err)
     }
@@ -83,6 +84,7 @@ function createComidasDietaModelo(connection, param, callback){
                 let sql = ""
                 for(let i = 1; i <= 7; i++){
                     sql = "INSERT INTO comidas_del_dia_modelo (dia, dieta_modelo) VALUES (" + i + ", \"" + param + "\");"
+                    console.log("ESTA HACIENDO TRANSACCIONES")
                     connection.query(sql, function(err, results) {
                         if (err) {          //Query Error (Rollback and release connection)
                             conn.rollback()
@@ -98,11 +100,14 @@ function createComidasDietaModelo(connection, param, callback){
                     });
                 }
             }
+        
         });
-        callback(call)
       
     }catch(error){
         console.log(error)
+        callback(call)
+    }finally {
+        console.log("ENTRA ANTESS")
         callback(call)
     }
 }

@@ -50,7 +50,7 @@ $(document).ready(function () {
                 }
 
                 if (suscripcionVigente) {
-                    renderCalendario(result[0].fecha_inicioS, result[0].idsuscripcion)
+                    renderCalendarioSus(result[0].fecha_inicioS, result[0].fecha_finS, result[0].idsuscripcion)
                 } else {
                     renderButton()
                 }
