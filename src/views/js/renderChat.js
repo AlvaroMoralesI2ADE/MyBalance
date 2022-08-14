@@ -1,5 +1,11 @@
 var id = 0
-function sendMessageRender(message,dFormat) {
+function sendMessageRender(message,d) {
+    dFormat = [d.getMonth()+1,
+        d.getDate(),
+        d.getFullYear()].join('/')+' '+
+    [d.getHours(),
+        d.getMinutes()
+        ].join(':');
     if (message != "") {
         let form = document.getElementById("message");
         id += 1
@@ -17,7 +23,13 @@ function sendMessageRender(message,dFormat) {
 }
 
 
-function receivedMessageRender(message, dFormat) {
+function receivedMessageRender(message, d) {
+    dFormat = [d.getMonth()+1,
+        d.getDate(),
+        d.getFullYear()].join('/')+' '+
+    [d.getHours(),
+        d.getMinutes()
+        ].join(':');
     let form = document.getElementById("message");
     id += 1
     form.innerHTML += "<div class=\"get-line\" id=\"get-line-" + id + "\">"
@@ -29,7 +41,13 @@ function receivedMessageRender(message, dFormat) {
 }
 
 
-function sentMessageRender(message, dFormat) {
+function sentMessageRender(message, d) {
+    dFormat = [d.getMonth()+1,
+        d.getDate(),
+        d.getFullYear()].join('/')+' '+
+    [d.getHours(),
+        d.getMinutes()
+        ].join(':');
     let form = document.getElementById("message");
     id += 1
     form.innerHTML += "<div class=\"send-line\" id=\"send-line-" + id + "\">"

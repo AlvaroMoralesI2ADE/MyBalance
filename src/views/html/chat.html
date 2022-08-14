@@ -34,7 +34,6 @@
         </ul>
     </div>
 
-    <br></br>
     <div id="titulo">
         <p class="titulo" style="text-align: center;">Chat</p>
         <hr style="border:2px;">
@@ -74,6 +73,16 @@
     <script src="../js/renderChat.js"></script>
     <script src="../../controllers/menu.js"></script>
     <script src="../../controllers/chat.js"></script>
+    <script>
+        $(document).ready(function () {
+            var param = window.location.search.substr(1);
+            var listaParametros = param.split('&');
+            console.log(listaParametros)
+            user = listaParametros[0].split('=');
+            usuario = user[1]
+            prepareMessages(usuario,true)
+        });
+    </script>
   
 
 </html>

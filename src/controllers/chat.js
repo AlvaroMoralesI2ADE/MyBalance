@@ -2,11 +2,14 @@ const { getConnection } = require('../../../src/database/database');
 const conn = getConnection();
 const { app } = require('../../../src/controllers/expressApp.js');
 const Mensaje  = require('../../../src/controllers/mensaje.js');
-const { insertMessageUser, selectMessagesUser, selectMessagesAdmin} = require('../../../src/models/mensajes.js');
+const { insertMessageUser, selectMessagesUser, selectMessagesAdmin, insertMessageAdmin} = require('../../../src/models/mensajes.js');
 const { dbox } = require('../../../src/views/js/popup.js');
-var usuario
+const bcrypt = require("bcryptjs");
 var mensajes = []
+var usuario
 
+
+const { countMensajesNoVistos } = require('../../../src/models/mensajes.js');
 
 
 app.listen(8000, () => {
@@ -17,6 +20,21 @@ app.listen(8000, () => {
 
 app.get("/api/insertMessageUser", (req, res) => {
     insertMessageUser(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
+
+
+
+
+
+app.get("/api/insertMessageAdmin", (req, res) => {
+    insertMessageAdmin(
         conn,
         req.query,
         (result) => {
@@ -50,64 +68,53 @@ app.get("/api/selectMessagesAdmin", (req, res) => {
 
 
 
-$(document).ready(function () {
-    var param = window.location.search.substr(1);
-    var listaParametros = param.split('&');
-    console.log(listaParametros)
-    usuario = listaParametros[0].split('=');
-    prepareMessages(usuario[1])
-});
 
 
-
-function prepareMessages(usuario){
+function prepareMessages(usuario, isUser){
+    console.log(usuario)
     $.getJSON('http://localhost:8000/api/selectMessagesUser?nombre=' + usuario).done(function (results) {
-        
         console.log(results)
         if (results.length > 0) {
             results.forEach(mens => {
-                let d = new Date(mens.fecha)
-                dFormat = [d.getMonth()+1,
-                    d.getDate(),
-                    d.getFullYear()].join('/')+' '+
-                [d.getHours(),
-                    d.getMinutes()
-                    ].join(':');
-                mensajes.push(new Mensaje(mens.mensaje, dFormat, true))
-            });
+                if(isUser){
+                    mensajes.push(new Mensaje(mens.mensaje, new Date(mens.fecha) , true))
+                }else{
+                    mensajes.push(new Mensaje(mens.mensaje, new Date(mens.fecha) , false))
+                }
+              });
         }
 
         $.getJSON('http://localhost:8000/api/selectMessagesAdmin?nombre=' + usuario).done(function (results) {
             if (results.length > 0) {
                 results.forEach(mens => {
-                let d = new Date(mens.fecha)
-                dFormat = [d.getMonth()+1,
-                    d.getDate(),
-                    d.getFullYear()].join('/')+' '+
-                [d.getHours(),
-                    d.getMinutes()
-                    ].join(':');
-                    mensajes.push(new Mensaje(mens.mensaje,  dFormat, false))
+                    if(isUser){
+                        mensajes.push(new Mensaje(mens.mensaje, new Date(mens.fecha) , false))
+                    }else{
+                        mensajes.push(new Mensaje(mens.mensaje, new Date(mens.fecha) , true))
+                    }
                 });
             }
 
             if(mensajes.length > 0){
+                mensajes.sort( function( a , b){
+                    if(a.fecha > b.fecha) return 1;
+                    if(a.fecha < b.fecha) return -1;
+                    return 0;
+                });
+                
+             
+             
                 mensajes.forEach(element => {
                     console.log(element)
                     if(element.enviado == true){
-                        receivedMessageRender(element.mensaje, element.fecha)
                         sendMessageRender(element.mensaje, element.fecha)
                     }else{
-                        console.log("recibido")
                         receivedMessageRender(element.mensaje, element.fecha)
                     }
                 });
             }
         
         });
-
-        
-
     });
 }
 
@@ -119,26 +126,57 @@ function prepareMessages(usuario){
 
 
 
-/*
-function sendMessage(){
 
-    sendMessageRender(message)
-   
-    sendMessageRender(message, date)   
+function sendMessage(){
     var input = document.getElementById("replyText");
     var message = input.value;
     
-
+    if(message != ""){
+        console.log(message)
+        d = new Date()
+        let request = "http://localhost:8000/api/insertMessageUser?email=" + usuario
+        request += "&mensaje=" + message
+       
+       
+        $.getJSON(request).done(function (results) {
+            if(results){
+                sendMessageRender(message, d)
+            }else{
+                dbox("Ha ocurrido un error al enviar el mensaje")
+            }
+            
+                 
+        });
+    }
 
 
 }
 
 
 
-let d = new Date()
-    dFormat = [d.getMonth()+1,
-        d.getDate(),
-        d.getFullYear()].join('/')+' '+
-       [d.getHours(),
-        d.getMinutes()
-        ].join(':');*/
+
+
+
+function sendMessageAdmin(){
+    var input = document.getElementById("replyText");
+    var message = input.value;
+    
+    if(message != ""){
+        d = new Date()
+        let request = "http://localhost:8000/api/insertMessageAdmin?email=" + usuario
+        request += "&mensaje=" + message
+       
+       
+        $.getJSON(request).done(function (results) {
+            if(results){
+                sendMessageRender(message, d)
+            }else{
+                dbox("Ha ocurrido un error al enviar el mensaje")
+            }
+            
+                 
+        });
+    }
+
+
+}

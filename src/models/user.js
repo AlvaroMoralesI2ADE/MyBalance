@@ -5,9 +5,29 @@ const mysql = require("mysql")
 
 function selectSuscVigentes(connection, callback) {
     try {
-        let sql = 'SELECT email, nombre, suscripcion.fecha_inicioS, suscripcion.fecha_finS,'
-        sql += ' suscripcion.idsuscripcion FROM suscripcion, '
-        sql += 'usuarios WHERE mybalance.usuarios.email = suscripcion.usuario '
+
+        let sql = "SELECT email, nombre, suscripcion.fecha_inicioS, suscripcion.fecha_finS, "
+        sql += "suscripcion.idsuscripcion,  ("
+        sql += "SELECT count(*) FROM mybalance.mensajes_usuario "
+        sql += "WHERE mybalance.mensajes_usuario.visto = false "
+        sql += "AND mybalance.mensajes_usuario.usuario = email) as Novistos, "
+        sql += "(SELECT COUNT(*) FROM mybalance.alimentos_comidas "
+        sql += "WHERE mybalance.alimentos_comidas.modificar = true "
+        sql += "AND mybalance.alimentos_comidas.comida IN (SELECT "
+        sql += "mybalance.comidas_del_dia.idcomidas_dia FROM mybalance.comidas_del_dia "
+        sql += "WHERE mybalance.comidas_del_dia.dieta IN "
+        sql += "(SELECT mybalance.dieta.dieta "
+        sql += "FROM mybalance.dieta WHERE mybalance.dieta.suscripcion = mybalance.suscripcion.idsuscripcion))) as "
+        sql += "modificar, "
+        sql += "(SELECT COUNT(*) FROM mybalance.alimentos_comidas "
+        sql += "WHERE mybalance.alimentos_comidas.comida IN (SELECT "
+        sql += "mybalance.comidas_del_dia.idcomidas_dia FROM mybalance.comidas_del_dia "
+        sql += "WHERE mybalance.comidas_del_dia.dieta IN "
+        sql += "(SELECT mybalance.dieta.dieta "
+        sql += "FROM mybalance.dieta WHERE mybalance.dieta.suscripcion = mybalance.suscripcion.idsuscripcion))) as dietaAsignada "
+        sql += "FROM mybalance.suscripcion, "
+        sql += "mybalance.usuarios WHERE mybalance.usuarios.email = mybalance.suscripcion.usuario "
+        sql += "AND mybalance.suscripcion.caducada = false "
 
         connection.query(sql, function (err, result) {
             if (err) throw err

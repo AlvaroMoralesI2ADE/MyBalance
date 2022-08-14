@@ -17,32 +17,32 @@
 
 
 <body>
-    <div class="menu" id="menu">
+    <div class="menu">
         <ul>
-            <a class="navbar-logo" href="sessionMain.html">
-                <img src="../assets/logoTexto.png">
-            </a>
-            <li><a href="sessionMain.html">Mi Dieta</a></li>
-            <li><a href="chat.html">Chat</a></li>
-            <li><a href="#">Mi cuenta</a>
-                <ul>
-                    <li><a href="miCuenta.html">Mi cuenta</a></li>
-                    <li><a href="#" onclick=cerrarCuentaUser();>Salir</a></li>
-                </ul>
-            </li>
-            <p id="date" style="text-align: left;margin-left:-80px;"></p>
+          <a class="navbar-logo" href="adminMain.html">
+            <img src="../assets/logoTexto.png">
+          </a>
+    
+          <li><a href="cuadroMandos.html">Añadir Alimento</a></li>
+          <li><a href="crearDieta.html">Crear Dieta</a></li>
+          <li><a href="#">Mi cuenta</a>
+            <ul>
+              <li><a href="#">Mi cuenta</a></li>
+              <li><a href="#" onclick=cerrarCuentaAdmin();>Salir</a></li>
+            </ul>
+          </li>
+          <p id="date"></p>
         </ul>
-    </div>
+      </div>
 
-    <br></br>
     <div id="titulo">
         <p class="titulo" style="text-align: center;">Chat</p>
         <hr style="border:2px;">
     </div>
 
     <div id="pagewrap">
-        <header class="headerChat">
-            <h3>My balance nutricionista</h3>
+        <header class="headerChat" id ="headerChat" >
+         
         </header>
 
         <section class="chatbox">
@@ -54,7 +54,7 @@
         <section class="reply" id="reply">
             <form>
                 <input id="replyText" type="text" placeholder="Mensaje">
-                <button type="button" onclick="sendMessage()">Enviar mensaje</button>
+                <button type="button" onclick="sendMessageAdmin()">Enviar mensaje</button>
             </form>
         </section>
     </div>
@@ -71,7 +71,26 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="../js/renderChat.js"></script>
+    <script src="../../controllers/chat.js"></script>
     <script src="../../controllers/menu.js"></script>
+    <script>
+
+        function renderUserChar(user){
+            let form = document.getElementById("headerChat");
+            form.innerHTML += "<h3>" + user + "</h3>"
+        }
+
+        $(document).ready(function () {
+            console.log("ESTA ENTRANDO")
+            var param = window.location.search.substr(1);
+            var listaParametros = param.split('&');
+            console.log(listaParametros)
+            user = listaParametros[0].split('=');
+            usuario = user[1]
+            renderUserChar(usuario)
+            prepareMessages(usuario,false)
+        });
+    </script>
   
 
 </html>
