@@ -6,19 +6,17 @@ function addDays(date, days) {
     return result;
 }
 
-const insertHtml = (value, suscripcion) => {    
+const insertHtml = (value, suscripcion) => {  
+
     const data = document.getElementById("camposUsuario");
-
     data.innerHTML = "<form action=\"#\" method=\"post\" id = \"form\">"
-
-    const dataForm = document.getElementById("form")
- 
+    const dataForm = document.getElementById("form") 
     dataForm.innerHTML += "<div class=\"suscripcion-input\" id=\"suscInput1\" style=\"color:white; float: left;width: 200px;\">"
-
 
     const data2 = document.getElementById("suscInput1")
     data2.innerHTML += "<label id=\"labelNombre\"> Nombre <span class=\"req\"></span>"
     data2.innerHTML += "  </label> <input type=\"text\" id=\"idNombre\" required>"
+   
     dataForm.innerHTML +=" <div class=\"suscripcion-input\" id=\"suscInput2\" style=\"float: right; width: 200px;\">"
     const data3 = document.getElementById("suscInput2")
     data3.innerHTML += "<label id=\"labelEdad\">  Edad <span class=\"req\"></span>"
@@ -85,13 +83,9 @@ const insertHtml = (value, suscripcion) => {
         let dia6Fecha =  dia6.getDate().toString().padStart(2, "0") + "-" + (dia6.getMonth() + 1).toString().padStart(2, "0") + "-" + dia6.getFullYear();
         let dia7Fecha =  dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear();
         
-    
         const data13 = document.getElementById("p3")
         data13.innerHTML += "<select name=\"my_html_select_box\" id = \"fechaSuscripcion\">"
     
-
-
-
         const data14 = document.getElementById("fechaSuscripcion")
         data14.innerHTML += "<option value = \"" + dia1.toISOString().split('T')[0] + "\">" + dia1Fecha + "</option>"
         data14.innerHTML += "<option value = \"" + dia2.toISOString().split('T')[0] + "\">" + dia2Fecha + "</option>"
@@ -100,11 +94,20 @@ const insertHtml = (value, suscripcion) => {
         data14.innerHTML += "<option value = \"" + dia5.toISOString().split('T')[0] + "\">" + dia5Fecha + "</option>"
         data14.innerHTML += "<option value = \"" + dia6.toISOString().split('T')[0] + "\">" + dia6Fecha + "</option>"
         data14.innerHTML += "<option value = \"" + dia7.toISOString().split('T')[0] + "\">" + dia7Fecha + "</option>"
-
+    
     }
-
- 
-
+    
+    
+    dataForm.innerHTML += "<div class=\"suscripcion-input\" id=\"suscInput7\" style=\"color:white; float: left;\">"
+    const data15 = document.getElementById("suscInput7")
+    data15.innerHTML += " <label id=\"labelPeso\"> Introduce alergías o intolerancias <span class=\"req\"></span>"
+    data15.innerHTML += "  </label> <input type=\"text\" id=\"idAlimento\" required>"
+     data15.innerHTML +=" <button id=\"Añadir\" type=\"button\" class=\"añadirButton\">Añadir</button>"
+   
+    data15.innerHTML += "<br></br>"
+    data15.innerHTML += "<br></br>"
+     data15.innerHTML +="<textarea id=\"w3review\" name=\"w3review\" rows=\"4\" cols=\"60\" disabled>"
+    
     dataForm.innerHTML += "<input type=\"submit\" id = \"set\" class=\"suscripcionButton button-block\" value=\"" + value  + "\" >"
 
 }

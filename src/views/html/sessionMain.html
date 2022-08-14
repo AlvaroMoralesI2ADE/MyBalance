@@ -22,16 +22,15 @@
         <a class="navbar-logo" href="sessionMain.html">
           <img src="../assets/logoTexto.png" >
         </a>
-        <li><a href="chat.html">Chat</a></li>
-        <li><a href="sessionMain.html">Mi Dieta</a></li>
-        <li><a href="#">Mi cuenta</a>
-          <ul>
-            <li><a href="miCuenta.html">Mi cuenta</a></li>
-            <li><a href="#" onclick=cerrarCuentaUser();>Salir</a></li>
-          </ul>
-        </li>
+        <li><a href="suscripcion.html">Unirse</a></li>
+        <li><a href="#" onclick=cerrarCuentaUser()>Cerrar Sesión</a></li>
         <p id="date" style="text-align: left;margin-left:-80px;"></p>
       </ul>
+    </div>
+
+
+    <div id="Chat">
+
     </div>
     
 
@@ -52,6 +51,14 @@
   
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script type="text/javascript">
+
+      function renderChat(){
+        console.log("entra")
+        var chat = document.getElementById("Chat")
+        console.log(localStorage.getItem('user'))
+        chat.innerHTML += "<a style=\"float:right;\" href=\"chat.html?email=" + localStorage.getItem('user') + "\">Contactar con MyBalance</a>"
+  
+      }
       function renderButton(){
         buttonSus.innerHTML += "<a class=\"botonComenzar\" id = \"suscribirse\" href=\"suscripcion.html\">Suscribirse a mybalance</a>"
 

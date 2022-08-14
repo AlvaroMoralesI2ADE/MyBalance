@@ -75,11 +75,7 @@
     <script src="../../controllers/chat.js"></script>
     <script>
         $(document).ready(function () {
-            var param = window.location.search.substr(1);
-            var listaParametros = param.split('&');
-            console.log(listaParametros)
-            user = listaParametros[0].split('=');
-            usuario = user[1]
+            usuario = localStorage.getItem('user')
             prepareMessages(usuario,true)
         });
     </script>

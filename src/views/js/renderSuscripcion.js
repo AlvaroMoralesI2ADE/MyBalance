@@ -34,10 +34,7 @@ function renderSuscripcion(fecha_inicioS, fecha_finS, nombre, email, idsuscripci
         $('table').first().append(tr);
 
         tr2 = $('<tr/>');     
-        tr2.css("border", "0"); 
-        
- 
-            
+        tr2.css("border", "0");            
         let html = "<td style=\"height: 100%\">"
         html += "<div style = \"height: 100%; width: 100%;\" class=\"alert alert-warning\" role=\"alert\">"
         html +=  "<a href=\"chatAdmin.html?gmail=" + email + "\"> Mensajes: " + Novistos + " </a>"

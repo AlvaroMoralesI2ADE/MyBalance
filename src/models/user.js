@@ -141,4 +141,20 @@ function updateUsuario(connection, data, callback) {
 }
 
 
-module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, selectAdmin, createUser, insertSuscripcion, updateUsuario }
+function cancelarSuscripcion(connection, email, callback) {
+    try {
+        console.log("entra")
+        let sql = "UPDATE Suscripcion SET caducada = 1 WHERE suscripcion.usuario = ?"
+        console.log(sql)
+        connection.query(sql, email, function (err, result) {
+            if (err) { throw err}
+            else{ callback(true)}
+        });
+    } catch (Err) {
+        console.log(Err)
+    }
+
+
+}
+
+module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, selectAdmin, createUser, insertSuscripcion, updateUsuario, cancelarSuscripcion }
