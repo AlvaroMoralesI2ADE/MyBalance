@@ -153,6 +153,8 @@ function sendMessage(){
             
                  
         });
+
+        input.value = ""
     }
 
 
@@ -182,6 +184,8 @@ function sendMessageAdmin(){
             
                  
         });
+        
+        input.value = ""
     }
 }
 

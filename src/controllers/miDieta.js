@@ -12,6 +12,7 @@ let comidas = []
 var diaFin = null
 var diaInit = null
 var idsuscripcion = 0
+var starWeek
 var cont = 0
 
 $(document).ready(function () {
@@ -29,12 +30,12 @@ $(document).ready(function () {
     var semana = listaParametros[3].split('=');
     var contArray = listaParametros[4].split('=');
     cont = parseInt(contArray[1])
-    idsuscripcion =  suscripcion[1]
-    diaFin =  semanaFin[1]
+    idsuscripcion = suscripcion[1]
+    diaFin = semanaFin[1]
     diaInit = semanaInit[1]
+    starWeek = semana[1]
 
-
-    console.log("semana actual:" + semana + " susc" + diaInit + "///" + diaFin )
+    console.log("semana actual:" + semana + " susc" + diaInit + "///" + diaFin)
     rellenarTabla(suscripcion[1], semana[1])
 
 });
@@ -81,7 +82,7 @@ function rellenarTabla(suscripcion, sem) {
     dataForm.innerHTML += "<tbody id=\"body\"><tr id=\"desayuno\"></tr><tr id=\"almuerzo\"></tr><tr id=\"comidaTH\"></tr><tr id=\"merienda\"></tr><tr id=\"cena\"></tr>"
     dataForm.innerHTML += "</tbody>"
 
-    
+
     if (sem == diaInit) {
         semanaA.disabled = true
     }
@@ -152,8 +153,8 @@ function getFechas(sem) {
 
     let div = document.getElementById("titulo")
 
-    
-    
+
+
     let compare = dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear()
 
 
@@ -166,7 +167,7 @@ function getFechas(sem) {
 
 
     semanaTit = sem.replace('-', '/')
-    div.innerHTML += "<p class=\"titulo\">SEMANA " + cont +  "</p>"
+    div.innerHTML += "<p class=\"titulo\">SEMANA " + cont + "</p>"
 
 
 
@@ -184,9 +185,9 @@ function semanaSiguiente() {
     //let fechaFind = new Date(fechaFinD);
     //let fechaIniciod = new Date(fechaInicioD);
     let fechaInicioFormat = fechaInicio.getDate().toString().padStart(2, "0") + "-" + (fechaInicio.getMonth() + 1).toString().padStart(2, "0") + "-" + fechaInicio.getFullYear()
-   
-    console.log(fechaInicioFormat )
-    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit  + "&fechaFin=" + diaFin  + "&semana=" + fechaInicioFormat+ "&cont=" + (cont + 1) 
+
+    console.log(fechaInicioFormat)
+    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit + "&fechaFin=" + diaFin + "&semana=" + fechaInicioFormat + "&cont=" + (cont + 1)
 
 
 }
@@ -198,7 +199,7 @@ function semanaAnterior() {
     let diaAnt = removeDays(semanaAnt, 7)
 
     let fechaInicioFormat = diaAnt.getDate().toString().padStart(2, "0") + "-" + (diaAnt.getMonth() + 1).toString().padStart(2, "0") + "-" + diaAnt.getFullYear()
-    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit + "&fechaFin=" + diaFin + "&semana=" + fechaInicioFormat + "&cont=" + (cont - 1) 
+    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit + "&fechaFin=" + diaFin + "&semana=" + fechaInicioFormat + "&cont=" + (cont - 1)
 
 }
 
@@ -208,7 +209,7 @@ function prepararSemana(semana) {
     try {
         let fechas = getFechas(semana)
         renderCalendario(fechas)
-        
+
 
     } catch (error) {
         console.log(error)
@@ -224,9 +225,9 @@ function prepararSemana(semana) {
 function rellenarAlimentos(suscripcion, semana) {
     try {
         $.getJSON('http://localhost:8000/api/selectAlimentosSuscripcion?suscripcion=' + suscripcion
-         + '&semana=' + semana).done(function (data) {
-            renderDieta(data, suscripcion)
-        })
+            + '&semana=' + semana).done(function (data) {
+                renderDieta(data, suscripcion)
+            })
 
     } catch (error) {
         dbox(error)
@@ -237,32 +238,72 @@ function rellenarAlimentos(suscripcion, semana) {
 
 
 
-
-
 function renderDieta(result, suscripcion) {
     try {
-        let dia = ""
-        for (i = 0; i < result.length; i++) {
-            let comida = result[i].tipo
-            let classM = ""
-            
-            //\" required
+        console.log("COMIENZA LA COMPARATIVA")
+        let d = starWeek.split("-");
+        console.log(starWeek)
+        //20-08-2022
+        var inicioSemana = new Date(d[2] + '/' + d[1] + '/' + d[0]);
+        let hoy = new Date()
+        hoy.setHours(0, 0, 0, 0);
+        console.log("ESTA ENTRANDO")
 
-            if (result[i].modificar == 1) {
-                classM = "btn btn-warning btn-sm"
-            } else {
-                classM = "btn btn-light btn-sm dropdown-toggle"
-            }
-            //HAY QUE VER LA FECHA. 
-            //let consumido = "btn btn-success btn-sm "
-            //let noconsumido = "btn btn-danger btn-sm "
+        let caso = 0
+        for (i = 0; i < result.length; i++) {
+            console.log(result)
             let diaSql = result[i].dia
             let diaSqlFormat = new Date(diaSql)
             let dia = diaSqlFormat.getFullYear() + "-" + (diaSqlFormat.getMonth() + 1).toString().padStart(2, "0") + "-" + diaSqlFormat.getDate().toString().padStart(2, "0")
             let alimento = result[i].alimento
+            let comida = result[i].tipo
+            let classM = ""
+            let day = dia.split("-")       
+            let diaFormat = new Date(day[0] + '/' + day[1] + '/' + day[2]);
+            //\" required
+
+            //SI NO ES ADMIN:
+            //FECHA == ACTUAL -> CONSUMIDO (AÑADIR LAYER)
+            //FECHA < ACTUAL -> ROJO O VERDE. 
+            //FECHA > ACTUAL -> MODIFICAR (AÑADIR LAYER)
+
+            if (result[i].modificar == 1) {
+                classM = "btn btn-warning btn-sm"
+            } else if (result[i].consumido == 1) {
+                classM = "btn btn-success btn-sm"
+            } else {
+                classM = "btn btn-light btn-sm dropdown-toggle"
+            }
+
+            console.log(inicioSemana)
+            console.log(hoy)
+            console.log(inicioSemana == hoy)
+
+            if (inicioSemana > hoy) {
+                caso = 0
+            }else if(inicioSemana < hoy){
+                if(diaFormat < hoy){
+                    caso = 0
+                    if (result[i].consumido == 1) {
+                        classM = "btn btn-success btn-sm"
+                    } else {
+                        classM = "btn btn-danger btn-sm"
+                    }
+                }else{
+                    caso = 2
+                }
+            }else{
+                console.log("ENTRA AQUI")
+                caso = 2
+            }
+
+        
+            //HAY QUE VER LA FECHA. 
+            //let consumido = "btn btn-success btn-sm "
+            //let noconsumido = "btn btn-danger btn-sm "
             if (comidas.length < 1) {
                 comidas.push(new Comida(comida, dia, (result[i].alimento + "-" + result[i].tipo + "-" + dia), result[i].cantidad, 1, 1));
-                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM, false , suscripcion)
+                renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM, caso, suscripcion)
                 btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + result[i].alimento)
                 console.log(btn_drop_id)
             } else {
@@ -279,12 +320,12 @@ function renderDieta(result, suscripcion) {
                     if (comidas[pos].añadirAlimento((alimento + "-" + comida + "-" + dia), result[i].cantidad)) {
                         var data = document.getElementById("btn-" + comida + "-" + dia + "-" + comidas[pos].btn_group_width)
                         if (data.clientWidth > 250) {
-                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, false, suscripcion)      
+                            renderAlimentoBtnGroup(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, caso, suscripcion)
                             btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
                             comidas[pos].incrementBtn_group_width()
                             comidas[pos].incrementBtn()
                         } else {
-                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, false, suscripcion)
+                            renderAlimentoBtn(comida, dia, alimento, result[i].cantidad, comidas[pos].btn, comidas[pos].btn_group_width, classM, caso, suscripcion)
                             btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + (comidas[pos].btn + 1) + "-" + alimento)
                             comidas[pos].incrementBtn()
 
@@ -294,12 +335,15 @@ function renderDieta(result, suscripcion) {
                     }
                 } else {
                     comidas.push(new Comida(comida, dia, (alimento + "-" + comida + "-" + dia), result[i].cantidad, 1, 1))
-                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM, false, suscripcion)
+                    renderFirstAlimento(comida, dia, result[i].alimento, result[i].cantidad, classM, caso, suscripcion)
                     btn_drop_id = document.getElementById("btn-drop-" + comida + "-" + dia + "-" + 1 + "-" + alimento)
                 }
             }
 
-            if (result[i].modificar == 1) {
+         
+
+            //EL DIA < ACTUAL 
+            if (result[i].modificar == 1 || result[i].consumido == 1 || diaFormat < hoy) {
                 btn_drop_id.disabled = true
             }
 
@@ -335,7 +379,7 @@ function modificarAlimento(id, suscripcion) {
 
         let query = ""
 
-        let request = 'http://localhost:8000/api/UpdateAlimentosComidas?alimento=' + alimento 
+        let request = 'http://localhost:8000/api/UpdateAlimentosComidas?alimento=' + alimento
         request += '&comida=' + comida
         request += '&año=' + año
         request += '&mes=' + mes
@@ -346,7 +390,7 @@ function modificarAlimento(id, suscripcion) {
         $.getJSON(request).done(function (data) {
             btn_drop.className = "btn btn-warning btn-sm"
             btn_drop.disabled = true
-       })
+        })
     } catch (error) {
         dbox(error)
     }

@@ -179,7 +179,7 @@ function añadirAlergia() {
             let request = "http://localhost:8000/api/insertAlergia?email=" + usuario
             request += "&alimento=" + alimento
 
-            console.log("ESTA AQUIE")
+     
             $.getJSON(request).done(function (result) {
                 if (result) {
                     renderAlimentoAlergia(alimento)

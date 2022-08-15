@@ -5,6 +5,7 @@ const { selectUsuario } = require('../../../src/models/user')
 const { selectAlimento } = require('../../../src/models/alimentos')
 const { selectDieta, selectDietaNombre, createComidasDieta, createDieta, transactionInsertAlimentosDieta } = require('../../../src/models/dieta')
 const { selectDietaModelo, selectNameDietaModelo } = require('../../../src/models/dietaModelo')
+const { selectAlergia } = require('../../../src/models/user')
 const { app } = require('../../../src/controllers/expressApp.js');
 const { request } = require('express');
 
@@ -86,6 +87,17 @@ app.get("/api/searchAlimento", (req, res) => {
     selectAlimento(
         conn,
         req.query.term,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
+
+app.get("/api/selectAlergia", (req, res) => {
+    selectAlergia(
+        conn,
+        req.query.email,
         (result) => {
             res.json(result);
         }
@@ -318,11 +330,24 @@ function mostrarDatosUsuario(gmail) {
     try {
         $.getJSON('http://localhost:8000/api/selectUser?email=' + gmail).done(function (results) {
             if (results.length == 1) {
-                renderCard(results[0].nombre, results[0].altura, results[0].edad, results[0].tipoAlimentacion, results[0].peso)
-            } else {
+                $.getJSON('http://localhost:8000/api/selectAlergia?email=' + gmail).done(function (alergias) {
+                    alimentosAlergia = []
+                    if (alergias.length > 0) {
+                        alergias.forEach(element => {    
+                            alimentosAlergia.push(element.alimento)
+                        });
+                        
+                    } 
+                    renderCard(results[0].nombre, results[0].altura, results[0].edad, results[0].tipoAlimentacion, results[0].peso, alimentosAlergia)
+                });
+            }else {
                 dbox("Ha ocurrido un error a la hora de consultar la información del usuario")
             }
         });
+
+
+     
+
 
     } catch (error) {
         dbox(error)
@@ -829,7 +854,6 @@ guardar.addEventListener("click", function () {
 
 function rellenarAlimentos(suscripcion, semana) {
     try {
-
         let semana = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
         let semSQL = semana.getFullYear() + "-" + (semana.getMonth() + 1).toString().padStart(2, "0") + "-" + semana.getDate().toString().padStart(2, "0")
         let request = "http://localhost:8000/api/selectDieta?suscripcion=" + suscripcion

@@ -38,7 +38,7 @@
     <hr style="border:2px;">
   </div>
 
-  <div class="card border-success mb-3" style="max-width: 28rem ;float:left; margin:10px; position:relative;">
+  <div class="card border-success mb-3" >
     <div class="card-header bg-transparent border-success">FICHA CLIENTE</div>
     <div class="card-body" id="card">
 
@@ -162,12 +162,21 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="../js/popup.js"></script>
   <script>
-    function renderCard(nombre, altura, edad, tipoAlimentacion, peso) {
+    function renderCard(nombre, altura, edad, tipoAlimentacion, peso, comidas) {
       var div = document.getElementById("card");
       div.innerHTML += "<h5 class=\"card-title\">" + nombre + "</h5>"
       div.innerHTML += "<p class=\"card-text\">Edad: " + edad + "&nbsp&nbsp&nbsp Altura: " + altura + "cm &nbsp&nbsp&nbsp Peso: " + peso + "kg</p>"
       div.innerHTML += "<p class=\"card-text\"> Tipo Alimentacion: " + tipoAlimentacion + "</p>"
+      let alimentos = "Alergías y intoleracias: "
+      comidas.forEach(element => {
+        alimentos += element + ", "      
+      });
+
+      div.innerHTML += "<p class=\"card-text\"> " + alimentos + "</p>"
+
+   
     }
+
 
     function renderSemana(fechas) {
       const dataForm = document.getElementById("diasSemana")
