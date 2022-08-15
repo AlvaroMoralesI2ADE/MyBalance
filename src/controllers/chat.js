@@ -2,14 +2,11 @@ const { getConnection } = require('../../../src/database/database');
 const conn = getConnection();
 const { app } = require('../../../src/controllers/expressApp.js');
 const Mensaje  = require('../../../src/controllers/mensaje.js');
-const { insertMessageUser, selectMessagesUser, selectMessagesAdmin, insertMessageAdmin} = require('../../../src/models/mensajes.js');
+const { insertMessageUser, selectMessagesUser, selectMessagesAdmin, insertMessageAdmin, updateVistosMensajes} = require('../../../src/models/mensajes.js');
 const { dbox } = require('../../../src/views/js/popup.js');
 const bcrypt = require("bcryptjs");
 var mensajes = []
 var usuario
-
-
-const { countMensajesNoVistos } = require('../../../src/models/mensajes.js');
 
 
 app.listen(8000, () => {
@@ -31,6 +28,15 @@ app.get("/api/insertMessageUser", (req, res) => {
 
 
 
+app.get("/api/updateVistosMensajes", (req, res) => {
+    updateVistosMensajes(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
 
 
 app.get("/api/insertMessageAdmin", (req, res) => {
@@ -177,6 +183,23 @@ function sendMessageAdmin(){
                  
         });
     }
+}
 
 
+function marcarComoVisto(usuario){
+    try{
+        let request = "http://localhost:8000/api/updateVistosMensajes?email=" + usuario
+
+        $.getJSON(request).done(function (results) {
+            if(results){
+                
+            }else{
+                dbox("Ha ocurrido un error")
+            }
+            
+                 
+        });
+    }catch(err){
+        console.log(err)
+    }
 }

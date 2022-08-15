@@ -53,30 +53,32 @@
 
       <div id="boxCancel">
         <div id="boxWrapCancel">
-          <div id="boxTxt">¿Desea cancelar la suscripción?</div>
+          <div id="boxTxtC">¿Desea cancelar la suscripción?</div>
           <input type="button" style="display:inline-block;"  class="btn btn-outline-success" value="No" onclick="renderQuitarCancelar()" />
           <br></br>
           <input type="button" style="display:inline-block;" class="btn btn-outline-danger" value="Si" onclick="cancelarSuscripcionButton()"/>
          </div>
-      </div>
 
+      </div>
 
 
       <div id="boxBack">
         <div id="boxWrap">
-          <div id="boxCancelar">¿Estás seguro de cancelar tu suscripción?</div>
+          <div id="boxTxt"></div>
           <input type="button" class="btn btn-outline-success" value="OK" onclick="dbox()" />
         </div>
       </div>
-
+    
+    
       <script>window.$ = window.jQuery = require('jquery');</script>
       <script src="../js/renderSuscribirse.js"></script>
+      <script src="../../controllers/datosUsuario.js"></script>
       <script>
         insertHtml("Modificar Datos", false);
-        setInfo();
-
+        let alimentos = []
+        alimentos = getAlergias()
+       
       </script>
-      <script src="../../controllers/datosUsuario.js"></script>
       <script src="../../controllers/miCuenta.js"></script>
       <script type="text/javascript">
         function renderCancelar() {

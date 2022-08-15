@@ -70,7 +70,9 @@ function TablaUsuarios() {
     $.getJSON('http://localhost:8000/api/selectSuscVigentes').done(function (data) {
       if(data.length > 0){
         for (let i = 0; i < data.length; i++) {
-            renderSuscripcion(data[i].fecha_inicioS, data[i].fecha_finS, 
+
+            console.log(data[i].idsuscripcion)
+             renderSuscripcion(data[i].fecha_inicioS, data[i].fecha_finS, 
               data[i].nombre, data[i].email, data[i].idsuscripcion,  data[i].dietaAsignada, data[i].Novistos, data[i].modificar)
       
         }

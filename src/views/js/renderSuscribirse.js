@@ -7,7 +7,6 @@ function addDays(date, days) {
 }
 
 const insertHtml = (value, suscripcion) => {  
-
     const data = document.getElementById("camposUsuario");
     data.innerHTML = "<form action=\"#\" method=\"post\" id = \"form\">"
     const dataForm = document.getElementById("form") 
@@ -59,6 +58,20 @@ const insertHtml = (value, suscripcion) => {
     data11.innerHTML += "<option value = \"Vegana\">Vegana</option>"
     data11.innerHTML += "<option value = \"Vegetariana\">Vegetariana</option>"
 
+
+    dataForm.innerHTML += "<div class=\"suscripcion-input\" id=\"suscInput8\" style=\"color:white; float: left;\">"
+    const data15 = document.getElementById("suscInput8")
+    data15.innerHTML += " <label id=\"labelPeso\"> Introduce alergías o intolerancias <span class=\"req\"></span>"
+    data15.innerHTML += "  </label> <input type=\"text\" id=\"idAlimento\">"
+     data15.innerHTML +=" <button id=\"Añadir\" type=\"button\" onclick = \"añadirAlergia()\" class=\"añadirButton\">Añadir</button>"
+   
+    data15.innerHTML += "<br></br>"
+    data15.innerHTML += "<br></br>"
+     data15.innerHTML +="<textarea id=\"w3review\" name=\"w3review\" rows=\"4\" cols=\"60\" disabled>"
+   
+
+
+
     if(suscripcion){
         dataForm.innerHTML += "<div class=\"suscripcion-input\" id=\"suscInput7\" style=\"float: left; \">"
         const data12 = document.getElementById("suscInput7")
@@ -98,22 +111,13 @@ const insertHtml = (value, suscripcion) => {
     }
     
     
-    dataForm.innerHTML += "<div class=\"suscripcion-input\" id=\"suscInput7\" style=\"color:white; float: left;\">"
-    const data15 = document.getElementById("suscInput7")
-    data15.innerHTML += " <label id=\"labelPeso\"> Introduce alergías o intolerancias <span class=\"req\"></span>"
-    data15.innerHTML += "  </label> <input type=\"text\" id=\"idAlimento\" required>"
-     data15.innerHTML +=" <button id=\"Añadir\" type=\"button\" class=\"añadirButton\">Añadir</button>"
    
-    data15.innerHTML += "<br></br>"
-    data15.innerHTML += "<br></br>"
-     data15.innerHTML +="<textarea id=\"w3review\" name=\"w3review\" rows=\"4\" cols=\"60\" disabled>"
-    
     dataForm.innerHTML += "<input type=\"submit\" id = \"set\" class=\"suscripcionButton button-block\" value=\"" + value  + "\" >"
 
 }
 
 
-const setInfo = () => {
+const setInfo = (alimentos) => {
     try {
 
         var user = new Usuario(localStorage.getItem('user'), localStorage.getItem('nombre'), localStorage.getItem('edad'),
@@ -164,7 +168,32 @@ const setInfo = () => {
             tipoAlimentacion.value = user.tipo;
         }
 
+        console.log(alimentos)
+        console.log(alimentos.length )
+        if(alimentos.length > 0){
+            console.log("entraaaaaaa")
+            var textArea = document.getElementById("w3review")
+            alimentos.forEach(alimento => {
+                textArea.innerHTML += alimento + ", "
+            });
+          
+        }
+        
+
     } catch (error) {
+        console.log(error)
         dbox(error);
     }
+}
+
+
+
+function renderAlimentoAlergia(alimento){
+    try{
+        var textArea = document.getElementById("w3review")
+        textArea.innerHTML += alimento + ", "
+    }catch(err){
+        console.log(err)
+    }
+
 }

@@ -81,12 +81,12 @@
         }
 
         $(document).ready(function () {
-            console.log("ESTA ENTRANDO")
             var param = window.location.search.substr(1);
             var listaParametros = param.split('&');
             console.log(listaParametros)
             user = listaParametros[0].split('=');
             usuario = user[1]
+            marcarComoVisto(usuario)
             renderUserChar(usuario)
             prepareMessages(usuario,false)
         });

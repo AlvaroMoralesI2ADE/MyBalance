@@ -41,9 +41,18 @@
     </div>
       
 
-
-
             
+    <div id="boxCancel">
+      <div id="boxWrapCancel">
+        <div id="boxTxtC">Gracias por suscribirse a My Balance</div>
+        <li><a href="sessionMain.html" class="btn btn-outline-success">OK</a></li>
+      </div>
+
+    </div>
+
+
+
+
 
       <!-- (A) HTML DIALOG BOX -->
       <div id="boxBack"><div id="boxWrap">
@@ -56,25 +65,17 @@
 
     
 
+    <script>window.$ = window.jQuery = require('jquery');</script>
+    <script src="../js/popup.js"></script>
     <script src="../js/renderSuscribirse.js"></script>
+    <script src="../../controllers/datosUsuario.js"></script>
     <script>
       insertHtml("Continuar",true);
-      setInfo();  
+      let alimentos = []
+      alimentos = getAlergias() 
     </script>
-    <script>window.$ = window.jQuery = require('jquery');</script>
-    <script src="../../controllers/datosUsuario.js"></script>
     <script src="../../controllers/suscripcion.js"></script>
-    <script type="text/javascript">
-      function cerrarCuentaUser(){
-        localStorage.removeItem('user');
-        localStorage.removeItem('altura');
-        localStorage.removeItem('peso');
-        localStorage.removeItem('nombre');
-        localStorage.removeItem('tipo');
-        localStorage.removeItem('sexo');
-        window.location.href = "../html/log.html";
-      }
-    </script>
+    <script src="../../controllers/menu.js"></script>
     <script src="../js/jqueryFormularioLog.js"></script>
   
     

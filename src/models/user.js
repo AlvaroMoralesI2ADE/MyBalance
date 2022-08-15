@@ -157,4 +157,41 @@ function cancelarSuscripcion(connection, email, callback) {
 
 }
 
-module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, selectAdmin, createUser, insertSuscripcion, updateUsuario, cancelarSuscripcion }
+
+
+function insertAlergia(connection, param, callback) {
+    try {
+        console.log("ENTRA")
+        let sql = "INSERT INTO alergias_intolerancias (alimento, usuario) VALUES ('" + param.alimento + "','" + param.email + "')"
+        connection.query(sql, function (err, result) {
+            if (err) { throw err
+            console.log(err)
+            }
+            else{ callback(true)}
+        });
+    } catch (Err) {
+        console.log(Err)
+    }
+
+}
+
+
+
+function selectAlergia(connection, data, callback) {
+    try {
+        let sql = 'SELECT * FROM alergias_intolerancias WHERE usuario = ?';
+        connection.query(sql, data, function (err, result) {
+            if (err) throw err
+            callback(result)
+        });
+    } catch (Err) {
+        console.log(Err)
+    }
+
+}
+
+
+
+module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, 
+    selectAdmin, createUser, insertSuscripcion,
+    updateUsuario, cancelarSuscripcion, insertAlergia, selectAlergia }

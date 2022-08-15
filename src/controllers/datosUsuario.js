@@ -1,6 +1,8 @@
 const { insertSuscripcion, updateUsuario } = require('../../../src/models/user');
 const { app } = require('../../../src/controllers/expressApp.js');
 
+const { insertAlergia, selectAlergia } = require('../../../src/models/user.js')
+
 app.listen(8000, () => {
     console.log("Sever is Running");
 })
@@ -15,6 +17,29 @@ app.get("/api/updateUsuario", (req, res) => {
         }
     );
 });
+
+
+app.get("/api/insertAlergia", (req, res) => {
+    insertAlergia(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
+
+app.get("/api/selectAlergia", (req, res) => {
+    selectAlergia(
+        conn,
+        req.query.email,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
+
 
 
 app.get('/api/insertSuscripcion', (req, res) => {
@@ -33,7 +58,7 @@ const setUser = (suscripcion) => {
         var user = new Usuario(localStorage.getItem('user'), localStorage.getItem('nombre'), localStorage.getItem('edad'),
             localStorage.getItem('altura'), localStorage.getItem('peso'), localStorage.getItem('tipo'), localStorage.getItem('sexo'), "")
 
-        
+
 
         var valuesSet = "";
 
@@ -106,11 +131,11 @@ const setUser = (suscripcion) => {
 
         if (valuesSet != "") {
             var setValues = valuesSet.substring(0, valuesSet.length - 1);
-            
-            let requestU = 'http://localhost:8000/api/updateUsuario?setValues=' + setValues 
-            requestU +=  '&email=' + user.email
+
+            let requestU = 'http://localhost:8000/api/updateUsuario?setValues=' + setValues
+            requestU += '&email=' + user.email
             $.getJSON(requestU).done(function (result) {
-                if(suscripcion != true){
+                if (suscripcion != true) {
                     dbox("Datos actualizados");
                 }
             });
@@ -126,10 +151,10 @@ const setUser = (suscripcion) => {
             let request = 'http://localhost:8000/api/insertSuscripcion?email=' + user.email
             request += '&fechaInicio=' + fechaInicio
             request += '&fechaFinal=' + fechaFinal
-           
+
             console.log(request)
             $.getJSON(request).done(function (result) {
-                dbox("Gracias por suscribirte a My Balance");
+                dboxSuscripcion();
             });
         }
 
@@ -143,3 +168,61 @@ const setUser = (suscripcion) => {
 
 
 
+
+function añadirAlergia() {
+    try {
+        var input = document.getElementById("idAlimento");
+        var alimento = input.value;
+
+        if (alimento != "") {
+            let usuario = localStorage.getItem('user')
+            let request = "http://localhost:8000/api/insertAlergia?email=" + usuario
+            request += "&alimento=" + alimento
+
+            console.log("ESTA AQUIE")
+            $.getJSON(request).done(function (result) {
+                if (result) {
+                    renderAlimentoAlergia(alimento)
+                } else {
+                    dbox("Ha ocurrido un error")
+                }
+            });
+        } else {
+            dbox("Escribe un alimento por favor")
+        }
+
+
+
+    } catch (err) {
+        console.log(err)
+    }
+
+}
+
+
+function getAlergias() {
+    let alimentos = []
+    try {
+        let usuario = localStorage.getItem('user')
+        let request = "http://localhost:8000/api/selectAlergia?email=" + usuario
+        $.getJSON(request).done(function (result) {
+            if (result.length > 0) {
+                result.forEach(element => {    
+                    alimentos.push(element.alimento)
+                });
+            } 
+
+            setInfo(alimentos);
+        });
+
+        console.log(alimentos)
+
+
+    } catch (err) {
+        console.log(err)
+    }
+
+    return alimentos
+
+
+}

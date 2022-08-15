@@ -6,4 +6,10 @@ function dbox (msg) {
     } else { document.getElementById("boxBack").classList.remove("show"); }
 }
 
-module.exports = { dbox }
+
+function dboxSuscripcion(){
+      document.getElementById("boxCancel").classList.add("show");  
+}
+
+
+module.exports = { dbox, dboxSuscripcion }

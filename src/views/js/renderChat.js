@@ -4,7 +4,7 @@ function sendMessageRender(message,d) {
         d.getDate(),
         d.getFullYear()].join('/')+' '+
     [d.getHours(),
-        d.getMinutes()
+        ('0' + d.getMinutes()).slice(-2)
         ].join(':');
     if (message != "") {
         let form = document.getElementById("message");
@@ -28,7 +28,7 @@ function receivedMessageRender(message, d) {
         d.getDate(),
         d.getFullYear()].join('/')+' '+
     [d.getHours(),
-        d.getMinutes()
+        ('0' + d.getMinutes()).slice(-2)
         ].join(':');
     let form = document.getElementById("message");
     id += 1
@@ -46,7 +46,7 @@ function sentMessageRender(message, d) {
         d.getDate(),
         d.getFullYear()].join('/')+' '+
     [d.getHours(),
-        d.getMinutes()
+        ('0' + d.getMinutes()).slice(-2)
         ].join(':');
     let form = document.getElementById("message");
     id += 1
