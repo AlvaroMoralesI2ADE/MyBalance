@@ -45,9 +45,12 @@ app.get('/api/selectAdmin', (req, res)  => {
 
 
 
+
+
 function ValidateUser(user){
     try{
         $.getJSON('http://localhost:8000/api/selectAdmin?email=' + user.email).done(function (result) {
+            console.log(result)
             if(result.length > 0){
                 var contraseñaAdmin = result[0]["contraseña"]; 
                 console.log(contraseñaAdmin) ;

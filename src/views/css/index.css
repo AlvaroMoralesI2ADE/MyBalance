@@ -26,8 +26,6 @@ body {
 }
 
 
-
-
 a {
   text-decoration: none;
   color: #447a36;
@@ -375,20 +373,15 @@ float:right;
   display: block;
   width: 100%;
 }
-.forgot {
+
+.recuperarContraseña {
+  display: inline-block;
   margin-top: -20px;
-  text-align: right;
   margin-bottom: 20px;
-  
+  width: 100%;
+  text-decoration: underline black;        
 }
 
-
-.forgot a {
- 
-  color: #6fad5f;
-
-
-}
 
 
 hr {
@@ -406,13 +399,6 @@ hr {
   padding: 15px;
 }
 
-
-.forgot a:hover {
- 
-  color: #2f7a1f;
-
-
-}
 
 
 .nivelContraseña {

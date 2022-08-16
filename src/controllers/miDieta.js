@@ -2,7 +2,7 @@
 const { dbox } = require('../../../src/views/js/popup');
 const { getConnection } = require('../../../src/database/database');
 const Comida = require('../../../src/controllers/comida');
-const { selectAlimentosSuscripcion, UpdateAlimentosComidas } = require('../../../src/models/alimentos');
+const { selectAlimentosSuscripcion, UpdateAlimentosComidas, UpdateConsumidoAlimento } = require('../../../src/models/alimentos');
 const { app } = require('../../../src/controllers/expressApp.js');
 const semanaA = document.getElementById('semanaAnterior');
 const semanaS = document.getElementById('semanaSiguiente');
@@ -74,6 +74,16 @@ app.get("/api/UpdateAlimentosComidas", (req, res) => {
 });
 
 
+
+app.get("/api/UpdateConsumidoAlimento", (req, res) => {
+    UpdateConsumidoAlimento(
+        conn,
+        req.query,
+        (result) => {
+            res.json(result);
+        }
+    );
+});
 
 function rellenarTabla(suscripcion, sem) {
     let div = document.getElementById('tableDiv')
@@ -240,14 +250,13 @@ function rellenarAlimentos(suscripcion, semana) {
 
 function renderDieta(result, suscripcion) {
     try {
-        console.log("COMIENZA LA COMPARATIVA")
-        let d = starWeek.split("-");
-        console.log(starWeek)
+     
+        let d = starWeek.split("-");    
         //20-08-2022
         var inicioSemana = new Date(d[2] + '/' + d[1] + '/' + d[0]);
         let hoy = new Date()
         hoy.setHours(0, 0, 0, 0);
-        console.log("ESTA ENTRANDO")
+
 
         let caso = 0
         for (i = 0; i < result.length; i++) {
@@ -262,7 +271,9 @@ function renderDieta(result, suscripcion) {
             let diaFormat = new Date(day[0] + '/' + day[1] + '/' + day[2]);
             //\" required
 
-            //SI NO ES ADMIN:
+            //SEMANA ANTERIOR A LA ACTUAL -> CASO = 0 Y METER LO DE DANGER O LO OTRO
+
+
             //FECHA == ACTUAL -> CONSUMIDO (AÑADIR LAYER)
             //FECHA < ACTUAL -> ROJO O VERDE. 
             //FECHA > ACTUAL -> MODIFICAR (AÑADIR LAYER)
@@ -355,6 +366,55 @@ function renderDieta(result, suscripcion) {
         dbox(error)
     }
 }
+
+
+
+//PASAR COMO PARÁMETRO DIV?
+function consumirAlimento(id, suscripcion) {
+    try {
+
+        console.log(id + " sus " + suscripcion)
+        var dropdown_item_id = id.replace('btn-drop', 'dropdown-item')
+        var dropdown_menu_id = id.replace('btn-drop', 'dropdown-menu')
+
+        var dropdown_item = document.getElementById(dropdown_item_id)
+        var dropdown_menu = document.getElementById(dropdown_menu_id)
+        var btn_drop = document.getElementById(id)
+
+        var array = id.split("-")
+        let comida = array[2]
+        let año = array[3]
+        let mes = array[4]
+        let dia = array[5]
+        let alimento = array[7]
+
+        let query = ""
+
+        let request = 'http://localhost:8000/api/UpdateConsumidoAlimento?alimento=' + alimento
+        request += '&comida=' + comida
+        request += '&año=' + año
+        request += '&mes=' + mes
+        request += '&dia=' + dia
+        request += '&suscripcion=' + suscripcion
+
+
+        $.getJSON(request).done(function (data) {
+            btn_drop.className = "btn btn-success btn-sm"
+            btn_drop.disabled = true
+        })
+    } catch (error) {
+        dbox(error)
+    }
+}
+
+
+
+
+
+
+
+
+
 
 
 

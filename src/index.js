@@ -1,6 +1,24 @@
 const { app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 
+const express = require('express')
+
+appExpress = express()
+
+
+appExpress.listen(4000, () => {
+  console.log("Sever is Running");
+})
+
+
+appExpress.get('/reset-password', function(req, res) {
+  res.sendFile(path.join(__dirname, 'views/html/prueba.html'));
+});
+
+
+
+
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {

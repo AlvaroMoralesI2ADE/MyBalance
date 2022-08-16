@@ -79,4 +79,26 @@ function insertAlimento(connection, data, callback){
 
 
 
-module.exports = { selectAlimento, selectAlimentosSuscripcion,UpdateAlimentosComidas, deleteAlimento, insertAlimento}
+function UpdateConsumidoAlimento(connection, param, callback){
+    let query = "UPDATE alimentos_comidas "
+    query += "SET alimentos_comidas.consumido = 1 "
+    query += "WHERE alimentos_comidas.alimento = \"" + param.alimento + "\" AND "
+    query += "alimentos_comidas.tipo = \"" + param.comida + "\" "
+    query += "AND alimentos_comidas.comida = (SELECT idcomidas_dia "
+    query += "FROM mybalance.comidas_del_dia "
+    query += "WHERE mybalance.comidas_del_dia.dia = '" + param.año + "-" + param.mes + "-" + param.dia + "' AND mybalance.comidas_del_dia.dieta IN "
+    query += "(SELECT dieta FROM mybalance.dieta "
+    query += "WHERE mybalance.dieta.suscripcion = " + param.suscripcion + ")) "
+    
+ 
+    connection.query(query, function (err, result) {
+        if (err) throw err
+        callback(result)
+    });
+}
+
+
+
+
+module.exports = { selectAlimento, selectAlimentosSuscripcion,UpdateAlimentosComidas,
+     deleteAlimento, insertAlimento, UpdateConsumidoAlimento}
