@@ -11,7 +11,7 @@ recuperarContraseña.addEventListener('submit', (e) => {
         $.getJSON('http://localhost:8000/api/selectUsuario?email=' + email.value).done(function (result) {
             if(result.length > 0){
                 let gmail = email.value           
-                sendEmailPrueba(gmail)
+                sendEmail(gmail)
             }else{dbox('El email no esta registrado en nuestra base de datos');} 
             
             email.value = ""       
@@ -22,7 +22,7 @@ recuperarContraseña.addEventListener('submit', (e) => {
 })
 
 
-function sendEmailPrueba(email) {
+function sendEmail(email) {
     var email = email;
     
    

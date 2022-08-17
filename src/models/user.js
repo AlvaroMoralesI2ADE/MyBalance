@@ -1,4 +1,5 @@
 const mysql = require("mysql")
+const bcrypt = require("bcryptjs");
 
 
 
@@ -43,6 +44,7 @@ function selectSuscVigentes(connection, callback) {
 
 function selectUsuario(connection, data, callback) {
     try {
+        console.log("selectUsuario")
         let sql = 'SELECT * FROM usuarios WHERE email = ?';
         connection.query(sql, data, function (err, result) {
             if (err) throw err
@@ -61,7 +63,7 @@ function createUser(connection, data, callback) {
         let sql = "INSERT INTO usuarios SET ?"
         connection.query(sql, data, function (err, result) {
             if (err) throw err
-            callback(result)
+            callback(true)
         });
     } catch (err) {
         console.log(err)
@@ -141,6 +143,23 @@ function updateUsuario(connection, data, callback) {
 }
 
 
+function updatePassword(connection, data, callback) {
+    try {
+        console.log("entra")
+        let pass = bcrypt.hashSync(data.password,10);
+        let sql = "UPDATE usuarios SET contraseña = '" + pass +  "' WHERE email = '" + data.email + "'";
+
+        console.log(sql)
+        connection.query(sql, function (err, result) {
+            if (err) throw err
+            callback(true)
+        });
+    } catch (Err) {
+        console.log(Err)
+    }
+}
+
+
 function cancelarSuscripcion(connection, email, callback) {
     try {
         console.log("entra")
@@ -165,7 +184,6 @@ function insertAlergia(connection, param, callback) {
         let sql = "INSERT INTO alergias_intolerancias (alimento, usuario) VALUES ('" + param.alimento + "','" + param.email + "')"
         connection.query(sql, function (err, result) {
             if (err) { throw err
-            console.log(err)
             }
             else{ callback(true)}
         });
@@ -194,4 +212,4 @@ function selectAlergia(connection, data, callback) {
 
 module.exports = { selectSuscVigentes, selectUsuario, selectSuscripcion, 
     selectAdmin, createUser, insertSuscripcion,
-    updateUsuario, cancelarSuscripcion, insertAlergia, selectAlergia }
+    updateUsuario, cancelarSuscripcion, insertAlergia, selectAlergia, updatePassword }

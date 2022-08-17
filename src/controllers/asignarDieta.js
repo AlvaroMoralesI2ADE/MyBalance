@@ -56,13 +56,6 @@ function dietaModelo() {
 
 
 
-
-
-
-
-
-
-
 $(document).ready(function () {
     var param = window.location.search.substr(1);
     var listaParametros = param.split('&');
@@ -631,9 +624,7 @@ function eliminarAlimento(id) {
             dietaModelo()
         }
 
-
         //BUSCAR EL ALIMENTO EN EL 
-
     } catch (error) {
         dbox(error)
     }

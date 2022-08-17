@@ -1,12 +1,13 @@
 const path = require('path');
 
+
 const { getConnection } = require('../database/database.js')
 const conn = getConnection();
 
 const { selectAdmin, selectUsuario,
     createUser, selectSuscripcion,
     insertSuscripcion, updateUsuario, selectSuscVigentes,
-    insertAlergia, selectAlergia, cancelarSuscripcion } = require('../models/user.js')
+    insertAlergia, selectAlergia, cancelarSuscripcion, updatePassword } = require('../models/user.js')
 const { selectAlimentosSuscripcion, UpdateAlimentosComidas,
     UpdateConsumidoAlimento, selectAlimento, deleteAlimento, insertAlimento } = require('../models/alimentos.js');
 const { selectMessagesAdmin, insertMessageUser, selectMessagesUser,
@@ -19,14 +20,15 @@ const { transactionInsertAlimentosDietaModelo, createDietaModelo, createComidasD
 
 const api = (app) => {
 
-    app.get('/main', function (req, res) {
-        res.sendFile(path.join(__dirname, '../views/html/serverMain.html'));
-    });
-
-
     app.get('/reset-password', function (req, res) {
         res.sendFile(path.join(__dirname, '../views/html/nuevaContraseña.html'));
     });
+
+
+    app.get('/verifyAccount', function (req, res) {
+        res.sendFile(path.join(__dirname, '../views/html/verificacionEmail.html'));
+    });
+
 
 
     app.get("/api/selectUsuario", (req, res) => {
@@ -146,6 +148,18 @@ const api = (app) => {
     });
 
 
+  
+
+    app.get("/api/updatePassword", (req, res) => {
+        console.log("SI HACE LA PETICIÓN")
+        updatePassword(
+            conn,
+            req.query,
+            (result) => {
+                res.json(result);
+            }
+        );
+    });
 
     app.get("/api/UpdateConsumidoAlimento", (req, res) => {
         UpdateConsumidoAlimento(
@@ -411,9 +425,6 @@ const api = (app) => {
             }
         );
     });
-    
-
-
 
 }
 

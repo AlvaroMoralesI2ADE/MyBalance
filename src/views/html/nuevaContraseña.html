@@ -8,12 +8,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <!-- Estilos -->
-  <link rel="stylesheet" href="../css/index.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="/js/my.js"></script>
 
 </head>
 
@@ -30,14 +28,13 @@
           <input type="password" id="exampleInputPassword2" placeholder="Repetir contraseña">
         </div>
         <button type="submit" id="cambiarContraseña"  class="btn btn-primary">Cambiar contraseña</button>
-        <label id="info"></label>
+        
         
     </form>
 
+    <label id="info"></label>
 
 
-
-  <script>window.$ = window.jQuery = require('jquery');</script>
   <script>
 
       $('#exampleInputPassword1').keyup(function(e) {
@@ -63,34 +60,46 @@
       var cambiarContraseña = document.getElementById("cambiarContraseña")
 
       cambiarContraseña.addEventListener('submit', function(event){ 
-          event.preventDefault();
-          info.value = ""
-          let contraseña1 = document.getElementById("exampleInputPassword1")
-          let contraseña2 = document.getElementById("exampleInputPassword2")
-         
-          if(contraseña1.value != "" && contraseña2.value != ""){
-              if(contraseña1.value == contraseña2.value){
-                info.innerHTML += "Contraseña cambiada correctamente"
-              }else{
-                info.innerHTML += "Las contraseñas no coinciden"
-              }
+        event.preventDefault();
+        console.log("va?")
+        info.innerHTML = ""
+        let contraseña1 = document.getElementById("exampleInputPassword1")
+        let contraseña2 = document.getElementById("exampleInputPassword2")
 
-
-
-          }else{
-            info.innerHTML += "rellena"
-          }
-         
-          contraseña1.value = ""
-          contraseña2.value = ""
-          
-      })
-
-     
-   
+        if(contraseña1.value != "" && contraseña2.value != ""){
+            if(contraseña1.value == contraseña2.value){
+              var param = window.location.search.substr(1);
+              var listaParametros = param.split('&');
+              emailSplit = listaParametros[0].split('=');
+              gmail = emailSplit[1]
+              console.log(gmail)
+              let request = "http://localhost:8000/api/updatePassword?password=" + contraseña1.value + "&email=" + gmail
+              $.getJSON(request).done(function (result) {
+           
+                  if(result == true){
+                    info.innerHTML = "Contraseña cambiada correctamente"
+                    cambiarContraseña.parentNode.removeChild(cambiarContraseña);
+                  }else{
+                    info.innerHTML = "Ha ocurrido un problema"
+                  }
     
+              });
+          
+            }else{
+              info.innerHTML = "Las contraseñas no coinciden"
+            }
+        }else{
+          info.innerHTML = "Por favor, rellene las contraseñas"
+        }
 
-  </script>
+        contraseña1.value = ""
+        contraseña2.value = ""
+        
+      })
+  
+
+    </script>
+
 
 </body>
 

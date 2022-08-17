@@ -4,22 +4,45 @@ const contraseña = document.getElementById("contraseñaRegistro")
 const contraseña2 = document.getElementById("contraseñaRepRegistro")
 const nombreUsuario = document.getElementById("usuarioRegistro")
 const registrar = document.getElementById('registrarse');
+var nodemailer = require('nodemailer')
 
 
 
 
-function createU(user){
-    let request = 'http://localhost:8000/api/createUser?email=' + user.email
-    request += '&nombre=' + user.nombre
-    request += '&contraseña=' + user.contraseña
 
-    console.log(request)
-    $.getJSON(request).done(function (result) {
-        dbox("Usuario registrado en nuestra base de datos");
+
+
+function sendEmail(email, password, nombre) {
+    var email = email;
+    
+   
+    var mail = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'mybalancenutricion@gmail.com', 
+            pass: 'ohhz vnwz pczo yuvn'
+        }
+    });
+    
+    let request = 'http://localhost:8000/verifyAccount?email=' + email + '&password=' + password + '&nombre=' + nombre
+    var mailOptions = {
+        from: 'mybalancenutricion@gmail.com',
+        to: email,
+        subject: 'Verificación crear cuenta- My Balance',
+        html: '<p>Pulsa este link para suscribirte a My Balance <a href="' + request + '" >link</a></p>'
+    };
+ 
+    mail.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            dbox("Ha ocurrido un error")
+        } else {
+            dbox("Hemos enviado un correo a " + email + " para que puedas verificar tu cuenta")
+        }
     });
 }
 
-
+ 
+    
 
 
 
@@ -41,12 +64,7 @@ registrar.addEventListener('submit', (e) => {
                     dbox('El email ya esta registrado en nuestra base de datos');
                 }else{
                     var contraseñaEncriptada = bcrypt.hashSync(contraseña.value,10); //encriptamos la contraseña
-                    const newUser = {
-                        email: email.value,
-                        nombre: usuario.value,
-                        contraseña: contraseñaEncriptada
-                    }
-                    createU(newUser)
+                    sendEmail(email.value, contraseñaEncriptada, usuario.value)
                 }
             });              
         }
@@ -142,3 +160,7 @@ function Validation(){
     
 
 }
+
+
+
+
