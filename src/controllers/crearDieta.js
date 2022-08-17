@@ -1,13 +1,3 @@
-const { getConnection } = require('../../../src/database/database');
-
-const conn = getConnection();
-
-const { app } = require('../../../src/controllers/expressApp.js');
-
-const Comida = require('../../../src/controllers/comida');
-const { selectDieta } = require('../../../src/models/dieta')
-const { selectAlimento } = require('../../../src/models/alimentos')
-const { transactionInsertAlimentosDietaModelo, createDietaModelo, createComidasDietaModelo, selectDietaModeloName } = require('../../../src/models/dietaModelo');
 
 const añadir = document.getElementById('Añadir');
 const guardar = document.getElementById('guardarDieta');
@@ -34,73 +24,6 @@ $(function () {
     });
   });
 
-
-
-app.listen(8000, () => {
-    console.log("Sever is Running");
-})
-
-app.get("/api/searchAlimento", (req, res) => {
-    selectAlimento(
-      conn,
-      req.query.term,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-app.get("/api/selectDietaModeloName", (req, res) => {
-    selectDietaModeloName(
-      conn,
-      req.query.nombre,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
-
-app.get("/api/createDietaModelo", (req, res) => {
-    createDietaModelo(
-      conn,
-      req.query.nombre,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
-app.get("/api/transactionInsertAlimentosDietaModelo", (req, res) => {
-    console.log(req.query)
-    transactionInsertAlimentosDietaModelo(
-      conn,
-      req.query,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
-app.get("/api/createComidasDietaModelo", (req, res) => {
-    console.log(req.query)
-    createComidasDietaModelo(
-      conn,
-      req.query.nombre,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
-
-
-
-      
 
 
 

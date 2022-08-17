@@ -1,12 +1,6 @@
 
-const { dbox } = require('../../../src/views/js/popup');
-const { getConnection } = require('../../../src/database/database');
-const Comida = require('../../../src/controllers/comida');
-const { selectAlimentosSuscripcion, UpdateAlimentosComidas, UpdateConsumidoAlimento } = require('../../../src/models/alimentos');
-const { app } = require('../../../src/controllers/expressApp.js');
 const semanaA = document.getElementById('semanaAnterior');
 const semanaS = document.getElementById('semanaSiguiente');
-const conn = getConnection();
 let fechasArray = []
 let comidas = []
 var diaFin = null
@@ -41,49 +35,10 @@ $(document).ready(function () {
 });
 
 
-app.listen(8000, () => {
-    console.log("Sever is Running");
-})
 
 
 
 
-
-app.get("/api/selectAlimentosSuscripcion", (req, res) => {
-    selectAlimentosSuscripcion(
-        conn,
-        req.query.suscripcion,
-        req.query.semana,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-
-
-app.get("/api/UpdateAlimentosComidas", (req, res) => {
-    UpdateAlimentosComidas(
-        conn,
-        req.query,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-
-app.get("/api/UpdateConsumidoAlimento", (req, res) => {
-    UpdateConsumidoAlimento(
-        conn,
-        req.query,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
 
 function rellenarTabla(suscripcion, sem) {
     let div = document.getElementById('tableDiv')

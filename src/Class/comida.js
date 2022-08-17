@@ -1,6 +1,3 @@
-const { select } = require("async")
-
-
 class ComidaCantidad{
   constructor (alimento, cantidad, bd, eliminar) {
     this._alimento = alimento
@@ -51,7 +48,7 @@ class ComidaCantidad{
 
 
 
-module.exports = class Comida {
+class Comida {
 
     constructor (tipo, dia, alimento, cantidad, bd, btn_group_width, btn) {
       //this._sqlCommand = ""

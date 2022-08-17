@@ -27,7 +27,6 @@
           <li><a href="crearDieta.html">Crear Dieta</a></li>
           <li><a href="#">Mi cuenta</a>
             <ul>
-              <li><a href="#">Mi cuenta</a></li>
               <li><a href="#" onclick=cerrarCuentaAdmin();>Salir</a></li>
             </ul>
           </li>
@@ -70,11 +69,11 @@
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="../../Class/mensaje.js"></script>
     <script src="../js/renderChat.js"></script>
     <script src="../../controllers/chat.js"></script>
     <script src="../../controllers/menu.js"></script>
     <script>
-
         function renderUserChar(user){
             let form = document.getElementById("headerChat");
             form.innerHTML += "<h3>" + user + "</h3>"

@@ -7,17 +7,6 @@ const eliminar = document.getElementById('EliminarAlimento');
 
 let tipo = document.getElementById('tipo');
 
-const { getConnection } = require('../../../src/database/database');
-const conn = getConnection();
-const  { app } = require('../../../src/controllers/expressApp.js');
-
-
-const { dbox } = require('../../../src/views/js/popup');
-
-const { selectAlimento, deleteAlimento, insertAlimento } = require('../../../src/models/alimentos')
-
-
-
 
 
 
@@ -36,44 +25,6 @@ $(function () {
       limit: 4
     });
   });
-
-
-
-app.listen(8000, () => {
-    console.log("Sever is Running");
-})
-
-app.get("/api/searchAlimento", (req, res) => {
-    selectAlimento(
-      conn,
-      req.query.term,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
-app.get("/api/deleteAlimento", (req, res) => {
-    deleteAlimento(
-      conn,
-      req.query.alimento,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
-app.get("/api/insertAlimento", (req, res) => {
-    insertAlimento(
-      conn,
-      req.query,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
 
 
 

@@ -1,36 +1,9 @@
-const { getConnection } = require('../../../src/database/database')
-const Usuario = require('../../../src/controllers/userClass')
-
-const { app } = require('../../../src/controllers/expressApp.js');
-
-const { selectSuscripcion } = require('../../../src/models/user')
-
-const conn = getConnection();
 const set = document.getElementById('setSuscripcion')
-const { dbox } = require('../../../src/views/js/popup.js')
-
 let buttonSus = document.getElementById('botonSus')
-
 let head = document.getElementById('header')
-
 let fechasArray = []
 
 
-app.listen(8000, () => {
-    console.log("Sever is Running");
-})
-
-
-app.get("/api/selectSuscripcion", (req, res) => {
-    selectSuscripcion(
-        conn,
-        req.query.email,
-        (result) => {
-            console.log(result)
-            res.json(result);
-        }
-    );
-});
 
 
 

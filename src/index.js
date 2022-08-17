@@ -1,21 +1,26 @@
 const { app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
-
-const express = require('express')
-
-appExpress = express()
-
-
-appExpress.listen(4000, () => {
-  console.log("Sever is Running");
-})
+const api = require('./API/api.js')
+const express = require('express');
+const appExpress = express();
+// ...
+api(appExpress)
 
 
-appExpress.get('/reset-password', function(req, res) {
-  res.sendFile(path.join(__dirname, 'views/html/prueba.html'));
+//const appExpress = require('./API/api.js')
+//const appExpress = express();
+
+
+//Import the Routes -> index.js
+appExpress.get('/', function(req, res){
+	res.send('Server is listening');
 });
 
 
+
+appExpress.listen(8000, () => {
+  console.log("Sever is Running");
+})
 
 
 

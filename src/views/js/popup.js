@@ -12,4 +12,3 @@ function dboxSuscripcion(){
 }
 
 
-module.exports = { dbox, dboxSuscripcion }

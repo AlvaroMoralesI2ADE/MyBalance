@@ -1,13 +1,5 @@
-const { getConnection } = require('../../../src/database/database');
-const conn = getConnection();
-const Comida = require('../../../src/controllers/comida');
-const { selectUsuario } = require('../../../src/models/user')
-const { selectAlimento } = require('../../../src/models/alimentos')
-const { selectDieta, selectDietaNombre, createComidasDieta, createDieta, transactionInsertAlimentosDieta } = require('../../../src/models/dieta')
-const { selectDietaModelo, selectNameDietaModelo } = require('../../../src/models/dietaModelo')
-const { selectAlergia } = require('../../../src/models/user')
-const { app } = require('../../../src/controllers/expressApp.js');
-const { request } = require('express');
+
+
 
 const añadir = document.getElementById('Añadir');
 const guardar = document.getElementById('GuardarDieta');
@@ -64,130 +56,6 @@ function dietaModelo() {
 
 
 
-app.listen(8000, () => {
-    console.log("Sever is Running");
-})
-
-
-
-app.get("/api/selectNameDietaModelo", (req, res) => {
-    selectNameDietaModelo(
-        conn,
-        req.query.term,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-
-
-app.get("/api/searchAlimento", (req, res) => {
-    selectAlimento(
-        conn,
-        req.query.term,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-app.get("/api/selectAlergia", (req, res) => {
-    selectAlergia(
-        conn,
-        req.query.email,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-app.get('/api/selectDieta', (req, res) => {
-    selectDieta(
-        conn,
-        req.query,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-
-app.get('/api/selectDietaNombre', (req, res) => {
-    selectDietaNombre(
-        conn,
-        req.query.nombre,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-
-app.get('/api/transactionInsertAlimentosDieta', async (req, res) => {
-    await transactionInsertAlimentosDieta(
-        conn,
-        req.query,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-app.get('/api/createComidasDieta', (req, res) => {
-    createComidasDieta(
-        conn,
-        req.query,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-
-app.get('/api/createDieta', (req, res) => {
-    createDieta(
-        conn,
-        req.query,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-
-
-
-
-app.get("/api/selectUser", (req, res) => {
-    selectUsuario(
-        conn,
-        req.query.email,
-        (result) => {
-            res.json(result);
-        }
-    );
-});
-
-
-app.get("/api/selectDietaModelo", (req, res) => {
-    selectDietaModelo(
-        conn,
-        req.query.dieta,
-        (result) => {
-            console.log(result)
-            res.json(result);
-        }
-    );
-});
 
 
 
@@ -328,7 +196,7 @@ function prepararSemana(semana) {
 
 function mostrarDatosUsuario(gmail) {
     try {
-        $.getJSON('http://localhost:8000/api/selectUser?email=' + gmail).done(function (results) {
+        $.getJSON('http://localhost:8000/api/selectUsuario?email=' + gmail).done(function (results) {
             if (results.length == 1) {
                 $.getJSON('http://localhost:8000/api/selectAlergia?email=' + gmail).done(function (alergias) {
                     alimentosAlergia = []
@@ -439,6 +307,7 @@ añadir.addEventListener("click", function () {
             }
             Idcantidad.value = ""
             alimento.value = ""
+            dietaModeloS = false
         }
 
     } catch (error) {
@@ -757,6 +626,7 @@ function eliminarAlimento(id) {
 
 
         if (comidas.length < 1) {
+            dietaModeloS = true
             renderCargarDieta()
             dietaModelo()
         }

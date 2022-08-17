@@ -1,5 +1,5 @@
 
-module.exports = class Usuario {
+class Usuario {
 
     constructor (email,nombre,edad,altura,peso, tipo, sexo, alergiasIntolerancia) {
       this._email = email;

@@ -90,7 +90,7 @@ function selectSuscripcion(connection, data, callback) {
     try {
         var sql = "SELECT suscripcion.caducada, suscripcion.idsuscripcion, suscripcion.fecha_inicioS, suscripcion.fecha_finS "
         sql += "FROM suscripcion WHERE "
-        sql += "suscripcion.usuario = ? "
+        sql += "suscripcion.usuario = ? AND suscripcion.caducada = 0 "
         sql += "AND (SELECT curdate()) <= suscripcion.fecha_finS "
         sql += "ORDER BY suscripcion.fecha_inicioS ASC"
 

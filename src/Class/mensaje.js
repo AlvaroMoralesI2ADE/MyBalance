@@ -1,4 +1,4 @@
-module.exports =  class mensaje{
+class Mensaje{
   constructor (mensaje, fecha,  enviado) {
     this._mensaje = mensaje
     this._fecha = fecha

@@ -2,6 +2,8 @@
 
 function renderCargarDieta(){
     div = document.getElementById('dietaModelo');
+
+    div.innerHTML = "";
     div.innerHTML += "<p id = \"tituloModelo\" class=\"titulo\">Cargar dieta</p>"
     div.innerHTML += "<hr id = \"line\" style=\"border:2px;\">"
     div.innerHTML += "<div class=\"col\"  id=\"labelCargarDieta\" style=\"padding-top:10px; \">"

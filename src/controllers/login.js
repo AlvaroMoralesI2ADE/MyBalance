@@ -4,46 +4,10 @@ let  contraseñaLog = document.getElementById('contraseñaLogIn');
 let  emailLog = document.getElementById("emailLogIn")
 //const { BrowserWindow } = require('@electron/remote')
 const {ipcRenderer} = require('electron');
-const { dbox } = require('../../../src/views/js/popup');
 //const remote = require('@electron/remote')
 //const app = require('electron').remote.app
 const path = require('path');
-const { app } = require('../../../src/controllers/expressApp');
 const bcrypt = require("bcryptjs");
-const { selectAdmin, selectUsuario, createUser } = require('../../../src/models/user')
-
-const { getConnection } = require('../../../src/database/database');
-
-const conn = getConnection()
-
-
-app.listen(8000, () => {
-    console.log("Sever is Running");
-})
-
-
-app.get("/api/selectUsuario", (req, res) => {
-    selectUsuario(
-      conn,
-      req.query.email,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
-app.get('/api/selectAdmin', (req, res)  => {
-    selectAdmin(
-        conn,
-        req.query.email,
-        (result) => {
-          res.json(result);
-        }
-      );
-});
-
-
 
 
 

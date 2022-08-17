@@ -5,17 +5,6 @@ const contraseña2 = document.getElementById("contraseñaRepRegistro")
 const nombreUsuario = document.getElementById("usuarioRegistro")
 const registrar = document.getElementById('registrarse');
 
-app.get("/api/createUser", (req, res) => {
-    createUser(
-      conn,
-      req.query,
-      (result) => {
-        res.json(result);
-      }
-    );
-});
-
-
 
 
 

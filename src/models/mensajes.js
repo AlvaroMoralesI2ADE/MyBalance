@@ -56,7 +56,7 @@ function insertMessageUser(connection, data, callback) {
         // dFormat = new Date().toISOString().slice(0, 19).replace('T', ' ');
         let query = "INSERT INTO mensajes_usuario"
         query += "(usuario, admin, mensaje, fecha, visto) "
-        query += "VALUES ('" + data.email + "', 'admin@gmail.com','"
+        query += "VALUES ('" + data.email + "', 'mybalancenutricion@gmail.com','"
         query += data.mensaje + "', '" + dFormat + "'," + false + ")"
 
         console.log(query)
@@ -93,7 +93,7 @@ function insertMessageAdmin(connection, data, callback) {
         // dFormat = new Date().toISOString().slice(0, 19).replace('T', ' ');
         let query = "INSERT INTO mensajes_admin"
         query += "(admin, usuario, mensaje, fecha) "
-        query += "VALUES ('admin@gmail.com','" + data.email + "', '"
+        query += "VALUES ('mybalancenutricion@gmail.com','" + data.email + "', '"
         query += data.mensaje + "', '" + dFormat + "')"
 
         console.log(query)
@@ -148,7 +148,7 @@ function insertMessageAdmin(connection, data, callback) {
         // dFormat = new Date().toISOString().slice(0, 19).replace('T', ' ');
         let query = "INSERT INTO mensajes_admin"
         query += "(admin, usuario, mensaje, fecha) "
-        query += "VALUES ('admin@gmail.com','" + data.email + "', '"
+        query += "VALUES ('mybalancenutricion@gmail.com','" + data.email + "', '"
         query += data.mensaje + "', '" + dFormat + "')"
 
         console.log(query)
