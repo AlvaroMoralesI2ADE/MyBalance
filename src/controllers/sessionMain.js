@@ -27,10 +27,12 @@ $(document).ready(function () {
                 } else {
                     renderChat()
                     renderButton()
+                    renderInfo()
                 }
             } else {
                 renderChat()
                 renderButton()
+                renderInfo()
             }
         })
 

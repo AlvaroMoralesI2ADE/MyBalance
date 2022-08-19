@@ -17,31 +17,25 @@
 
 
 <body>
-    <div class="menu">
+    <div class = "menu" id = "menu">
         <ul>
-          <a class="navbar-logo" href="adminMain.html">
-            <img src="../assets/logoTexto.png">
+          <a class="navbar-logo" href="sessionMain.html">
+            <img src="../assets/logoTexto.png" >
           </a>
-    
-          <li><a href="cuadroMandos.html">Añadir Alimento</a></li>
-          <li><a href="crearDieta.html">Crear Dieta</a></li>
-          <li><a href="#">Mi cuenta</a>
-            <ul>
-              <li><a href="#" onclick=cerrarCuentaAdmin();>Salir</a></li>
-            </ul>
-          </li>
-          <p id="date"></p>
+          <li><a href="suscripcion.html">Unirse</a></li>
+          <li><a href="#" onclick=cerrarCuentaUser()>Cerrar Sesión</a></li>
+          <p id="date" style="text-align: left;margin-left:-80px;"></p>
         </ul>
       </div>
-
+  
     <div id="titulo">
         <p class="titulo" style="text-align: center;">Chat</p>
         <hr style="border:2px;">
     </div>
 
     <div id="pagewrap">
-        <header class="headerChat" id ="headerChat" >
-         
+        <header class="headerChat">
+            <h3>My balance nutricionista</h3>
         </header>
 
         <section class="chatbox">
@@ -53,9 +47,10 @@
         <section class="reply" id="reply">
             <form>
                 <input id="replyText" type="text" placeholder="Mensaje">
-                <button type="button" onclick="sendMessageAdmin()">Enviar mensaje</button>
+                <button type="button" onclick="sendMessage()">Enviar mensaje</button>
             </form>
         </section>
+
     </div>
 
     <div id="boxBack"><div id="boxWrap">
@@ -69,25 +64,15 @@
     <script>window.$ = window.jQuery = require('jquery');</script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="../js/popup.js"></script>
     <script src="../../Classes/mensaje.js"></script>
     <script src="../js/renderChat.js"></script>
-    <script src="../../controllers/chat.js"></script>
     <script src="../../controllers/menu.js"></script>
+    <script src="../../controllers/chat.js"></script>
     <script>
-        function renderUserChar(user){
-            let form = document.getElementById("headerChat");
-            form.innerHTML += "<h3>" + user + "</h3>"
-        }
-
         $(document).ready(function () {
-            var param = window.location.search.substr(1);
-            var listaParametros = param.split('&');
-            console.log(listaParametros)
-            user = listaParametros[0].split('=');
-            usuario = user[1]
-            marcarComoVisto(usuario)
-            renderUserChar(usuario)
-            prepareMessages(usuario,false)
+            usuario = localStorage.getItem('user')
+            prepareMessages(usuario,true)
         });
     </script>
   

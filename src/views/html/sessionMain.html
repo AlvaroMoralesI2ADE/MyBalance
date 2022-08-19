@@ -29,8 +29,18 @@
     </div>
 
 
-    <div id="Chat">
 
+
+
+    <div id="Chat">
+    
+      
+
+    </div>
+    <br></br>
+    
+    <div id="info">
+    
     </div>
     
 
@@ -56,12 +66,13 @@
         console.log("entra")
         var chat = document.getElementById("Chat")
         console.log(localStorage.getItem('user'))
-        chat.innerHTML += "<a style=\"float:right;\" href=\"chat.html?email=" + localStorage.getItem('user') + "\">Contactar con MyBalance</a>"
+        chat.innerHTML += "<h3 style=\"float:left; color:black; \">¡Bienvenido/a a MyBalance!</h3>"
+        chat.innerHTML += "<a style=\"float:right; margin-top:10px;\" href=\"chatUsuario.html?email=" + localStorage.getItem('user') + "\">Contactar con MyBalance</a>"
   
       }
-      function renderButton(){
-        buttonSus.innerHTML += "<a class=\"botonComenzar\" id = \"suscribirse\" href=\"suscripcion.html\">Suscribirse a mybalance</a>"
 
+      function renderButton(){  
+        buttonSus.innerHTML += "<a class=\"botonComenzar\" id = \"suscribirse\" href=\"suscripcion.html\">Suscribirse a mybalance</a>"
       }
 
 
@@ -75,10 +86,19 @@
         window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + fechaInicioFormat + "&fechaFin=" + fechaFinFormat + "&semana=" + fechaInicioFormat + "&cont=1"
 
       }
+
+      function renderInfo(){
+        let info = document.getElementById("info")
+        info.innerHTML += "<p>MyBalance es una app intuitiva que te ayudará a mejorar tus hábitos alimenticios.</p>"
+        info.innerHTML += "<p>Con MyBalance podrás desde ponerte en contacto con tu nutricionista y hacer un seguimiento de tu dieta hasta gestionar tus pagos y suscripciones.</p>"
+        info.innerHTML += "<p>¡Mejora tu vida en un solo click! Gracias por confiar en nosotros.</p>"
+        info.innerHTML += "<img width = \"550\" height = \"400\" src=\"../assets/inicio.jpg\" >"
+
+      }
     </script>
     
     <script src="../js/popup.js"></script>
-    <script src="../../Class/user.js"></script>
+    <script src="../../Classes/user.js"></script>
     <script src="../../controllers/sessionMain.js"></script>
     <script src="../../controllers/menu.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

@@ -1,13 +1,7 @@
 let alimento  = document.getElementById('Buscador');
-
 const añadir = document.getElementById('AñadirAlimento');
-
-
 const eliminar = document.getElementById('EliminarAlimento');
-
 let tipo = document.getElementById('tipo');
-
-
 
 
 
@@ -29,9 +23,6 @@ $(function () {
 
 
 
-
-
-   
 
 
 alimento.addEventListener('input', updateValue);

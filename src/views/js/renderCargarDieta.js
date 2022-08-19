@@ -14,6 +14,5 @@ function renderCargarDieta(){
 
     div3 = document.getElementById('buttonCargarDieta');
     div3.innerHTML += "<button id=\"CargarDieta\" onclick=\"cargarDieta()\" type=\"button\" class=\"btn btn-outline-success\">Añadir</button>"
-
    
 }

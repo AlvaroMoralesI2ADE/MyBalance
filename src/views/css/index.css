@@ -408,14 +408,14 @@ hr {
 }
 
 
+
 .botonComenzar {
-  padding:0px 12px 3px 12px;
+  padding:0px 13px 3px 12px;
   text-decoration:none;
-  font-weight: 600;
+  margin-top:205px;
+  margin-right:-20px;
   font-size: 20px;
-  color:#fefefe;
-  background: #6fad5f;
-  border-color: #6fad5f;
+  color: #000000;
   border-width: 3px;
   border-style: solid;
   border-radius:35px;
@@ -423,12 +423,7 @@ hr {
   position: absolute;
   top: 25%;
   right: 40%;
-  
- 
 }
-
-
-
 
 th {
   width: 1%;
@@ -438,11 +433,9 @@ th {
 
 
 .botonComenzar:hover, .botonComenzar:focus {
-  background-color:#447a36;
   border-color: #447a36;
-  color:#fefefe;
-}
 
+}
 
 
 
@@ -1026,5 +1019,6 @@ input[type=number] {
 
   width: 1000px;
 }
+
 
 
