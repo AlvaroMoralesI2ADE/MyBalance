@@ -76,14 +76,9 @@
       }
 
 
-      function renderCalendarioSus(fecha_inicioS, fecha_finS, idsuscripcion){
+      function renderCalendarioSus(fechaInicioFormat, fechaInicioFormatSemana ,idsuscripcion, cont){
    
-        let fechaInicio = new Date(fecha_inicioS);
-        let fechaFin = new Date(fecha_finS);
-        let fechaInicioFormat = fechaInicio.getDate().toString().padStart(2, "0") + "-" + (fechaInicio.getMonth() + 1).toString().padStart(2, "0") + "-" + fechaInicio.getFullYear()                    
-        let fechaFinFormat = fechaFin.getDate().toString().padStart(2, "0") + "-" + (fechaFin.getMonth() + 1).toString().padStart(2, "0") + "-" + fechaFin.getFullYear()                    
-
-        window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + fechaInicioFormat + "&fechaFin=" + fechaFinFormat + "&semana=" + fechaInicioFormat + "&cont=1"
+         window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + fechaInicioFormat + "&semana=" + fechaInicioFormatSemana + "&cont=" + cont
 
       }
 

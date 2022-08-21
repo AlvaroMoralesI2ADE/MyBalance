@@ -12,7 +12,6 @@ var comida = document.getElementById("comida");
 var alimento = document.getElementById("Buscador");
 var nombreUsuario = ""
 var suscripcion = 0
-var fechaFin
 var fechaInit
 let comidas = []
 let fechasArray = []
@@ -55,6 +54,8 @@ function dietaModelo() {
 }
 
 
+//href=\"adminAsignarDieta.html?gmail=" + email + "&semana=" + fechaInicioFormat + "&suscripcion=" + idsuscripcion + "&semanaI=" + fechaInicioFormatD  + "&num=" + cont + 
+
 
 $(document).ready(function () {
     var param = window.location.search.substr(1);
@@ -63,10 +64,8 @@ $(document).ready(function () {
     var usuario = listaParametros[0].split('=');
     var semana = listaParametros[1].split('=');
     var suscripcionSplit = listaParametros[2].split('=');
-    let fechaFinFormat = listaParametros[3].split('=');
-    let fechaInitFormat = listaParametros[4].split('=');
-    let numFormat = listaParametros[5].split('=');
-    fechaFin = fechaFinFormat[1]
+    let fechaInitFormat = listaParametros[3].split('=');
+    let numFormat = listaParametros[4].split('=');
     fechaInit = fechaInitFormat[1]
     suscripcion = suscripcionSplit[1]
     num = parseInt(numFormat[1])
@@ -131,10 +130,6 @@ function getFechas(sem) {
     let compare = dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear()
 
 
-    if (fechaFin == compare) {
-        semanaS.disabled = true
-    }
-
     let dia8 = addDays(semana, 7)
     fechasArray.push(dia8.getFullYear() + "-" + (dia8.getMonth() + 1).toString().padStart(2, "0") + "-" + dia8.getDate().toString().padStart(2, "0"))
 
@@ -165,17 +160,15 @@ function removeDays(date, days) {
 
 function prepararSemana(semana) {
     try {
-
-        var semNum = document.getElementById("semanaNumero");
-        let html = "SEMANA " + num;
-        semNum.insertAdjacentHTML("afterbegin", html);
-
-
         if (semana == fechaInit) {
             semanaA.disabled = true
         }
-
         let fechas = getFechas(semana)
+        
+        var semNum = document.getElementById("semanaNumero");
+        let html = "SEMANA DEL " + fechasArray[0] + " AL " + fechasArray[6] + "   ";
+        semNum.insertAdjacentHTML("afterbegin", html);
+
         renderSemana(fechas)
     } catch (error) {
         dbox(error)
@@ -261,10 +254,12 @@ añadir.addEventListener("click", function () {
                 div2 = document.getElementById('labelCargarDieta');
                 div3 = document.getElementById('buttonCargarDieta');
 
-                div1.remove()
-                div2.remove()
-                div4.remove()
-                div3.remove()
+                if(div1 != null && div4 != null && div2 != null && div3 != null){
+                    div1.remove()
+                    div2.remove()
+                    div4.remove()
+                    div3.remove()
+                }
 
                 renderFirstAlimento(comida.value, dia.value, alimento.value, Idcantidad.value, classM, true, 0)
 
@@ -557,7 +552,7 @@ function semanaSiguiente() {
     //let fechaFind = new Date(fechaFinD);
     //let fechaIniciod = new Date(fechaInicioD);
     let fechaInicioFormat = fechaInicio.getDate().toString().padStart(2, "0") + "-" + (fechaInicio.getMonth() + 1).toString().padStart(2, "0") + "-" + fechaInicio.getFullYear()
-    window.location.href = "adminAsignarDieta.html?gmail=" + nombreUsuario + "&semana=" + fechaInicioFormat + "&suscripcion=" + suscripcion + "&semanaF=" + fechaFin + "&semanaI=" + fechaInit + "&num=" + (num + 1)
+    window.location.href = "adminAsignarDieta.html?gmail=" + nombreUsuario + "&semana=" + fechaInicioFormat + "&suscripcion=" + suscripcion + "&semanaI=" + fechaInit + "&num=" + (num + 1)
 
 
 }
@@ -567,14 +562,8 @@ function semanaSiguiente() {
 function semanaAnterior() {
     let semanaAnt = new Date(Number(semanaArray[2]), (Number(semanaArray[1]) - 1), Number(semanaArray[0]))
     let diaAnt = removeDays(semanaAnt, 7)
-
     let fechaInicioFormat = diaAnt.getDate().toString().padStart(2, "0") + "-" + (diaAnt.getMonth() + 1).toString().padStart(2, "0") + "-" + diaAnt.getFullYear()
-
-
-    window.location.href = "adminAsignarDieta.html?gmail=" + nombreUsuario + "&semana=" + fechaInicioFormat + "&suscripcion=" + suscripcion + "&semanaF=" + fechaFin + "&semanaI=" + fechaInit + "&num=" + (num - 1)
-
-
-
+    window.location.href = "adminAsignarDieta.html?gmail=" + nombreUsuario + "&semana=" + fechaInicioFormat + "&suscripcion=" + suscripcion + "&semanaI=" + fechaInit + "&num=" + (num - 1)
 
 }
 
@@ -632,7 +621,28 @@ function eliminarAlimento(id) {
 }
 
 
-function insertDeleteComidas(comidasSql, nombreD){
+function insertDeleteComidas(comidasSql, nombreD, nombreUsuario){
+    $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDieta?alimentos[]=' + JSON.stringify(comidasSql) + "&nombre=" + nombreD).done(function (result3) {
+        if (result3 != true) {
+            dbox("Error al crear insertar los alimentos")
+            //resetear comidas. y ponerlo como estaba. 
+        } else {
+            dbox("Alimentos guardados correctamente")
+            let nombreD2 = nombreUsuario + "/" +  fechasArray[7]
+            let petitionCreateDieta2 = "http://localhost:8000/api/createDieta?nombre=" + nombreD2
+            petitionCreateDieta2 += "&fechaI=" + fechasArray[7]
+            petitionCreateDieta2 += "&suscripcion=" + suscripcion
+            $.getJSON(petitionCreateDieta2).done(function (result4) {
+                                       
+            });
+        }
+    });
+}
+
+
+
+
+function insertDeleteComidasNoAñadir(comidasSql, nombreD, nombreUsuario){
     $.getJSON('http://localhost:8000/api/transactionInsertAlimentosDieta?alimentos[]=' + JSON.stringify(comidasSql) + "&nombre=" + nombreD).done(function (result3) {
         if (result3 != true) {
             dbox("Error al crear insertar los alimentos")
@@ -669,32 +679,52 @@ guardar.addEventListener("click", function () {
 
 
             let nombreD = nombreUsuario + "/" + fechasArray[0]
+            console.log(nombreD )
             if (comidasSql.length > 0) {
                 $.getJSON('http://localhost:8000/api/selectDietaNombre?nombre=' + nombreD).done(function (existe) {
+                    console.log(existe)
                     let correcto = true
-                    if (existe.length < 1) {
-                        let petitionCreateDieta = "http://localhost:8000/api/createDieta?nombre=" + nombreD
-                        petitionCreateDieta += "&fechaF=" + fechasArray[6]
-                        petitionCreateDieta += "&fechaI=" + fechasArray[0]
-                        petitionCreateDieta += "&suscripcion=" + suscripcion
-                        $.getJSON(petitionCreateDieta).done(function (result) {
-                            if (result) {
-                                let petitionCreateComidas = "http://localhost:8000/api/createComidasDieta?nombre=" + nombreD
-                                petitionCreateComidas += "&fechas=" + JSON.stringify(fechasArray)
-                                $.getJSON(petitionCreateComidas).done(function (result2) {
-                                    if (result2 != true) {
-                                        dbox("Error al crear las comidas de la dieta")
-                                        correcto = false
-                                    }else{insertDeleteComidas(comidasSql, nombreD)}
-                                });
-                            } else {
-                                dbox("Error al crear la dieta")
-                                correcto = false
-                            }
-                        });
+                    if (existe.length <= 1) {
+                        if(existe.length == 1){
+                            let petitionCreateComidas = "http://localhost:8000/api/createComidasDieta?nombre=" + nombreD
+                            petitionCreateComidas += "&fechas=" + JSON.stringify(fechasArray)
+                            $.getJSON(petitionCreateComidas).done(function (result2) {
+                                if (result2 != true) {
+                                    dbox("Error al crear las comidas de la dieta")
+                                    correcto = false
+                                }else{
+                                    insertDeleteComidas(comidasSql, nombreD, nombreUsuario)
+                                }
+                            });
+                        }else{
+                            let petitionCreateDieta = "http://localhost:8000/api/createDieta?nombre=" + nombreD
+                            petitionCreateDieta += "&fechaI=" + fechasArray[0]
+                            petitionCreateDieta += "&suscripcion=" + suscripcion
+                            $.getJSON(petitionCreateDieta).done(function (result) {
+                                if (result) {
+                                    let petitionCreateComidas = "http://localhost:8000/api/createComidasDieta?nombre=" + nombreD
+                                    petitionCreateComidas += "&fechas=" + JSON.stringify(fechasArray)
+                                    $.getJSON(petitionCreateComidas).done(function (result2) {
+                                        if (result2 != true) {
+                                            dbox("Error al crear las comidas de la dieta")
+                                            correcto = false
+                                        }else{
+                                            insertDeleteComidas(comidasSql, nombreD, nombreUsuario)
+                                            
+                                        }
+                                    });
+                                } else {
+                                    dbox("Error al crear la dieta")
+                                    correcto = false
+                                }
+                            });
+
+
+                        }
+                    
                     }else{
-                        insertDeleteComidas(comidasSql, nombreD)
-                    }
+                        insertDeleteComidasNoAñadir(comidasSql, nombreD)
+                    }          
                 });
             }
         } else {

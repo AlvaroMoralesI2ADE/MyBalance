@@ -24,8 +24,13 @@ function selectDieta(connection, param, callback){
 
 function selectDietaNombre(connection, param, callback) {
     try {
-        let query = "SELECT dieta FROM dieta WHERE dieta = '" + param + "'"
-        connection.query(query, function (err, result) {
+        let query = "SELECT * FROM mybalance.dieta "
+        query += "LEFT JOIN mybalance.comidas_del_dia "
+        query += "ON mybalance.dieta.dieta = mybalance.comidas_del_dia.dieta "
+        query += "WHERE mybalance.dieta.dieta  = '" + param + "'"
+  
+        console.log(query)
+        connection.query(query, param, function (err, result) {
             if (err) throw err
             callback(result)
         });
@@ -43,10 +48,9 @@ function selectDietaNombre(connection, param, callback) {
 function createDieta(connection, param, callback){
     try{
         let nombreD = param.nombre
-        let fecha_fin = param.fechaF
         let fecha_inicio = param.fechaI
         let suscripcion = param.suscripcion
-        let query = "INSERT INTO dieta (dieta,fecha_inicio,fecha_fin,suscripcion) VALUES ('" + nombreD + "', '" + fecha_inicio + "', '" + fecha_fin + "', " + suscripcion + ");"
+        let query = "INSERT INTO dieta (dieta,fecha_inicio,suscripcion) VALUES ('" + nombreD + "', '" + fecha_inicio + "', " + suscripcion + ");"
         connection.query(query, function (err, result) {
             if (err) throw err
             callback(true)

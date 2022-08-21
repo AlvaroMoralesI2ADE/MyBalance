@@ -1,9 +1,6 @@
 const path = require('path');
-
-
 const { getConnection } = require('../database/database.js')
 const conn = getConnection();
-
 const { selectAdmin, selectUsuario,
     createUser, selectSuscripcion,
     insertSuscripcion, updateUsuario, selectSuscVigentes,

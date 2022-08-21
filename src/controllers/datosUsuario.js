@@ -91,12 +91,11 @@ const setUser = (suscripcion) => {
             var fechaInicioSelect = document.getElementById('fechaSuscripcion')
             let fechaInicio = fechaInicioSelect.value
 
-            let fechaFinalF = addDays(fechaInicio, 27)
-            let fechaFinal = fechaFinalF.toISOString().split('T')[0]
+ 
 
             let request = 'http://localhost:8000/api/insertSuscripcion?email=' + user.email
             request += '&fechaInicio=' + fechaInicio
-            request += '&fechaFinal=' + fechaFinal
+      
 
             console.log(request)
             $.getJSON(request).done(function (result) {

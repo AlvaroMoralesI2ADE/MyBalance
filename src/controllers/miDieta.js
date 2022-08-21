@@ -3,7 +3,6 @@ const semanaA = document.getElementById('semanaAnterior');
 const semanaS = document.getElementById('semanaSiguiente');
 let fechasArray = []
 let comidas = []
-var diaFin = null
 var diaInit = null
 var idsuscripcion = 0
 var starWeek
@@ -20,16 +19,13 @@ $(document).ready(function () {
     console.log("PARAMETROS: " + listaParametros)
     var suscripcion = listaParametros[0].split('=');
     var semanaInit = listaParametros[1].split('=');
-    var semanaFin = listaParametros[2].split('=');
-    var semana = listaParametros[3].split('=');
-    var contArray = listaParametros[4].split('=');
+    var semana = listaParametros[2].split('=');
+    var contArray = listaParametros[3].split('=');
     cont = parseInt(contArray[1])
     idsuscripcion = suscripcion[1]
-    diaFin = semanaFin[1]
     diaInit = semanaInit[1]
     starWeek = semana[1]
 
-    console.log("semana actual:" + semana + " susc" + diaInit + "///" + diaFin)
     rellenarTabla(suscripcion[1], semana[1])
 
 });
@@ -123,10 +119,6 @@ function getFechas(sem) {
     let compare = dia7.getDate().toString().padStart(2, "0") + "-" + (dia7.getMonth() + 1).toString().padStart(2, "0") + "-" + dia7.getFullYear()
 
 
-    if (diaFin == compare) {
-        semanaS.disabled = true
-    }
-
     let dia8 = addDays(semana, 7)
     fechasArray.push(dia8.getFullYear() + "-" + (dia8.getMonth() + 1).toString().padStart(2, "0") + "-" + dia8.getDate().toString().padStart(2, "0"))
 
@@ -152,7 +144,7 @@ function semanaSiguiente() {
     let fechaInicioFormat = fechaInicio.getDate().toString().padStart(2, "0") + "-" + (fechaInicio.getMonth() + 1).toString().padStart(2, "0") + "-" + fechaInicio.getFullYear()
 
     console.log(fechaInicioFormat)
-    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit + "&fechaFin=" + diaFin + "&semana=" + fechaInicioFormat + "&cont=" + (cont + 1)
+    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit + "&semana=" + fechaInicioFormat + "&cont=" + (cont + 1)
 
 
 }
@@ -164,7 +156,7 @@ function semanaAnterior() {
     let diaAnt = removeDays(semanaAnt, 7)
 
     let fechaInicioFormat = diaAnt.getDate().toString().padStart(2, "0") + "-" + (diaAnt.getMonth() + 1).toString().padStart(2, "0") + "-" + diaAnt.getFullYear()
-    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit + "&fechaFin=" + diaFin + "&semana=" + fechaInicioFormat + "&cont=" + (cont - 1)
+    window.location.href = "miDieta.html?suscripcion=" + idsuscripcion + "&fechaInicio=" + diaInit  + "&semana=" + fechaInicioFormat + "&cont=" + (cont - 1)
 
 }
 
@@ -197,7 +189,6 @@ function rellenarAlimentos(suscripcion, semana) {
     } catch (error) {
         dbox(error)
     }
-
 }
 
 
