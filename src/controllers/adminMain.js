@@ -54,7 +54,6 @@ function TablaUsuarios() {
             let fechaInicioFormatD = dataMod[i].fecha_inicio
             renderSuscripcionMod(fechaInicioFormat, fechaInicioFormatD,
               dataMod[i].nombre, dataMod[i].email, dataMod[i].idsuscripcion, dataMod[i].dietaAsignada, dataMod[i].Novistos, dataMod[i].modificar, 1)
-
           }
         }
 
@@ -64,7 +63,6 @@ function TablaUsuarios() {
             let fechaInicioFormatD = dataVer[i].fecha_inicio
             renderSuscripcionVer(fechaInicioFormat, fechaInicioFormatD,
               dataVer[i].nombre, dataVer[i].email, dataVer[i].idsuscripcion, dataVer[i].dietaAsignada, dataVer[i].Novistos, dataVer[i].modificar, 1)
-
           }
         }
       }
