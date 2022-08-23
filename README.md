@@ -1,5 +1,5 @@
 # MyBalance
-multiplatform nutrition application
-npm install
+multiplatform nutrition application:
+npm install, 
 npm start
 
